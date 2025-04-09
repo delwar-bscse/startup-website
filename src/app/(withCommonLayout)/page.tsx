@@ -2,34 +2,15 @@ import { projectDatas } from '@/constants/projectData'
 import Image from 'next/image'
 import homeHeroImg from '@/assets/home/home_hero.png';
 import aboutImg from '@/assets/home/about_us.png'
-// import booking_01 from '@/assets/home/booking_01.png'
+import ContactUsImg from "@/assets/contact/contact-us.png";
+import booking_01 from '@/assets/home/booking_01.png'
 import { LuClock } from "react-icons/lu";
 import { RiSendPlaneLine } from "react-icons/ri";
 import React from 'react'
-import { projectOverview } from '@/constants/homeData';
+import { projectOverview, whyChooseUsDatas } from '@/constants/homeData';
 
-// export const whyUs = <div className='flex w-full'>
-//   <div className='w-[40%] bg-primary flex items-center justify-end'>
-//     <div style={{ maxWidth: `${1440 * 40 / 100}px`, width: '100%' }} className='box-border flex flex-col justify-center items-center text-white py-8 px-20'>
-//       <h2 className='text-4xl font-semibold'>Why <br />Chose <br />US?</h2>
-//       <p>Hear from mentees who have transformed their careers with the help of expert mentors.</p>
-//     </div>
-//   </div>
-//   <div style={{ maxWidth: `${1440 * 60 / 100}px`, width: '100%' }} className='bg-secondary' >
-//     <div className='box-border py-4'>
-//       <div className='flex items-center gap-3'>
-//         <div className='relative top-2 left-0 transform -translate-x-1/2  bg-primary2 ring-4
-//      ring-gray-100/60 w-16 h-16 rounded-full flex items-center justify-center'>
-//           <Image src={booking_01} alt='About Us' />
-//         </div>
-//         <div className='pr-20'>
-//           <h2 className='text-2xl font-bold'>Accessible Options</h2>
-//           <p className=''>We prioritize your needs with options like wheelchair access, driver assistance, and extra space for mobility devices.</p>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// </div>
+
+
 
 const page = () => {
   return (
@@ -40,20 +21,20 @@ const page = () => {
           <div className='maxWidth text-white py-10 md:py-24 lg:py-48 space-y-4'>
             <h2 className='text-2xl md:text-3xl lg:text-5xl font-bold max-w-[650px]'>Empowering Small Businesses with Affordable Marketing Tools</h2>
             <p className='text-sm md:text-base lg:text-xl py-4 max-w-[700px]'>Connecting agents with powerful tools that showcase you and your listings beyond your local MLS, facilitating seamless referrals for lucrative fees, placing you on a global search engine where new clients can discover.</p>
-            <button className='flex justify-center items-center bg-primary text-white py-4 px-8 gap-4 rounded-md text-2xl tracking-wider'>
+            <button className='flex justify-center items-center bg-primary text-white py-2 sm:py-3 lg:py-4 px-2 sm:px-4 lg:px-8 gap-1  sm:gap-2 lg:gap-4 rounded-md text-sm sm:text-lg lg:text-2xl tracking-wider'>
               <span>Explore Projects</span>
-              <RiSendPlaneLine className='text-2xl' />
+              <RiSendPlaneLine className='text-sm sm:text-xl lg:text-2xl' />
             </button>
           </div>
         </div>
       </div>
       {/* ----------- About Us Section ----------- */}
-      <div className='maxWidth py-20 grid grid-cols-2 gap-8'>
+      <div className='maxWidth py-20 grid grid-cols-1 md:grid-cols-2 gap-8'>
         <div>
           <Image src={aboutImg} alt='About Us' className='w-full h-full object-cover' />
         </div>
         <div className='flex flex-col justify-center'>
-          <h2 className='text-3xl md:text-5xl font-bold pb-8'>About Us</h2>
+          <h2 className='text-2xl lg:text-4xl xl:text-5xl font-bold pb-2 md:pb-4 lg:pb-8'>About Us</h2>
           <p>We know how important it is to be on time. Our drivers are punctual, and our services are designed to ensure you arrive at your destination safely and efficiently. We know how important it is to be on time. Our drivers are punctual, and our services are designed to ensure you arrive at your destination safely and efficiently.</p>
         </div>
       </div>
@@ -64,15 +45,39 @@ const page = () => {
               <div key={item?.id} className='relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden'>
                 <h2 className='text-2xl md:text-3xl font-semibold pb-8 max-w-[300px] text-center'>{item?.title}</h2>
                 <p className='text-5xl font-bold text-primary'>{item?.number}</p>
-                <div className='bg-primary2 w-50 h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2' />
+                <div className='bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2' />
               </div>
             ))
           }
         </div>
       </div>
       {/* ----------- Why Choose US Section ----------- */}
-          
-          
+      <div className='flex flex-col md:flex-row w-full pt-20'>
+        <div className='w-full md:w-[40%] bg-primary box-border flex items-center justify-start md:justify-end'>
+          <div style={{ maxWidth: `${1440 * 40 / 100}px`, width: '100%' }} className='box-border flex flex-col justify-center items-start gap-6 text-white py-28 md:8 px-4 md:px-24'>
+            <h2 className='text-4xl font-semibold flex flex-row md:fle-col gap-2'>
+              <span>Why</span>
+              <span>Chose</span>
+              <span>Us?</span>
+            </h2>
+            <p className='text-gray-200'>Hear from mantes who have transformed their careers with the help of expert mentors.</p>
+          </div>
+        </div>
+        <div className='w-full md:w-[60%] bg-secondary box-border flex flex-col items-start justify-start gap-4 py-10' >
+          {whyChooseUsDatas?.map((item) => (
+            <div key={item?.id} style={{ maxWidth: `${1440 * 60 / 100}px`, width: '100%' }} className='py-4 flex items-center relative'>
+              <div className='absolute top-6 left-10 md:left-0 transform -translate-x-1/2 bg-primary2 ring-4 ring-gray-300
+     md:ring-gray-100/60 w-16 h-16 rounded-full flex items-center justify-center'>
+                <Image src={booking_01} width={32} height={32} alt='About Us' />
+              </div>
+              <div className='max-md:ps-22 md:px-16 space-y-2'>
+                <h2 className='text-2xl font-bold text-gray-600'>Accessible Options</h2>
+                <p className='text-gray-400 text-sm'>We prioritize your needs with options like wheelchair access, driver assistance, and extra space for mobility devices.</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       {/* ----------- Projects Section ----------- */}
       <div className='maxWidth py-20'>
         <h2 className='text-3xl md:text-5xl font-bold pb-8'>Our Projects</h2>
@@ -107,6 +112,14 @@ const page = () => {
             </div>
           ))}
         </div>
+      </div>
+      {/* ----------- Start Your Projects Section ----------- */}
+      <div style={{ backgroundImage: `url(${ContactUsImg.src})` }} className="w-full text-center min-h-[200px] md:min-h-[300px] bg-cover bg-center bg-no-repeat flex flex-col gap-6 items-center justify-center">
+        <h2 className="text-3xl md:text-5xl font-bold text-white">Want to Start your Project</h2>
+        <button className='flex justify-center items-center bg-primary2  py-2 sm:py-3 px-4 lg:px-6 gap-1  sm:gap-2 lg:gap-4 rounded-md text-sm sm:text-lg tracking-wider'>
+          <span>Explore Projects</span>
+          <RiSendPlaneLine className='text-sm sm:text-xl' />
+        </button>
       </div>
     </div>
   )

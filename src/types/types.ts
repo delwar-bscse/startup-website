@@ -65,3 +65,16 @@ export interface Project {
   ourVision: OurVision;
   ourMission: OurMission;
 }
+
+// -------------------------- Home Page Data Type -------------------------- //
+export type ProjectOverview = {
+  id: number;
+  title: string;
+  number: string | number;
+};
+
+export type WhyChooseUs = {
+  id: number;
+  title: string;
+  des: string;
+}
