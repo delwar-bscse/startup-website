@@ -2,11 +2,34 @@ import { projectDatas } from '@/constants/projectData'
 import Image from 'next/image'
 import homeHeroImg from '@/assets/home/home_hero.png';
 import aboutImg from '@/assets/home/about_us.png'
-import booking_01 from '@/assets/home/booking_01.png'
+// import booking_01 from '@/assets/home/booking_01.png'
 import { LuClock } from "react-icons/lu";
 import { RiSendPlaneLine } from "react-icons/ri";
 import React from 'react'
 import { projectOverview } from '@/constants/homeData';
+
+// export const whyUs = <div className='flex w-full'>
+//   <div className='w-[40%] bg-primary flex items-center justify-end'>
+//     <div style={{ maxWidth: `${1440 * 40 / 100}px`, width: '100%' }} className='box-border flex flex-col justify-center items-center text-white py-8 px-20'>
+//       <h2 className='text-4xl font-semibold'>Why <br />Chose <br />US?</h2>
+//       <p>Hear from mentees who have transformed their careers with the help of expert mentors.</p>
+//     </div>
+//   </div>
+//   <div style={{ maxWidth: `${1440 * 60 / 100}px`, width: '100%' }} className='bg-secondary' >
+//     <div className='box-border py-4'>
+//       <div className='flex items-center gap-3'>
+//         <div className='relative top-2 left-0 transform -translate-x-1/2  bg-primary2 ring-4
+//      ring-gray-100/60 w-16 h-16 rounded-full flex items-center justify-center'>
+//           <Image src={booking_01} alt='About Us' />
+//         </div>
+//         <div className='pr-20'>
+//           <h2 className='text-2xl font-bold'>Accessible Options</h2>
+//           <p className=''>We prioritize your needs with options like wheelchair access, driver assistance, and extra space for mobility devices.</p>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// </div>
 
 const page = () => {
   return (
@@ -48,26 +71,8 @@ const page = () => {
         </div>
       </div>
       {/* ----------- Why Choose US Section ----------- */}
-      <div className='flex w-full py-20'>
-        <div className='w-[40%] bg-primary'>
-        <div  style={{ maxWidth: `${1440 * 40 / 100}px` }} className='box-border  flex flex-col justify-center text-white p-8 px-44'>
-          <h2 className='text-4xl font-semibold'>Why <br />Chose <br />US?</h2>
-          <p>Hear from mentees who have transformed their careers with the help of expert mentors.</p>
-        </div>
-        </div>
-        <div className='w-[60%] box-border bg-secondary py-4'>
-          <div className='flex items-center gap-3'>
-            <div className='relative top-2 left-0 transform -translate-x-1/2  bg-primary2 ring-4
-             ring-gray-100/60 w-16 h-16 rounded-full flex items-center justify-center'>
-              <Image src={booking_01} alt='About Us' />
-            </div>
-            <div className='pr-20'>
-              <h2 className='text-2xl font-bold'>Accessible Options</h2>
-              <p className=''>We prioritize your needs with options like wheelchair access, driver assistance, and extra space for mobility devices.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+          
+          
       {/* ----------- Projects Section ----------- */}
       <div className='maxWidth py-20'>
         <h2 className='text-3xl md:text-5xl font-bold pb-8'>Our Projects</h2>
