@@ -1,6 +1,6 @@
 "use client"
 
-
+// components/CustomSlider.tsx
 import React from "react";
 import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -28,39 +28,39 @@ const SamplePrevArrow: React.FC<ArrowProps> = ({ className, style, onClick }) =>
   />
 );
 
-const CustomSlider: React.FC = () => {
-  const settings: Settings = {
+function CustomArrows() {
+  const settings = {
     dots: true,
     infinite: true,
     slidesToShow: 3,
     slidesToScroll: 1,
     nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 720,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 360,
-        settings: { slidesToShow: 1 },
-      },
-    ],
+    prevArrow: <SamplePrevArrow />
   };
-
   return (
-    <div className="px-30">
-      <div className="slider-container py-20 bg-gray-400 maxWidth">
-        <Slider {...settings}>
-          {[1, 2, 3, 4, 5, 6].map((num) => (
-            <div key={num} className="slider-item bg-red-100">
-              <h3>Slide {num}</h3>
-            </div>
-          ))}
-        </Slider>
-      </div>
+    <div className="slider-container">
+      <Slider {...settings}>
+        <div>
+          <h3>1</h3>
+        </div>
+        <div>
+          <h3>2</h3>
+        </div>
+        <div>
+          <h3>3</h3>
+        </div>
+        <div>
+          <h3>4</h3>
+        </div>
+        <div>
+          <h3>5</h3>
+        </div>
+        <div>
+          <h3>6</h3>
+        </div>
+      </Slider>
     </div>
   );
-};
+}
 
-export default CustomSlider;
+export default CustomArrows;

@@ -9,6 +9,16 @@ import { RiSendPlaneLine } from "react-icons/ri";
 import React from 'react'
 import { projectOverview, whyChooseUsDatas } from '@/constants/homeData';
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+// import dynamic from 'next/dynamic';
+
+import CustomSlider from '@/components/shared/OurUsersSlide';
+// const CustomSlider = dynamic(() => import("../../components/shared/OurUsersSlide"), {
+//   ssr: false, // ⛔ prevent server-side rendering
+// });
+
+
 
 
 
@@ -121,6 +131,10 @@ const page = () => {
           <RiSendPlaneLine className='text-sm sm:text-xl' />
         </button>
       </div>
+      <div>
+        <CustomSlider />
+      </div>
+
     </div>
   )
 }
