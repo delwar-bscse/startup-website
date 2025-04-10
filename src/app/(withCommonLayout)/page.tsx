@@ -14,9 +14,9 @@ import "slick-carousel/slick/slick-theme.css";
 // import dynamic from 'next/dynamic';
 
 import CustomSlider from '@/components/shared/OurUsersSlide';
-// const CustomSlider = dynamic(() => import("../../components/shared/OurUsersSlide"), {
-//   ssr: false, // ⛔ prevent server-side rendering
-// });
+import InvestorsSlider from '@/components/shared/BestInvestorSlide';
+// import OurCarouselSection from '@/sections/home/OurCarouselSection';
+
 
 
 
@@ -35,6 +35,9 @@ const page = () => {
               <span>Explore Projects</span>
               <RiSendPlaneLine className='text-sm sm:text-xl lg:text-2xl' />
             </button>
+            <div>
+              Filter Options present here
+            </div>
           </div>
         </div>
       </div>
@@ -131,7 +134,20 @@ const page = () => {
           <RiSendPlaneLine className='text-sm sm:text-xl' />
         </button>
       </div>
-      <div>
+      {/* ----------- Best Investors Section ----------- */}
+      <div className='maxWidth grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div><InvestorsSlider /></div>
+        <div className='flex flex-col gap-4 items-start justify-center px-3 lg:px-20'>
+          <h2 className='text-3xl md:text-5xl font-bold'>Our best Investors</h2>
+          <p className='lg:tracking-wider text-gray-600'>We know how important it is to be on time. Our drivers are punctual, and our services are designed to ensure you arrive at your destination safely and efficiently. We know how important it is to be on time. </p>
+        </div>
+      </div>
+      {/* ----------- What Our Users Are Saying Carousel Section ----------- */}
+      <div className='bg-secondary py-10 md:py-20'>
+        <div className='text-center space-y-2'>
+          <h3 className='text-3xl lg:text-5xl font-bold'>What Our Users Are Saying</h3>
+          <p className='text-gray-400 lg:tracking-widest'>Hear from mentees who have transformed their careers with the help of expert mentors.</p>
+        </div>
         <CustomSlider />
       </div>
 

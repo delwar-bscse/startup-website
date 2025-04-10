@@ -132,3 +132,10 @@
   }
 }
 
+.slick-track{
+  display: flex !important;
+  gap: 10px !important;
+}
+.slick-slide{
+  margin: 6px !important;
+}
