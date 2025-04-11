@@ -15,6 +15,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import CustomSlider from '@/components/shared/OurUsersSlide';
 import InvestorsSlider from '@/components/shared/BestInvestorSlide';
+import HeroFilter from '@/components/shared/HeroFilter';
 // import OurCarouselSection from '@/sections/home/OurCarouselSection';
 
 
@@ -35,8 +36,8 @@ const page = () => {
               <span>Explore Projects</span>
               <RiSendPlaneLine className='text-sm sm:text-xl lg:text-2xl' />
             </button>
-            <div>
-              Filter Options present here
+            <div className='mt-16'>
+              <HeroFilter />
             </div>
           </div>
         </div>
