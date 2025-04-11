@@ -16,6 +16,7 @@ import "slick-carousel/slick/slick-theme.css";
 import CustomSlider from '@/components/shared/OurUsersSlide';
 import InvestorsSlider from '@/components/shared/BestInvestorSlide';
 import HeroFilter from '@/components/shared/HeroFilter';
+import Link from 'next/link';
 // import OurCarouselSection from '@/sections/home/OurCarouselSection';
 
 
@@ -125,6 +126,9 @@ const page = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="flex items-center justify-center py-3">
+          <Link href="/projects" className='text-2xl font-semibold text-gray-500 py-2 px-2'>See All</Link>
         </div>
       </div>
       {/* ----------- Start Your Projects Section ----------- */}
