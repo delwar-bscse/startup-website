@@ -130,6 +130,9 @@
   .customShadow {
     @apply shadow-[0_0_20px_rgba(0,0,0,0.1)];
   }
+  .customShadow2 {
+    @apply shadow-[0_0_5px_rgba(0,0,0,0.1)];
+  }
   .select-item-hover {
     @apply hover:bg-blue-100 active:bg-blue-200 focus:bg-blue-100;
   }

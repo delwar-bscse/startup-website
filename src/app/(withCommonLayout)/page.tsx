@@ -11,13 +11,11 @@ import { projectOverview, whyChooseUsDatas } from '@/constants/homeData';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import dynamic from 'next/dynamic';
 
 import CustomSlider from '@/components/shared/OurUsersSlide';
 import InvestorsSlider from '@/components/shared/BestInvestorSlide';
 import HeroFilter from '@/components/shared/HeroFilter';
 import Link from 'next/link';
-// import OurCarouselSection from '@/sections/home/OurCarouselSection';
 
 
 
@@ -27,6 +25,7 @@ import Link from 'next/link';
 const page = () => {
   return (
     <div className='w-full'>
+
       {/* ----------- Home's Hero Section ----------- */}
       <div style={{ backgroundImage: `url(${homeHeroImg.src})` }} className='bg-cover bg-center'>
         <div className='bg-black/40'>
@@ -43,6 +42,7 @@ const page = () => {
           </div>
         </div>
       </div>
+
       {/* ----------- About Us Section ----------- */}
       <div className='maxWidth py-20 grid grid-cols-1 md:grid-cols-2 gap-8'>
         <div>
@@ -66,6 +66,7 @@ const page = () => {
           }
         </div>
       </div>
+
       {/* ----------- Why Choose US Section ----------- */}
       <div className='flex flex-col md:flex-row w-full pt-20'>
         <div className='w-full md:w-[40%] bg-primary box-border flex items-center justify-start md:justify-end'>
@@ -93,6 +94,7 @@ const page = () => {
           ))}
         </div>
       </div>
+
       {/* ----------- Projects Section ----------- */}
       <div className='maxWidth py-20'>
         <h2 className='text-3xl md:text-5xl font-bold pb-8'>Our Projects</h2>
@@ -121,7 +123,7 @@ const page = () => {
                   <div className='flex items-center justify-start w-full bg-gray-200'>
                     <p className='basis-[40%] bg-primary2 text-right px-3 py-1'>Raised 40%</p>
                   </div>
-                  <button className='bg-primary text-white py-3 px-4 mt-4 w-full'>View Details</button>
+                  <Link href={`/projects/${project?.id}`} className='bg-primary text-white py-3 px-4 mt-4 w-full block text-center'>View Details</Link>
                 </div>
               </div>
             </div>
@@ -131,6 +133,7 @@ const page = () => {
           <Link href="/projects" className='text-2xl font-semibold text-gray-500 py-2 px-2'>See All</Link>
         </div>
       </div>
+
       {/* ----------- Start Your Projects Section ----------- */}
       <div style={{ backgroundImage: `url(${ContactUsImg.src})` }} className="w-full text-center min-h-[200px] md:min-h-[300px] bg-cover bg-center bg-no-repeat flex flex-col gap-6 items-center justify-center">
         <h2 className="text-3xl md:text-5xl font-bold text-white">Want to Start your Project</h2>
@@ -139,6 +142,7 @@ const page = () => {
           <RiSendPlaneLine className='text-sm sm:text-xl' />
         </button>
       </div>
+
       {/* ----------- Best Investors Section ----------- */}
       <div className='maxWidth grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div><InvestorsSlider /></div>
@@ -147,6 +151,7 @@ const page = () => {
           <p className='lg:tracking-wider text-gray-600'>We know how important it is to be on time. Our drivers are punctual, and our services are designed to ensure you arrive at your destination safely and efficiently. We know how important it is to be on time. </p>
         </div>
       </div>
+
       {/* ----------- What Our Users Are Saying Carousel Section ----------- */}
       <div className='bg-secondary py-10 md:py-20'>
         <div className='text-center space-y-2'>

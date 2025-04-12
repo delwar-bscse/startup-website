@@ -1,14 +1,6 @@
 "use client"
 
 import React, { useState } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 
 
 type FilterOptions = {
@@ -87,19 +79,6 @@ const HeroFilter = () => {
           <button type="submit" className='bg-primary2 text-white px-6 py-2 rounded-lg'>Search</button>
         </div>
       </form>
-      <Dialog>
-        <DialogTrigger>Open</DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your account
-              and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-
     </div>
   )
 }
