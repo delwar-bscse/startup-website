@@ -33,9 +33,9 @@ const HeroFilter = () => {
 
   return (
     <div className='bg-white text-gray-950 p-4 rounded-xl'>
-      <form className='flex items-end' onSubmit={handleSubmit}>
-        <div className='grow grid grid-cols-3 gap-8'>
-          <div className='flex flex-col'>
+      <form className='' onSubmit={handleSubmit}>
+        <div className='grid grid-cols-2 items-end md:grid-cols-5 pb-4 gap-2 md:gap-4'>
+          <div className='col-span-2 flex flex-col'>
             <label htmlFor='search' className='text-sm text-gray-500 px-1 py-2'>Search</label>
             <input
               onChange={handleChange}
@@ -74,9 +74,9 @@ const HeroFilter = () => {
               <option value="Offline">Offline</option>
             </select>
           </div>
-        </div>
-        <div className='px-6'>
-          <button type="submit" className='bg-primary2 text-white px-6 py-2 rounded-lg'>Search</button>
+          <div className='justify-end box-border pt-2'>
+            <button type="submit" className='bg-primary2 text-white text-center py-1 rounded-lg w-full cursor-pointer'>Search</button>
+          </div>
         </div>
       </form>
     </div>
