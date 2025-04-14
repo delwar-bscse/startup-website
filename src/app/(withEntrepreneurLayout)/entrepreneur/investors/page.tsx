@@ -1,0 +1,134 @@
+import Image, { StaticImageData } from 'next/image'
+import Profile from '@/assets/projects/project.png';
+import Profile2 from '@/assets/projects/project_01.png';
+import { FC } from 'react'
+
+interface Investor {
+  name: string
+  email: string
+  amount: string
+  shareholder: string
+  date: string
+  profileUrl: StaticImageData
+}
+
+const investors: Investor[] = [
+  {
+    name: 'John Doe',
+    email: 'johndoe23@gmail.com',
+    amount: '300$',
+    shareholder: '10%',
+    date: '14/2/2025',
+    profileUrl: Profile,
+  },
+  {
+    name: 'Jane Smith',
+    email: 'janesmith23@gmail.com',
+    amount: '250$',
+    shareholder: '8%',
+    date: '15/3/2025',
+    profileUrl: Profile2,
+  },
+  {
+    name: 'John Doe',
+    email: 'johndoe23@gmail.com',
+    amount: '300$',
+    shareholder: '10%',
+    date: '14/2/2025',
+    profileUrl: Profile,
+  },
+  {
+    name: 'Jane Smith',
+    email: 'janesmith23@gmail.com',
+    amount: '250$',
+    shareholder: '8%',
+    date: '15/3/2025',
+    profileUrl: Profile2,
+  },
+  {
+    name: 'Jane Smith',
+    email: 'janesmith23@gmail.com',
+    amount: '250$',
+    shareholder: '8%',
+    date: '15/3/2025',
+    profileUrl: Profile2,
+  },
+  {
+    name: 'John Doe',
+    email: 'johndoe23@gmail.com',
+    amount: '300$',
+    shareholder: '10%',
+    date: '14/2/2025',
+    profileUrl: Profile,
+  },
+  {
+    name: 'Jane Smith',
+    email: 'janesmith23@gmail.com',
+    amount: '250$',
+    shareholder: '8%',
+    date: '15/3/2025',
+    profileUrl: Profile2,
+  },
+  {
+    name: 'Jane Smith',
+    email: 'janesmith23@gmail.com',
+    amount: '250$',
+    shareholder: '8%',
+    date: '15/3/2025',
+    profileUrl: Profile2,
+  },
+  {
+    name: 'John Doe',
+    email: 'johndoe23@gmail.com',
+    amount: '300$',
+    shareholder: '10%',
+    date: '14/2/2025',
+    profileUrl: Profile,
+  },
+  {
+    name: 'Jane Smith',
+    email: 'janesmith23@gmail.com',
+    amount: '250$',
+    shareholder: '8%',
+    date: '15/3/2025',
+    profileUrl: Profile2,
+  },
+]
+
+const InvestorsTable: FC = () => {
+  return (
+    <div className="w-full max-w-[1440px] mx-auto overflow-x-auto py-4">
+      <table className="min-w-full table-auto bg-white" style={{ borderCollapse: 'collapse', width: '100%' }}>
+        <thead className="bg-primary text-white">
+          <tr>
+            <th className="py-4 px-4 text-left">E-mail</th>
+            <th className="py-4 px-4 text-left">Investors</th>
+            <th className="py-4 px-4 text-left">Amount</th>
+            <th className="py-4 px-4 text-left">Shareholder</th>
+            <th className="py-4 px-4 text-left">Date</th>
+            <th className="py-4 px-4 text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {investors.map((investor, index) => (
+            <tr key={index}>
+              <td className="py-3 px-4 flex items-center">
+                <Image src={investor.profileUrl} width={48} height={48} alt={investor.name} className="w-[48px] h-[48px] rounded-full border-2 border-primary" />
+                <span className="ml-2">{investor.name}</span>
+              </td>
+              <td className="py-3 px-4">{investor.email}</td>
+              <td className="py-3 px-4">{investor.amount}</td>
+              <td className="py-3 px-4">{investor.shareholder}</td>
+              <td className="py-3 px-4">{investor.date}</td>
+              <td className="py-3 w-30">
+                <button className="bg-primary2 text-gray-600 font-semibold py-3 w-full rounded-md">See Profile</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+export default InvestorsTable
