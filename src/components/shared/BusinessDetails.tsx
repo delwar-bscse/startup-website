@@ -43,7 +43,7 @@ const BusinessDetails = () => {
                 <div className="grow border-s-4 border-dashed border-primary2" />
               </div>
               <div className="pb-4 pt-2">
-                <h2 className="text-3xl font-bold pb-2 text-gray-600">Fundraising & Vendor Recruitment</h2>
+                <h2 className="text-3xl font-bold pb-2 text-gray-600">Planning & Design</h2>
                 <p>Designing the Space and Business Plan? Develop a comprehensive business plan, create a layout for the street court, and obtain necessary permits. Design your space to ensure maximum customer satisfaction and operational efficiency. Designing the Space and Business Plan? Develop a comprehensive business plan, create a layout for the street court, and obtain necessary permits. Design your space to ensure maximum customer satisfaction and operational efficiency</p>
               </div>
             </div>
@@ -52,7 +52,7 @@ const BusinessDetails = () => {
                 <p className="w-12 h-12 bg-primary2 rounded-full flex items-center justify-center text-xl font-semibold text-gray-700">1</p>
               </div>
               <div className="pb-4 pt-2">
-                <h2 className="text-3xl font-bold pb-2 text-gray-600">Fundraising & Vendor Recruitment</h2>
+                <h2 className="text-3xl font-bold pb-2 text-gray-600">Conceptualization & Market Research</h2>
                 <p>Designing the Space and Business Plan? Develop a comprehensive business plan, create a layout for the street court, and obtain necessary permits. Design your space to ensure maximum customer satisfaction and operational efficiency. Designing the Space and Business Plan? Develop a comprehensive business plan, create a layout for the street court, and obtain necessary permits. Design your space to ensure maximum customer satisfaction and operational efficiency</p>
               </div>
             </div>
