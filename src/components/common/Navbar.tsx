@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import BrandLogo from '@/assets/logo/brandLogo.png'
 import UserImage from '@/assets/projects/Entrepreneur/profile.png'
 import { Button } from '@/components/ui/button'
@@ -16,21 +16,18 @@ import {
 
 import { Menu } from 'lucide-react'
 import { getCookie } from "cookies-next/client";
-
+import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
-  // const [role, setRole] = useState<string>('');
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const pathname = usePathname();
 
-  const userRole = getCookie('su_role');
-  
-  // useEffect(() => {
-  //   console.log("User Info from Cookie:", userInfo);
-
-  //   if (userInfo) {
-  //     setRole(userInfo);
-  //   }
-  // },[]);
+  useEffect(() => {
+    // Get the userRole cookie when the component mounts
+    const role = getCookie('su_role') as string | undefined; // Ensure it can be string or undefined
+    setUserRole(role || null); // If role is undefined, set null
+  }, [pathname]);
 
   return (
     <div className='shadow-md'>
@@ -55,9 +52,13 @@ const Navbar = () => {
 
         {/* Sign In / Mobile Menu Trigger */}
         <div className='col-span-1 flex justify-end items-center gap-4'>
-          {!userRole ? (<Link href="/signin" className='hidden md:inline-block bg-primary text-white py-2 px-4'>Sign In</Link>) : (<Link href={`/${userRole}/portfolio`} className='w-12 h-12 rounded-full overflow-hidden border-2 border-primary'>
-            <Image src={UserImage} alt="Vercel Logo" width={100} height={100} />
-          </Link>)}
+          {!userRole ? (
+            <Link href="/signin" className='hidden md:inline-block bg-primary text-white py-2 px-4'>Sign In</Link>
+          ) : (
+            <Link href={`/${userRole}/portfolio`} className='w-12 h-12 rounded-full overflow-hidden border-2 border-primary'>
+              <Image src={UserImage} alt="User Profile" width={100} height={100} />
+            </Link>
+          )}
           <div className='md:hidden'>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
@@ -94,4 +95,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default Navbar;

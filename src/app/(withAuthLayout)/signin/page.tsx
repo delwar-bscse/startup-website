@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/radio-group";
 import Link from "next/link";
 import { setCookie } from "cookies-next/client";
+import { useRouter } from "next/navigation";
 
 // Schema
 const signUpFormSchema = z.object({
@@ -49,6 +50,7 @@ const defaultValues: Partial<SignUpFormValues> = {
 };
 
 const SignInForm = () => {
+  const router = useRouter();
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues,
@@ -60,6 +62,7 @@ const SignInForm = () => {
     console.log("Submitted Data:", data);
 
     setCookie("su_role", data.role);
+    router.push("/")
   }
 
   return (
