@@ -6,9 +6,19 @@ import Link from 'next/link'
 const ActiveTab = () => {
   const pathname = usePathname()
 
-  // Function to check if the link is active
   const isActive = (path: string) => {
-    return pathname === path
+    // Exact match check
+    if (pathname === path) return true
+
+    // Partial match (useful for subcategories)
+    if (pathname.startsWith(path)) return true
+
+    // For dynamic routes, you might want to check the path along with query params
+    // Example: /entrepreneur/projects?id=123 should match for projects link
+    // const queryString = Object.keys(query).map(key => `${key}=${query[key]}`).join('&')
+    // if (pathname === path && queryString) return true
+
+    return false
   }
 
   return (

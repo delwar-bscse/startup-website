@@ -2,6 +2,7 @@ import Image, { StaticImageData } from 'next/image'
 import Profile from '@/assets/projects/project.png';
 import Profile2 from '@/assets/projects/project_01.png';
 import { FC } from 'react'
+import Link from 'next/link';
 
 interface Investor {
   name: string
@@ -121,7 +122,7 @@ const InvestorsTable: FC = () => {
               <td className="py-3 px-4">{investor.shareholder}</td>
               <td className="py-3 px-4">{investor.date}</td>
               <td className="py-3 w-30">
-                <button className="bg-primary2 text-gray-600 font-semibold py-3 w-full rounded-md">See Profile</button>
+                <Link href={`/entrepreneur/investors/${index+1}`} className="bg-primary2 block text-center text-gray-600 font-semibold py-3 w-full rounded-md">See Profile</Link>
               </td>
             </tr>
           ))}

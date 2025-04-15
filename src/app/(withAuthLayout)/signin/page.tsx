@@ -22,6 +22,7 @@ import {
   RadioGroupItem,
 } from "@/components/ui/radio-group";
 import Link from "next/link";
+import { setCookie } from "cookies-next/client";
 
 // Schema
 const signUpFormSchema = z.object({
@@ -57,6 +58,8 @@ const SignInForm = () => {
   function onSubmit(data: SignUpFormValues) {
     toast("Form submitted successfully!");
     console.log("Submitted Data:", data);
+
+    setCookie("su_role", data.role);
   }
 
   return (
@@ -143,7 +146,7 @@ const SignInForm = () => {
 
             {/* Submit */}
             <Button type="submit" className="w-full text-base md:text-lg">
-              Create Your Account
+              Sign In
             </Button>
             <div className="text-center text-sm md:text-base text-gray-600 mt-4">
               Don&apos;t have an account?{" "}

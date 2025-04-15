@@ -2,8 +2,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BrandLogo from '@/assets/logo/brandLogo.png'
+import UserImage from '@/assets/projects/Entrepreneur/profile.png'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -14,9 +15,22 @@ import {
 } from "@/components/ui/sheet"
 
 import { Menu } from 'lucide-react'
+import { getCookie } from "cookies-next/client";
+
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  // const [role, setRole] = useState<string>('');
+
+  const userRole = getCookie('su_role');
+  
+  // useEffect(() => {
+  //   console.log("User Info from Cookie:", userInfo);
+
+  //   if (userInfo) {
+  //     setRole(userInfo);
+  //   }
+  // },[]);
 
   return (
     <div className='shadow-md'>
@@ -41,7 +55,9 @@ const Navbar = () => {
 
         {/* Sign In / Mobile Menu Trigger */}
         <div className='col-span-1 flex justify-end items-center gap-4'>
-          <Link href="/signin" className='hidden md:inline-block bg-primary text-white py-2 px-4'>Sign In</Link>
+          {!userRole ? (<Link href="/signin" className='hidden md:inline-block bg-primary text-white py-2 px-4'>Sign In</Link>) : (<Link href={`/${userRole}/portfolio`} className='w-12 h-12 rounded-full overflow-hidden border-2 border-primary'>
+            <Image src={UserImage} alt="Vercel Logo" width={100} height={100} />
+          </Link>)}
           <div className='md:hidden'>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
