@@ -1,4 +1,5 @@
 import EditUserImage from '@/components/common/EditUserImage'
+import PersonalInformation from '@/components/section/PersonalInformation'
 import React from 'react'
 
 const EditDetails = () => {
@@ -11,8 +12,8 @@ const EditDetails = () => {
       {/* ----------- Profile complete steps ----------- */}
       <div className="maxWidth py-20 bg-white">
         <div className="flex gap-12">
-          <h2 className="text-3xl md:text-5xl font-semibold text-gray-700">Conplete Your Profile</h2>
-          <div className="space-y-1 pt-6">
+          <h2 className="text-3xl md:text-5xl font-semibold text-gray-700">Complete Your Profile</h2>
+          <div className="space-y-1 pt-5">
             <div className="flex items-start gap-4">
               <div className="flex flex-col items-center gap-2 pt-[2px]">
                 <p className="w-6 h-6 bg-gray-300 rounded-full flex " />
@@ -50,6 +51,8 @@ const EditDetails = () => {
           </div>
         </div>
       </div>
+
+      <PersonalInformation />
     </div>
   )
 }
