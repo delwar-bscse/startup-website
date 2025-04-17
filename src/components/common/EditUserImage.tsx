@@ -2,10 +2,6 @@ import Image from 'next/image'
 import React from 'react'
 import CoverImg from '@/assets/projects/Entrepreneur/cover.png'
 import ProfileImg from '@/assets/projects/Entrepreneur/profile.png'
-import { FiEdit3 } from "react-icons/fi";
-import Link from 'next/link'
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import ActiveTab from '../shared/ActiveTab';
 
 const EditUserImage = () => {
 

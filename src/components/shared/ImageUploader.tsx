@@ -3,13 +3,13 @@ import { CiImageOn } from "react-icons/ci";
 import Image from 'next/image'; // Import the next/image component
 
 const ImageUploader = () => {
-  const [image, setImage] = useState<File | null>(null);
+  // const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setImage(file);
+      // setImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         // Ensure the result is a valid base64 string

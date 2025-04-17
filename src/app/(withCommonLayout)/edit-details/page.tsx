@@ -1,4 +1,7 @@
 import EditUserImage from '@/components/common/EditUserImage'
+import BusinessDetailsInfo from '@/components/section/BusinessDetailsInfo'
+import FinancialInvestmentDetails from '@/components/section/FinancialInvestmentDetails'
+import LegalCompliance from '@/components/section/LegalCompliance'
 import PersonalInformation from '@/components/section/PersonalInformation'
 import React from 'react'
 
@@ -11,7 +14,7 @@ const EditDetails = () => {
       </div>
       {/* ----------- Profile complete steps ----------- */}
       <div className="maxWidth py-20 bg-white">
-        <div className="flex gap-12">
+        <div className="flex flex-col md:flex-row gap-12">
           <h2 className="text-3xl md:text-5xl font-semibold text-gray-700">Complete Your Profile</h2>
           <div className="space-y-1 pt-5">
             <div className="flex items-start gap-4">
@@ -51,8 +54,10 @@ const EditDetails = () => {
           </div>
         </div>
       </div>
-
       <PersonalInformation />
+      <BusinessDetailsInfo />
+      <FinancialInvestmentDetails />
+      <LegalCompliance />
     </div>
   )
 }
