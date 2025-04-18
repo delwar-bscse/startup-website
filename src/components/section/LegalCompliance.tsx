@@ -77,8 +77,10 @@ const LegalCompliance = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md space-y-6">
               <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">Legal Compliance</h2>
+              
               <div className="grid grid-cols-2 gap-4">
                 {/* Are you an accredited investor */}
+                <div>
                 <FormField
                   control={form.control}
                   name="accreditedInvestor"
@@ -89,7 +91,7 @@ const LegalCompliance = () => {
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
+                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1 text-gray-600"
                         >
                           <FormItem className="flex items-center space-x-1 ">
                             <FormControl>
@@ -113,7 +115,9 @@ const LegalCompliance = () => {
                     </FormItem>
                   )}
                 />
+                </div>
                 {/* Do you have a team */}
+                <div>
                 <FormField
                   control={form.control}
                   name="legalOrRegulatory"
@@ -124,7 +128,7 @@ const LegalCompliance = () => {
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
+                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1 text-gray-600"
                         >
                           <FormItem className="flex items-center space-x-1 ">
                             <FormControl>
@@ -148,7 +152,9 @@ const LegalCompliance = () => {
                     </FormItem>
                   )}
                 />
+                </div>
               </div>
+
               <p>I hereby declare that the information provided is accurate and complete to the best of my knowledge.</p>
 
               {/* Title of the project */}

@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/sheet"
 
 import { Menu } from 'lucide-react'
-import { getCookie } from "cookies-next/client";
+import { getCookie, deleteCookie } from "cookies-next/client";
 import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
+  const [openProfileModal, setOpenProfileModal] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const pathname = usePathname();
@@ -28,6 +29,13 @@ const Navbar = () => {
     const role = getCookie('su_role') as string | undefined; // Ensure it can be string or undefined
     setUserRole(role || null); // If role is undefined, set null
   }, [pathname]);
+
+  const handleLogout = () => {
+    // Clear the userRole cookie when logging out
+    deleteCookie('su_role');
+    setUserRole(null); // Set userRole to null after logout
+    setOpenProfileModal(false);
+  };
 
   return (
     <div className='shadow-md'>
@@ -51,14 +59,36 @@ const Navbar = () => {
         </ul>
 
         {/* Sign In / Mobile Menu Trigger */}
-        <div className='col-span-1 flex justify-end items-center gap-4'>
+        <div className='col-span-1 flex justify-end items-center gap-4 relative'>
           {!userRole ? (
             <Link href="/signin" className='hidden md:inline-block bg-primary text-white py-2 px-4'>Sign In</Link>
           ) : (
-            <Link href={`/${userRole}/portfolio`} className='w-12 h-12 rounded-full overflow-hidden border-2 border-primary'>
-              <Image src={UserImage} alt="User Profile" width={100} height={100} />
-            </Link>
+            <div onClick={()=>setOpenProfileModal(!openProfileModal)} className='w-12 h-12 block rounded-full overflow-hidden border-2 border-primary'>
+              <Image src={UserImage} alt="User Profile" width={200} height={200} className='object-fit' />
+            </div>
           )}
+          {/* ------------ Profile Modal ------------ */}
+          <div className={`${openProfileModal ? "absolute" : "hidden"} absolute top-16 bg-white p-4 space-y-4 min-w-[260px]`}>
+            <Link href={`/${userRole}/portfolio`} className='flex gap-2 items-center'>
+              <span className='w-12 h-12 block rounded-full overflow-hidden border-2 border-primary'>
+              <Image src={UserImage} alt="User Profile" width={100} height={100} />
+              </span>
+              <span className='flex flex-col text-gray-600 text-sm'>
+                <span>Rohan Chopra</span>
+                <span>@jennywilson</span>
+              </span>
+            </Link>
+            <div className='flex flex-col gap-2 text-xl text-gray-500 border-y py-2 '>
+              <Link href="/#" className='items-center cursor-pointer'>Terms & Conditions</Link>
+              <Link href="/#" className='items-center cursor-pointer'>Privacy Policy</Link>
+              <Link href="/#" className='items-center cursor-pointer'>FAQ</Link>
+              <Link href="/#" className='items-center cursor-pointer'>Settings</Link>
+            </div>
+            <div>
+              <button onClick={handleLogout} className='text-xl text-gray-500 cursor-pointer'>Sign Out</button>
+            </div>
+          </div>
+          {/* ------------ Mobile Menu ------------- */}
           <div className='md:hidden'>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>

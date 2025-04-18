@@ -140,75 +140,79 @@ const FinancialInvestmentDetails = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 {/* Do you have a company */}
-                <FormField
-                  control={form.control}
-                  name="haveCompany"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Do you Have a company ?</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="yes" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Yes
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="no" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              No
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="haveCompany"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Do you Have a company ?</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1 text-gray-600"
+                          >
+                            <FormItem className="flex items-center space-x-1 ">
+                              <FormControl>
+                                <RadioGroupItem value="yes" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Yes
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="no" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                No
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 {/* Do you have a team */}
-                <FormField
-                  control={form.control}
-                  name="haveTeam"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Do you Have a team ?</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="yes" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Yes
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="no" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              No
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="haveTeam"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Do you Have a team ?</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1 text-gray-600"
+                          >
+                            <FormItem className="flex items-center space-x-1 ">
+                              <FormControl>
+                                <RadioGroupItem value="yes" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Yes
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="no" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                No
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -319,204 +323,212 @@ const FinancialInvestmentDetails = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 {/* How many company shares do you sell */}
-                <FormField
-                  control={form.control}
-                  name="needCapital"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How much capital do you need ?</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="00-50000" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Less than $50,000
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="50000-250000" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              $50,000 to $250,000
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="250000-1000000" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              $250,000 to $1 million
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="1000000+" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              More than $1 million
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="needCapital"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>How much capital do you need ?</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-3 text-gray-600"
+                          >
+                            <FormItem className="flex items-center space-x-1 ">
+                              <FormControl>
+                                <RadioGroupItem value="00-50000" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Less than $50,000
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="50000-250000" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                $50,000 to $250,000
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="250000-1000000" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                $250,000 to $1 million
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="1000000+" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                More than $1 million
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 {/* Experience Level */}
-                <FormField
-                  control={form.control}
-                  name="percentageSell"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>How many percentage of your company do you sell ?</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="0-20" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Less than 20%
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="20-40" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              20% - 40%
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="40-60" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              40% - 60%
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="60-100" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              More than 60%
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="percentageSell"
+                    render={({ field }) => (
+                      <FormItem className="">
+                        <FormLabel>How many percentage of your company do you sell ?</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-3 text-gray-600"
+                          >
+                            <FormItem className="flex items-center space-x-1 ">
+                              <FormControl>
+                                <RadioGroupItem value="0-20" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Less than 20%
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="20-40" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                20% - 40%
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="40-60" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                40% - 60%
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="60-100" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                More than 60%
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 {/* How many company shares do you sell */}
-                <FormField
-                  control={form.control}
-                  name="shareSell"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How much company&apos;s shares do you sell ?</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="00-50000" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Less than $50,000
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="50000-250000" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              $50,000 to $250,000
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="250000-1000000" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              $250,000 to $1 million
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="1000000+" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              More than $1 million
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="shareSell"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>How much company&apos;s shares do you sell ?</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-3 text-gray-600"
+                          >
+                            <FormItem className="flex items-center space-x-1 ">
+                              <FormControl>
+                                <RadioGroupItem value="00-50000" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Less than $50,000
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="50000-250000" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                $50,000 to $250,000
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="250000-1000000" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                $250,000 to $1 million
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="1000000+" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                More than $1 million
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 {/* Experience Level */}
-                <FormField
-                  control={form.control}
-                  name="experience"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Experience Level</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="beginner" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Beginner
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="intermediate" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Intermediate
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="advanced" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Advanced
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="experience"
+                    render={({ field }) => (
+                      <FormItem className="">
+                        <FormLabel>Experience Level</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-3 text-gray-600"
+                          >
+                            <FormItem className="flex items-center space-x-1 ">
+                              <FormControl>
+                                <RadioGroupItem value="beginner" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Beginner
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="intermediate" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Intermediate
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1">
+                              <FormControl>
+                                <RadioGroupItem value="advanced" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Advanced
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
             {/* Back  ||  Submit then Next */}

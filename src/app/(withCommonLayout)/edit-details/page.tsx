@@ -1,8 +1,10 @@
 import EditUserImage from '@/components/common/EditUserImage'
 import BusinessDetailsInfo from '@/components/section/BusinessDetailsInfo'
 import FinancialInvestmentDetails from '@/components/section/FinancialInvestmentDetails'
+import FinancialInvestmentDetails2 from '@/components/section/FinancialInvestmentDetails2'
 import LegalCompliance from '@/components/section/LegalCompliance'
 import PersonalInformation from '@/components/section/PersonalInformation'
+import Subscriptions from '@/components/section/Subscriptions'
 import React from 'react'
 
 const EditDetails = () => {
@@ -57,7 +59,9 @@ const EditDetails = () => {
       <PersonalInformation />
       <BusinessDetailsInfo />
       <FinancialInvestmentDetails />
+      <FinancialInvestmentDetails2 />
       <LegalCompliance />
+      <Subscriptions />
     </div>
   )
 }
