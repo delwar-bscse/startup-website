@@ -13,6 +13,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import Link from 'next/link';
+import HeroFilter from '@/components/shared/HeroFilter';
 
 
 const Projects = () => {
@@ -24,6 +25,10 @@ const Projects = () => {
         <div className='maxWidth text-white py-10 md:py-24 lg:py-48 space-y-4'>
           <h2 className='text-2xl md:text-3xl lg:text-5xl font-bold max-w-[650px]'>Empowering Small Businesses with Affordable Marketing Tools</h2>
           <p className='text-sm md:text-base lg:text-xl py-4 max-w-[700px]'>Connecting agents with powerful tools that showcase you and your listings beyond your local MLS, facilitating seamless referrals for lucrative fees, placing you on a global search engine where new clients can discover.</p>
+          
+          <div className='mt-16'>
+              <HeroFilter />
+            </div>
         </div>
       </div>
 

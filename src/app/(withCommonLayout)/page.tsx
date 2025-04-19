@@ -14,7 +14,6 @@ import "slick-carousel/slick/slick-theme.css";
 
 import CustomSlider from '@/components/shared/OurUsersSlide';
 import InvestorsSlider from '@/components/shared/BestInvestorSlide';
-import HeroFilter from '@/components/shared/HeroFilter';
 import Link from 'next/link';
 
 
@@ -36,9 +35,6 @@ const page = () => {
               <span>Explore Projects</span>
               <RiSendPlaneLine className='text-sm sm:text-xl lg:text-2xl' />
             </button>
-            <div className='mt-16'>
-              <HeroFilter />
-            </div>
           </div>
         </div>
       </div>
@@ -87,8 +83,8 @@ const page = () => {
                 <Image src={booking_01} width={32} height={32} alt='About Us' />
               </div>
               <div className='max-md:ps-22 md:px-16 space-y-2'>
-                <h2 className='text-2xl font-bold text-gray-600'>Accessible Options</h2>
-                <p className='text-gray-400 text-sm'>We prioritize your needs with options like wheelchair access, driver assistance, and extra space for mobility devices.</p>
+                <h2 className='text-2xl font-bold text-gray-600'>{item?.title}</h2>
+                <p className='text-gray-400 text-sm'>{item?.des}</p>
               </div>
             </div>
           ))}
@@ -138,7 +134,7 @@ const page = () => {
       <div style={{ backgroundImage: `url(${ContactUsImg.src})` }} className="w-full text-center min-h-[200px] md:min-h-[300px] bg-cover bg-center bg-no-repeat flex flex-col gap-6 items-center justify-center">
         <h2 className="text-3xl md:text-5xl font-bold text-white">Want to Start your Project</h2>
         <button className='flex justify-center items-center bg-primary2  py-2 sm:py-3 px-4 lg:px-6 gap-1  sm:gap-2 lg:gap-4 rounded-md text-sm sm:text-lg tracking-wider'>
-          <span>Explore Projects</span>
+          <span>Start Project</span>
           <RiSendPlaneLine className='text-sm sm:text-xl' />
         </button>
       </div>

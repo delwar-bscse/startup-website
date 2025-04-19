@@ -1,12 +1,12 @@
 "use client"
 
 import StoryImg01 from "@/assets/projects/single_project/ourStory_01.png"
-import BusinessDetails from "@/components/shared/BusinessDetails";
-import TargetVsRaisedAmount from "@/components/shared/TargetVsRaised";
 import Image from "next/image"
 import { useState } from "react";
+import BusinessDetails from "../shared/BusinessDetails";
+import TargetVsRaisedAmount from "../shared/TargetVsRaised";
 
-const EntrepreneurProjects = () => {
+const ProjectDetails = () => {
   const [changeComponent, setChangeComponent] = useState<string>("details");
   return (
     <div>
@@ -80,4 +80,4 @@ const EntrepreneurProjects = () => {
   )
 }
 
-export default EntrepreneurProjects
+export default ProjectDetails;
