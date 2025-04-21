@@ -68,7 +68,11 @@ const defaultValues: Partial<PersonalInfoValues> = {
   currentAssets: "",
 };
 
-const FinancialInvestmentDetails2 = () => {
+interface PersonalInformationProps {
+  onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
+}
+
+const FinancialInvestmentDetails2: React.FC<PersonalInformationProps> = ({ onHandleStep }) => {
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(PersonalInfoSchema),
     defaultValues,
@@ -643,11 +647,11 @@ const FinancialInvestmentDetails2 = () => {
 
             {/* Back  ||  Submit then Next */}
             <div className="w-full flex justify-between">
-              <Button type="submit" variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
+              <Button onClick={() => onHandleStep(2)} type="submit" variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
                 Back
               </Button>
 
-              <Button type="submit" className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900">
+              <Button onClick={() => onHandleStep(4)} type="submit" className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900">
                 Next
               </Button>
             </div>

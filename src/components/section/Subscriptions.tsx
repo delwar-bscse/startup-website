@@ -4,8 +4,19 @@ import React from 'react'
 import WeGet from '@/assets/projects/Entrepreneur/Button.png'
 import { FaCheckCircle } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation';
+import { getCookie } from "cookies-next/client";
+
 
 const Subscriptions = () => {
+  const [selectedPlan, setSelectedPlan] = React.useState<null | number>(null);
+  const router = useRouter();
+  const userRole = getCookie('su_role')
+
+  const handleSubscribe = () => {
+    console.log('Subscribed!');
+    router.push(`/${userRole}/portfolio`);
+  }
   return (
     <div className='maxWidth py-20 space-y-6'>
       <div className='bg-secondary px-2 py-6 lg:py-12 lg:px-4 xl:py-20 xl:px-16'>
@@ -18,7 +29,7 @@ const Subscriptions = () => {
             <div key={sub.id}>
               <div className={`border ${sub?.recommended ? "border-primary" : "border-gray-200"} overflow-hidden rounded-md`}>
                 {sub?.recommended && <p className='text-center bg-primary text-white py-2 text-2xl font-bold'>Recommended</p>}
-                <div className=' space-y-6 py-6 px-2 lg:px-4 xl:px-6 bg-white'>
+                <div className={`${selectedPlan === sub.id ? "bg-gray-100" : "bg-white"} space-y-6 py-6 px-2 lg:px-4 xl:px-6`}>
                   <h3 className='text-2xl font-semibold text-center text-gray-700'>{sub.title}</h3>
                   <p className='text-4xl lg:text-5xl font-bold text-center'>${sub.price}<span className='text-gray-500 text-base lg:text-lg font-semibold'>/month</span></p>
                   <p className='text-gray-500 text-semibold'>{sub.description}</p>
@@ -36,7 +47,7 @@ const Subscriptions = () => {
                     }
                   </ul>
                   <div className='px-5'>
-                    <button className='w-full bg-secondary2 text-primary border-2 border-primary py-2 lg:py-3 rounded-lg font-semibold text-lg lg:text-2xl'>Choose Plan</button>
+                    <button onClick={() => setSelectedPlan(sub.id)} className='w-full bg-secondary2 text-primary border-2 border-primary py-2 lg:py-3 rounded-lg font-semibold text-lg lg:text-2xl'>Choose Plan</button>
                   </div>
                 </div>
               </div>
@@ -46,10 +57,10 @@ const Subscriptions = () => {
       </div>
       {/* Submit then Next */}
       <div className="flex justify-end">
-              <Button type="submit" className="text-base md:text-lg bg-primary2 text-gray-900 min-w-[150px] px-3">
-                Subscribe
-              </Button>
-            </div>
+        <Button onClick={handleSubscribe} className="text-base md:text-lg bg-primary2 text-gray-900 min-w-[150px] px-3 cursor-pointer">
+          Subscribe
+        </Button>
+      </div>
     </div>
   )
 }

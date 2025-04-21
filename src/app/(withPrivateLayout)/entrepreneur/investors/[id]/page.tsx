@@ -5,6 +5,9 @@ import React from 'react'
 import AboutMe from '@/components/section/AboutMe';
 import Achievement from '@/components/section/Achievement';
 import UserInfo from '@/components/section/UserInfo';
+import InterestedIndustry from "@/components/section/InterestedIndustry";
+
+const userInfo = {profileImg:Profile, name:"Jenny Wilson", designation:"Fashion Designer", address:"Dhaka, Bangladesh"}
 
 const page = () => {
   return (
@@ -12,7 +15,7 @@ const page = () => {
       {/* ----------- Pr
       {/* ----------- Profile Section ----------- */}
       <>
-        <UserInfo Profile={Profile} />
+        <UserInfo userInfo={userInfo} />
       </>
       {/* ----------- About Me Section ----------- */}
       <>
@@ -21,6 +24,10 @@ const page = () => {
       {/* ----------- About Me Section ----------- */}
       <>
         <Achievement />
+      </>
+      {/* ----------- Interested Industry Section ----------- */}
+      <>
+        <InterestedIndustry />
       </>
     </div>
   )

@@ -80,7 +80,11 @@ const defaultValues: Partial<PersonalInfoValues> = {
   achievement: "",
 };
 
-const BusinessDetailsInfo = () => {
+interface PersonalInformationProps {
+  onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
+}
+
+const BusinessDetailsInfo: React.FC<PersonalInformationProps> = ({onHandleStep}) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const [imagePreview2, setImagePreview2] = useState<string | null>(null);
   const form = useForm<PersonalInfoValues>({
@@ -92,6 +96,7 @@ const BusinessDetailsInfo = () => {
   function onSubmit(data: PersonalInfoValues) {
     toast("Form submitted successfully!");
     console.log("Submitted Data:", data);
+    onHandleStep(3);
   }
 
   return (
@@ -349,7 +354,7 @@ const BusinessDetailsInfo = () => {
             
             {/* Back  ||  Submit then Next */}
             <div className="w-full flex justify-between">
-              <Button type="submit" variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
+              <Button onClick={() => onHandleStep(1)} variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
                 Back
               </Button>
 

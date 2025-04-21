@@ -55,8 +55,11 @@ const defaultValues: Partial<PersonalInfoValues> = {
   iAgree: false,
   date: new Date(),
 };
+interface PersonalInformationProps {
+  onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
+}
 
-const LegalCompliance = () => {
+const LegalCompliance: React.FC<PersonalInformationProps> = ({ onHandleStep }) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(PersonalInfoSchema),
@@ -67,6 +70,7 @@ const LegalCompliance = () => {
   function onSubmit(data: PersonalInfoValues) {
     toast("Form submitted successfully!");
     console.log("Submitted Data:", data);
+    onHandleStep(5);
   }
 
   return (
@@ -232,9 +236,10 @@ const LegalCompliance = () => {
                 )}
               />
             </div>
+            
             {/* Back  ||  Submit then Next */}
             <div className="w-full flex justify-between">
-              <Button type="submit" variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
+              <Button onClick={() => onHandleStep(3)} variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
                 Back
               </Button>
 

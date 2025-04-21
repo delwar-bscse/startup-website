@@ -16,13 +16,14 @@ import {
 
 import { Menu } from 'lucide-react'
 import { getCookie, deleteCookie } from "cookies-next/client";
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 const Navbar = () => {
   const [openProfileModal, setOpenProfileModal] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     // Get the userRole cookie when the component mounts
@@ -35,6 +36,7 @@ const Navbar = () => {
     deleteCookie('su_role');
     setUserRole(null); // Set userRole to null after logout
     setOpenProfileModal(false);
+    router.push('/signin');
   };
 
   return (
@@ -79,10 +81,9 @@ const Navbar = () => {
               </span>
             </Link>
             <div className='flex flex-col gap-2 text-xl text-gray-500 border-y py-2 '>
-              <Link href="/#" className='items-center cursor-pointer'>Terms & Conditions</Link>
-              <Link href="/#" className='items-center cursor-pointer'>Privacy Policy</Link>
-              <Link href="/#" className='items-center cursor-pointer'>FAQ</Link>
-              <Link href="/#" className='items-center cursor-pointer'>Settings</Link>
+              <Link href="/terms-and-conditions" className='items-center cursor-pointer'>Terms & Conditions</Link>
+              <Link href="/privacy-policy" className='items-center cursor-pointer'>Privacy Policy</Link>
+              <Link href="/faq" className='items-center cursor-pointer'>FAQ</Link>
             </div>
             <div>
               <button onClick={handleLogout} className='text-xl text-gray-500 cursor-pointer'>Sign Out</button>

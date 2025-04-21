@@ -65,36 +65,39 @@ const InvestorsTable: FC = () => {
           <InvestmentVsEquity />
         </div>
       </div>
-      <div className="w-full max-w-[1440px] mx-auto overflow-x-auto py-4 px-2">
-        <table className="w-full min-w-[1040px] table-auto bg-white" style={{ borderCollapse: 'collapse', width: '100%' }}>
-          <thead className="bg-primary text-white">
-            <tr>
-              <th className="py-4 px-4 text-left">E-mail</th>
-              <th className="py-4 px-4 text-left">Investors</th>
-              <th className="py-4 px-4 text-left">Amount</th>
-              <th className="py-4 px-4 text-left">Shareholder</th>
-              <th className="py-4 px-4 text-left">Date</th>
-              <th className="py-4 px-4 text-left">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {investors.map((investor, index) => (
-              <tr key={index}>
-                <td className="py-3 px-4 flex items-center">
-                  <Image src={investor.profileUrl} width={48} height={48} alt={investor.name} className="w-[48px] h-[48px] rounded-full border-2 border-primary" />
-                  <span className="ml-2">{investor.name}</span>
-                </td>
-                <td className="py-3 px-4">{investor.email}</td>
-                <td className="py-3 px-4">{investor.amount}</td>
-                <td className="py-3 px-4">{investor.shareholder}</td>
-                <td className="py-3 px-4">{investor.date}</td>
-                <td className="py-3 w-30">
-                  <Link href={`/entrepreneur/investors/${index + 1}`} className="bg-primary2 block text-center text-gray-600 font-semibold py-3 w-full rounded-md">See Profile</Link>
-                </td>
+      <div className='maxWidth'>
+        <h2 className='text-4xl md:text-5xl font-bold pb-4 text-gray-700'>Entrepreneurs List</h2>
+        <div className="w-full max-w-[1440px] mx-auto overflow-x-auto py-4">
+          <table className="w-full min-w-[1040px] table-auto bg-white" style={{ borderCollapse: 'collapse', width: '100%' }}>
+            <thead className="bg-primary text-white">
+              <tr>
+                <th className="py-4 px-4 text-left">E-mail</th>
+                <th className="py-4 px-4 text-left">Investors</th>
+                <th className="py-4 px-4 text-left">Amount</th>
+                <th className="py-4 px-4 text-left">Shareholder</th>
+                <th className="py-4 px-4 text-left">Date</th>
+                <th className="py-4 px-4 text-left">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {investors.map((investor, index) => (
+                <tr key={index}>
+                  <td className="py-3 px-4 flex items-center">
+                    <Image src={investor.profileUrl} width={48} height={48} alt={investor.name} className="w-[48px] h-[48px] rounded-full border-2 border-primary" />
+                    <span className="ml-2">{investor.name}</span>
+                  </td>
+                  <td className="py-3 px-4">{investor.email}</td>
+                  <td className="py-3 px-4">{investor.amount}</td>
+                  <td className="py-3 px-4">{investor.shareholder}</td>
+                  <td className="py-3 px-4">{investor.date}</td>
+                  <td className="py-3 w-30">
+                    <Link href={`/investor/investments/${index + 1}`} className="bg-primary2 block text-center text-gray-600 font-semibold py-3 w-full rounded-md">See Profile</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

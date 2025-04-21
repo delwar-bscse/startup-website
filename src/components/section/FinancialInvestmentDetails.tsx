@@ -86,7 +86,11 @@ const defaultValues: Partial<PersonalInfoValues> = {
   percentageSell: "",
 };
 
-const FinancialInvestmentDetails = () => {
+interface PersonalInformationProps {
+  onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
+}
+
+const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHandleStep }) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const [imagePreview2, setImagePreview2] = useState<string | null>(null);
   const form = useForm<PersonalInfoValues>({
@@ -98,6 +102,7 @@ const FinancialInvestmentDetails = () => {
   function onSubmit(data: PersonalInfoValues) {
     toast("Form submitted successfully!");
     console.log("Submitted Data:", data);
+    onHandleStep(4);
   }
 
   return (
@@ -531,9 +536,10 @@ const FinancialInvestmentDetails = () => {
                 </div>
               </div>
             </div>
+            
             {/* Back  ||  Submit then Next */}
             <div className="w-full flex justify-between">
-              <Button type="submit" variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
+              <Button onClick={() => onHandleStep(2)} variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
                 Back
               </Button>
 

@@ -138,7 +138,12 @@ const defaultValues: Partial<PersonalInfoValues> = {
   interestedIndustry: [],
 };
 
-const PersonalInformation = () => {
+interface PersonalInformationProps {
+  onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
+}
+
+
+const PersonalInformation: React.FC<PersonalInformationProps> = ({onHandleStep}) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const [imagePreview2, setImagePreview2] = useState<string | null>(null);
   const form = useForm<PersonalInfoValues>({
@@ -150,6 +155,7 @@ const PersonalInformation = () => {
   function onSubmit(data: PersonalInfoValues) {
     toast("Form submitted successfully!");
     console.log("Submitted Data:", data);
+    onHandleStep(2);
   }
 
   return (
