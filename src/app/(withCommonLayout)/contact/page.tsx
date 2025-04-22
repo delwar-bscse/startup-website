@@ -59,7 +59,7 @@ const SignUpForm = () => {
   });
 
   function onSubmit(data: SignUpFormValues) {
-    toast("Form submitted successfully!");
+    toast("Message send successfully!");
     console.log("Submitted Data:", data);
   }
 

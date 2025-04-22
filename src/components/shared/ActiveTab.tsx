@@ -23,23 +23,23 @@ const ActiveTab = () => {
   }
 
   return (
-    <div>
+    <div className='px-1'>
       <div className='maxWidth grid grid-cols-3 bg-secondary p-1 my-8'>
         <Link
           href={`/${pathname.split('/')[1]}/portfolio`}
-          className={`${isActive(`/${pathname.split('/')[1]}/portfolio`) ? 'bg-primary text-white' : 'transparent text-gray-700'} py-3 px-1 font-semibold text-center`}
+          className={`${isActive(`/${pathname.split('/')[1]}/portfolio`) ? 'bg-primary text-white' : 'transparent text-gray-700'} py-1 md:py-2 lg:py-3 px-1 text-sm md:text-base md:font-semibold text-center`}
         >
           Portfolio
         </Link>
         <Link
           href={`/${pathname.split('/')[1]}/${pathname.split('/')[1] === 'entrepreneur' ? 'investors' : 'investments'}`}
-          className={`${isActive(`/${pathname.split('/')[1]}/${pathname.split('/')[1] === 'entrepreneur' ? 'investors' : 'investments'}`) ? 'bg-primary text-white' : 'transparent text-gray-700'} py-3 px-1 font-semibold text-center`}
+          className={`${isActive(`/${pathname.split('/')[1]}/${pathname.split('/')[1] === 'entrepreneur' ? 'investors' : 'investments'}`) ? 'bg-primary text-white' : 'transparent text-gray-700'} py-1 md:py-2 lg:py-3 px-1 text-sm md:text-base md:font-semibold text-center`}
         >
           {pathname.split('/')[1] === 'entrepreneur' ? 'Investors' : 'Investments'}
         </Link>
         <Link
           href={`/${pathname.split('/')[1]}/projects`}
-          className={`${isActive(`/${pathname.split('/')[1]}/projects`) ? 'bg-primary text-white' : 'transparent text-gray-700'} py-3 px-1 font-semibold text-center`}
+          className={`${isActive(`/${pathname.split('/')[1]}/projects`) ? 'bg-primary text-white' : 'transparent text-gray-700'} py-1 md:py-2 lg:py-3 px-1 text-sm md:text-base md:font-semibold text-center`}
         >
           Projects
         </Link>

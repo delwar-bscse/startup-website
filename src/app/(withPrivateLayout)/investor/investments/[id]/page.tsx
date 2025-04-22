@@ -17,12 +17,12 @@ const page = () => {
         <UserInfo userInfo={userInfo} />
       </>
       {/* ----------- About Me Section ----------- */}
-      <div className='maxWidth space-y-4 py-16'>
+      <div className='maxWidth space-y-4 py-4 md:py-12 lg:py-16'>
         <AboutMe image1={About03} image2={About04} />
       </div>
       {/* ----------- About Me Section ----------- */}
       <div className="bg-secondary">
-        <div className='maxWidth space-y-4 py-16'>
+        <div className='maxWidth space-y-4 py-4 md:py-12 lg:py-16'>
           <SkillsAndExperience />
         </div>
       </div>

@@ -14,9 +14,9 @@ const Achievement = () => {
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
               <div className='space-y-4'>
                 <div className='flex justify-center items-center gap-6'>
-                  <p className='font-semibold text-5xl md:text-8xl text-purple-950'>75%</p>
+                  <p className='font-semibold text-4xl sm:text-5xl md:text-7xl text-purple-950'>75%</p>
                   <div className='w-4 h-18 md:h-22 border-x-3 border-gray-300' />
-                  <div className='flex flex-col gap-1 text-xl font-semibold'>
+                  <div className='flex flex-col gap-1 text-base md:text-xl font-semibold'>
                     <p>Total Invested</p>
                     <p className='text-primary'>$100000</p>
                   </div>

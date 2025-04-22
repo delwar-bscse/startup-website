@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 interface Data {
@@ -17,7 +17,6 @@ const COLORS = ['#5F46D9', '#D0C8FA'];
 
 const RADIAN = Math.PI / 180;
 
-// Typing the renderCustomizedLabel function
 const renderCustomizedLabel = ({
   cx,
   cy,
@@ -45,38 +44,66 @@ const renderCustomizedLabel = ({
 };
 
 const TargetVsRaisedAmount: React.FC = () => {
+  const [outerRadius, setOuterRadius] = useState(220); // Default size for larger screens
+  
+  useEffect(() => {
+    // This code will only run on the client side
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setOuterRadius(100);
+      } else if (window.innerWidth < 1024) {
+        setOuterRadius(120);
+      } else if (window.innerWidth < 1280) {
+        setOuterRadius(200);
+      } else {
+        setOuterRadius(200);
+      }
+    };
+    
+    // Set initial size
+    handleResize();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className='maxWidth'>
-      <h2 className='text-3xl md:text-5xl font-bold pb-8 text-gray-700'>Targeted Vs Raised Amount</h2>
-      <div className='flex justify-center gap-12 border border-gray-200 p-4'>
-        <div className="w-[400px] h-[400px] flex items-center justify-center">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart width={300} height={300}>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={renderCustomizedLabel}
-                outerRadius={180}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+      <h2 className='text-xl sm:text-3xl md:text-5xl font-bold pb-8 text-gray-700'>Targeted Vs Raised Amount</h2>
+      <div className=''>
+        <div className='flex flex-col md:flex-row justify-center items-center gap-12 border border-gray-200 p-4'>
+          <div className="w-[260px] md:w-[300px] lg:w-[400px] h-[260px] md:[300px] lg:h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart width={400} height={400}>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={outerRadius}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <ul className='ps-4 list-disc flex flex-col justify-center gap-2 text-xl font-semibold'>
+            <li>Target Amount - $5000</li>
+            <li className='text-[#5F46D9]'>Raised Amount - $3000</li>
+            <li className='text-[#D0C8FA]'>Remaining Amount - $2000</li>
+          </ul>
         </div>
-        <ul className='list-disc flex flex-col justify-center gap-2 text-xl font-semibold'>
-          <li>Target Amount - $5000</li>
-          <li className='text-[#5F46D9]'>Raised Amount - $3000</li>
-          <li className='text-[#D0C8FA]'>Remaining Amount - $2000</li>
-        </ul>
       </div>
-      <div className='flex items-center justify-center gap-2 text-2xl font-semibold py-8'>
-        <p className='text-primary'>Time Left - </p>
+      <div className='flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-xl md:text-2xl font-semibold py-8 sm:gap-4'>
+        <p className='text-primary'>Time Left</p>
         <p className='bg-secondary p-4 text-gray-700'>27 Days  -  18 hours  -  52 Minutes</p>
       </div>
     </div>

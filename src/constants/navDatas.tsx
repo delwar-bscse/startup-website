@@ -10,22 +10,22 @@ import { FaYoutube } from "react-icons/fa";
 export const quickLinks:QuickLink[] = [
   {
     title:"About Us",
-    url:"about-us"
+    url:"#"
   },
   {
     title:"Contact Us",
-    url:"contact-us"
+    url:"contact"
   },
   {
     title:"Update News",
-    url:"update-news"
+    url:"#"
   }
 ];
 
 export const browseCategory:QuickLink[] = [
   {
     title:"Terms of Service",
-    url:"terms-of-service"
+    url:"terms-and-conditions"
   },
   {
     title:"Privacy Policy",
@@ -37,7 +37,7 @@ export const browseCategory:QuickLink[] = [
   },
   {
     title:"Subscription Plans",
-    url:"subscription-plans"
+    url:"#"
   }
 ];
 
@@ -63,14 +63,14 @@ export const contactInfo:ContactItem[] = [
 export const followUs:FollowUs[] = [
   {
     icon:<FaFacebookF size={20} />,
-    url:"www.facebook.com"
+    url:"https://www.facebook.com"
   },
   {
     icon:<FaLinkedinIn size={20} />,
-    url:"www.linkedin.com"
+    url:"https://www.linkedin.com"
   },
   {
     icon:<FaYoutube size={20} />,
-    url:"www.youtube.com"
+    url:"https://www.youtube.com"
   },
 ]

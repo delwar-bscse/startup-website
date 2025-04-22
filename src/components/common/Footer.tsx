@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <div style={{ backgroundImage: `url(${FooterBg.src})`}} className='bg-cover bg-no-repeat py-16 text-white'>
+    <div style={{ backgroundImage: `url(${FooterBg.src})` }} className='bg-cover bg-no-repeat py-16 text-white'>
       <div className='maxWidth grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 lg:gap-20'>
         <div>
           <h3>
@@ -50,15 +50,17 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className='maxWidth h-[1px] bg-gray-400/40 my-10'/>
+      <div className='maxWidth h-[1px] bg-gray-400/40 my-10' />
       <div className='maxWidth flex flex-col md:flex-row justify-between items-center gap-4'>
-        <p className='flex items-center justify-center gap-1 text-sm md:text-base flex-wrap'><AiOutlineCopyright size={16}/> Copyright 2025 <span className='text-primary font-semibold'>MOON PARTNER</span> All Rights Reserved.</p>
+        <p className='flex items-center justify-center gap-1 text-sm md:text-base flex-wrap'><AiOutlineCopyright size={16} /> Copyright 2025 <span className='text-primary font-semibold'>MOON PARTNER</span> All Rights Reserved.</p>
         <div className='flex items-center gap-2'>
           <p>Follow Us : </p>
-          <ul className='flex gap-2'>
+          <ul className="flex gap-2">
             {followUs?.map((item, index) => (
-              <li key={index} className='cursor-pointer bg-white p-2 rounded-full'>
-                <Link href={item?.url} className='text-gray-700'>{item?.icon}</Link>
+              <li key={index} className="cursor-pointer bg-white p-2 rounded-full">
+                <a href={item?.url} target="_blank" rel="noopener noreferrer" className="text-gray-700">
+                  {item?.icon}
+                </a>
               </li>
             ))}
           </ul>

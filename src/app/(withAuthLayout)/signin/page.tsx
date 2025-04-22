@@ -58,7 +58,7 @@ const SignInForm = () => {
   });
 
   function onSubmit(data: SignUpFormValues) {
-    toast("Form submitted successfully!");
+    toast("Sign In successfully!");
     console.log("Submitted Data:", data);
 
     setCookie("su_role", data.role);
@@ -132,7 +132,7 @@ const SignInForm = () => {
                 control={form.control}
                 name="rememberMe"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-4">
+                  <FormItem className="flex flex-row items-center gap-2 md:gap-4">
                     <FormControl>
                       <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
@@ -142,7 +142,7 @@ const SignInForm = () => {
                   </FormItem>
                 )}
               />
-              <Link href="/forgot-password" className="font-semibold text-gray-600">
+              <Link href="/forgot-password" className="font-semibold text-sm sm:text-base text-gray-600">
                 Forgot Password?
               </Link>
             </div>

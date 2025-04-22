@@ -32,7 +32,7 @@ const industries: Props[] = [
 const InterestedIndustry = () => {
   return (
     <div className='maxWidth py-20'>
-      <h1 className='text-4xl md:text-5xl font-bold pb-4 lg:pb-8 text-gray-700'>Interested Industry</h1>
+      <h1 className='text-3xl md:text-4xl lg:text-5xl font-bold pb-4 lg:pb-8 text-gray-700'>Interested Industry</h1>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
         {industries?.map((industry) => (
           <div key={industry.id} className='flex items-center gap-2 border border-primary py-2 px-4'>

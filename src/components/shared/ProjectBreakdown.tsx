@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 interface Data {
@@ -14,11 +14,10 @@ const data: Data[] = [
   { name: 'Group C', value: 33 },
 ];
 
-const COLORS = [  '#D93E39', '#43B75D', '#FFAA00'];
+const COLORS = ['#D93E39', '#43B75D', '#FFAA00'];
 
 const RADIAN = Math.PI / 180;
 
-// Typing the renderCustomizedLabel function
 const renderCustomizedLabel = ({
   cx,
   cy,
@@ -46,11 +45,37 @@ const renderCustomizedLabel = ({
 };
 
 const ProjectBreakdown: React.FC = () => {
+  const [outerRadius, setOuterRadius] = useState(200); // Default size
+  
+  useEffect(() => {
+    // This code will only run on the client side
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setOuterRadius(100);
+      } else if (window.innerWidth < 1024) {
+        setOuterRadius(120);
+      } else if (window.innerWidth < 1280) {
+        setOuterRadius(180);
+      } else {
+        setOuterRadius(200);
+      }
+    };
+    
+    // Set initial size
+    handleResize();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className='maxWidth pb-20'>
       <h2 className='text-3xl md:text-5xl font-bold pb-8 text-gray-700'>Project Breakdown</h2>
-      <div className='flex justify-center gap-12 border border-gray-200 p-4'>
-        <div className="w-[400px] h-[400px] flex items-center justify-center">
+      <div className='flex flex-col md:flex-row justify-center items-center gap-12 border border-gray-200 p-4'>
+        <div className="w-[260px] md:w-[300px] lg:w-[400px] h-[260px] md:[300px] lg:h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart width={300} height={300}>
               <Pie
@@ -59,7 +84,7 @@ const ProjectBreakdown: React.FC = () => {
                 cy="50%"
                 labelLine={false}
                 label={renderCustomizedLabel}
-                outerRadius={180}
+                outerRadius={outerRadius}
                 fill="#8884d8"
                 dataKey="value"
               >
@@ -70,7 +95,7 @@ const ProjectBreakdown: React.FC = () => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <ul className='list-disc flex flex-col justify-center gap-2 text-xl font-semibold'>
+        <ul className='ps-4 list-disc flex flex-col justify-center gap-2 text-xl font-semibold'>
           <li className='text-[#D93E39]'><span className='text-gray-700'>Technology -</span> 30%</li>
           <li className='text-[#43B75D]'><span className='text-gray-700'>Fashion -</span> 37%</li>
           <li className='text-[#FFAA00]'><span className='text-gray-700'>Cooking -</span> 33%</li>

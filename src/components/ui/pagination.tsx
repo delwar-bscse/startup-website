@@ -55,9 +55,11 @@ function PaginationLink({
       data-active={isActive}
       className={cn(
         buttonVariants({
-          variant: isActive ? "outline" : "ghost",
+          variant: "ghost",
           size,
         }),
+        "h-12 w-12 rounded-full",
+        isActive && " bg-primary2 text-white",
         className
       )}
       {...props}
@@ -67,13 +69,13 @@ function PaginationLink({
 
 function PaginationPrevious({
   className,
+  isActive,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={cn("h-12 w-12 rounded-full border-2", isActive ? "border-primary2" : "border-gray-300", className)}
       {...props}
     >
       <ChevronLeftIcon />
@@ -84,13 +86,14 @@ function PaginationPrevious({
 
 function PaginationNext({
   className,
+  isActive,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      className={cn("h-12 w-12 rounded-full border-2", isActive ? "border-primary2" : "border-gray-300", className)}
       {...props}
     >
       {/* <span className="hidden sm:block">Next</span> */}

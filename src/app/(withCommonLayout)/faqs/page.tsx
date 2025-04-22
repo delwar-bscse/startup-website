@@ -2,7 +2,7 @@
 
 // components/CollapsibleFAQ.tsx
 import React, { useState } from 'react';
-import ContactUsImg from "@/assets/contact/contact-us.png";
+import faqImg from "@/assets/contact/faq.png";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 
@@ -56,12 +56,12 @@ const CollapsibleFAQ: React.FC = () => {
 
   return (
     <div>
-      <div style={{ backgroundImage: `url(${ContactUsImg.src})` }} className="w-full text-center min-h-[200px] md:min-h-[300px] bg-cover bg-center bg-no-repeat flex items-center justify-center">
-        <h2 className="text-3xl md:text-5xl font-bold text-white">Contact Us</h2>
+      <div style={{ backgroundImage: `url(${faqImg.src})` }} className="w-full text-center min-h-[200px] md:min-h-[300px] bg-cover bg-center bg-no-repeat flex items-center justify-center">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white">FAQ</h2>
       </div>
       <div className="max-w-[800px] mx-auto my-16 p-8 bg-secondary">
         <div className='space-y-4 py-8'>
-          <h2 className='text-6xl lg:text-8xl font-bold text-gray-800 text-center'>FAQs</h2>
+          {/* <h2 className='text-6xl lg:text-8xl font-bold text-gray-800 text-center'>FAQs</h2> */}
           <p className='text-gray-600 text-center'>Got questions? We’ve got answers! Explore our frequently asked questions to learn more about how this website works, from subscriptions and gifts to delivery and support.</p>
         </div>
         <div className="space-y-4">
@@ -69,15 +69,15 @@ const CollapsibleFAQ: React.FC = () => {
             <div key={index} className="bg-white rounded-md overflow-hidden">
               <button
                 onClick={() => toggleOpen(index)}
-                className={`w-full text-left py-4 px-6 text-lg font-semibold flex items-center justify-between  ${openIndex === index ? 'bg-primary text-gray-50' : ''}`}
+                className={`w-full text-left py-2 md:py-4 px-3 md:px-6 text-base md:text-lg font-semibold flex items-center justify-between  ${openIndex === index ? 'bg-primary text-gray-50' : 'text-gray-600'}`}
               >
                 <span>{item.question}</span>
                 <span>{openIndex === index ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
               </button>
               {openIndex === index && (
-                <div className="py-4 px-6 bg-primary text-gray-50 text-base">
+                <p className="py-2 md:py-4 px-4 md:px-6 bg-primary text-gray-50 text-sm md:text-base font-light">
                   {item.answer}
-                </div>
+                </p>
               )}
             </div>
           ))}

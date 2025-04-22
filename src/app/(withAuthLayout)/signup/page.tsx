@@ -66,7 +66,7 @@ const SignUpForm = () => {
   });
 
   function onSubmit(data: SignUpFormValues) {
-    toast("Form submitted successfully!");
+    toast("Create account successfully!");
     console.log("Submitted Data:", data);
   }
 
@@ -181,11 +181,11 @@ const SignUpForm = () => {
               control={form.control}
               name="optInGiftDeliveries"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center gap-4  p-4">
+                <FormItem className="flex flex-row items-center gap-2 md:gap-4 p-4 text-gray-600">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
-                  <FormLabel className="text-sm sm:text-base">
+                  <FormLabel className="text-xs sm:text-sm md:text-base">
                     Opt-in for Random Gift Deliveries
                   </FormLabel>
                 </FormItem>
