@@ -17,13 +17,13 @@ interface ArrowProps {
 
 const SampleNextArrow: React.FC<ArrowProps> = ({ onClick }) => (
   <div onClick={onClick} className="absolute z-20 bottom-1/2 transform translate-y-[-50%] right-7 md:right-0">
-    <FaArrowAltCircleRight className="text-4xl md:text-5xl text-primary opacity-70" />
+    <FaArrowAltCircleRight className="text-4xl md:text-5xl text-primary opacity-70 cursor-pointer" />
   </div>
 );
 
 const SamplePrevArrow: React.FC<ArrowProps> = ({ onClick }) => (
   <div onClick={onClick} className="absolute z-20 bottom-1/2 transform translate-y-[-50%] left-8 md:left-1">
-    <FaArrowAltCircleLeft className="text-4xl md:text-5xl text-primary opacity-70" />
+    <FaArrowAltCircleLeft className="text-4xl md:text-5xl text-primary opacity-70 cursor-pointer" />
   </div>
 );
 
@@ -47,7 +47,7 @@ const InvestorsSlider: React.FC = () => {
                 <div className="z-10 w-full h-100 absolute bottom-0 bg-primary2" />
                 <Image src={Investors} width={800} height={900} alt="Users Say" className="relative z-20" />
               </div>
-              <div className="flex flex-col items-center gap-3 md:text-xl lg:text-2xl font-semibold py-6">
+              <div className="flex flex-col items-center gap-3 md:text-xl lg:text-2xl font-semibold py-6 border border-gray-200 shadow-sm">
                 <h3 className="text-2xl md:text-3xl lg:text-5xl text-gray-700 font-bold">James Michael</h3>
                 <p className=" text-sm md:text-base lg:text-xl">Total Invested - <span className="text-primary2">$78437</span></p>
                 <div className="w-full flex flex-col lg:flex-row items-center justify-around text-sm md:text-base lg:text-xl">

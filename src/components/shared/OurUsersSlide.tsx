@@ -18,13 +18,13 @@ interface ArrowProps {
 
 const SampleNextArrow: React.FC<ArrowProps> = ({ onClick }) => (
   <div onClick={onClick} className="absolute z-20 top-1/2 transform translate-y-[-50%] right-5 lg:-right-8">
-    <FaArrowAltCircleRight className="text-4xl text-primary opacity-70" />
+    <FaArrowAltCircleRight className="text-4xl text-primary opacity-70 cursor-pointer" />
   </div>
 );
 
 const SamplePrevArrow: React.FC<ArrowProps> = ({ onClick }) => (
   <div onClick={onClick} className="absolute z-20 top-1/2 transform translate-y-[-50%] left-6 lg:-left-7">
-    <FaArrowAltCircleLeft className="text-4xl text-primary opacity-70" />
+    <FaArrowAltCircleLeft className="text-4xl text-primary opacity-70 cursor-pointer" />
   </div>
 );
 

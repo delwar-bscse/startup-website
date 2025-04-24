@@ -49,9 +49,9 @@ const Navbar = () => {
     <div className='shadow-md'>
       <div className='grid grid-cols-2 md:grid-cols-5 maxWidth py-3 px-2'>
         {/* Brand Logo */}
-        <div className='col-span-1 flex justify-start items-center'>
+        <Link href="/" className='col-span-1 flex justify-start items-center'>
           <Image src={BrandLogo} alt="Vercel Logo" width={160} height={30} />
-        </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <ul className='hidden md:flex col-span-3 justify-center items-center gap-5 font-semibold text-gray-700'>

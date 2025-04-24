@@ -25,7 +25,7 @@ const BusinessDetails = () => {
       {/* ----------- Our Mission Section ----------- */}
       <div className="bg-secondary">
         <div className="maxWidth py-20">
-          <h2 className="text-3xl md:text-5xl font-bold pb-10 text-gray-700">Our Story</h2>
+          <h2 className="text-3xl md:text-5xl font-bold pb-10 text-gray-700">Our Mission</h2>
           <div className="space-y-2">
             <div className="flex gap-2 md:gap-4">
               <div className="flex flex-col items-center gap-2">

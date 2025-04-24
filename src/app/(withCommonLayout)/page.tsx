@@ -94,7 +94,7 @@ const page = () => {
 
       {/* ----------- Projects Section ----------- */}
       <div className='maxWidth py-20'>
-        <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold pb-8'>Our Projects</h2>
+        <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold pb-8'>Exclusive Projects</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
           {projectDatas.slice(0, 6)?.map((project) => (
             <ProjectCard key={project?.id} project={project} detailsUrl={`/projects/${project?.id}`} />
@@ -114,7 +114,7 @@ const page = () => {
         </Link>
       </div>
 
-      {/* ----------- Best Investors Section ----------- */}
+      {/* ----------- Best Investors Slider Section ----------- */}
       <div className='maxWidth flex flex-col-reverse md:flex-row gap-4 pt-12'>
         <div className='w-full md:w-[50%]'><InvestorsSlider /></div>
         <div className='flex flex-col gap-4 items-start justify-center px-3 lg:px-20'>

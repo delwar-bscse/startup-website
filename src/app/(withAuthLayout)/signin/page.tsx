@@ -62,7 +62,7 @@ const SignInForm = () => {
     console.log("Submitted Data:", data);
 
     setCookie("su_role", data.role);
-    router.push("/")
+    router.push(`/${data.role}/portfolio`)
   }
 
   return (
