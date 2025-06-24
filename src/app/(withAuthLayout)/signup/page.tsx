@@ -14,35 +14,37 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/ui/radio-group";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import { IoCameraOutline } from "react-icons/io5";
+import { myFetch } from "@/utils copy/myFetch";
+import { useRouter } from "next/navigation";
 
 // Schema
 const signUpFormSchema = z.object({
   role: z.enum(["investor", "entrepreneur"], {
     required_error: "Please select a role.",
   }),
-  fullName: z.string().min(2, {
+  name: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  phoneNumber: z.string().min(10, {
+  phone: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
-  }),
-  primaryEvent: z.string({
-    required_error: "Please select your primary event.",
   }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  optInGiftDeliveries: z.boolean().optional(),
+  // optInGiftDeliveries: z.boolean().optional(),
 });
 
 // Type
@@ -50,24 +52,59 @@ type SignUpFormValues = z.infer<typeof signUpFormSchema>;
 
 const defaultValues: Partial<SignUpFormValues> = {
   role: "investor",
-  fullName: "",
+  name: "",
   email: "",
-  phoneNumber: "",
-  primaryEvent: "",
+  phone: "",
   password: "",
-  optInGiftDeliveries: false,
+  // optInGiftDeliveries: false,
 };
 
 const SignUpForm = () => {
+  const router = useRouter();
+  const userRef = useRef<HTMLInputElement>(null);
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageError, setImageError] = useState<string>("");
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  function onSubmit(data: SignUpFormValues) {
-    toast("Create account successfully!");
-    console.log("Submitted Data:", data);
+  const handleImageChange = () => {
+    const file = userRef.current?.files?.[0];
+    if (file) {
+      setImageUrl(URL.createObjectURL(file));
+      setImageError("");
+    }
+  };
+
+  const onSubmit = async (data: SignUpFormValues) => {
+    if (!imageUrl) {
+      setImageError("Please select a profile image.");
+      return;
+    }
+    const formData = new FormData();
+    const file = userRef.current?.files?.[0];
+    if (file) {
+      formData.append("file", file);
+    }
+    formData.append("data", JSON.stringify(data));
+
+    try {
+      const res = await myFetch("/users/register", {
+        method: "POST",
+        body: formData,
+      });
+      if (res.success) {
+        toast.success("Sign up successful", { id: "signup" });
+        router.push("/signin");
+      } else {
+        toast.error(res?.message || "Sign up failed", { id: "signup" });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
   }
 
   return (
@@ -101,10 +138,30 @@ const SignUpForm = () => {
               )}
             />
 
+            {/* Profile Image */}
+            <div className="relative w-40 h-40 mx-auto rounded-full bg-gray-100">
+              <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-primary">
+                <Image
+                  src={imageUrl}
+                  alt="Profile"
+                  width={400}
+                  height={400}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <span onClick={() => userRef.current?.click()} className="absolute bottom-2.5 right-2.5 p-1.5 bg-white rounded-full flex items-center justify-center cursor-pointer">
+                <IoCameraOutline size={16} />
+              </span>
+              <input ref={userRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+            </div>
+            {imageError && (
+              <p className="text-red-500 text-center pb-4 text-sm">{imageError}</p>
+            )}
+
             {/* Full Name */}
             <FormField
               control={form.control}
-              name="fullName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
@@ -134,27 +191,12 @@ const SignUpForm = () => {
             {/* Phone Number */}
             <FormField
               control={form.control}
-              name="phoneNumber"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your phone number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Primary Event */}
-            <FormField
-              control={form.control}
-              name="primaryEvent"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>What&apos;s Your Primary Event?</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Type your primary event" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -177,7 +219,7 @@ const SignUpForm = () => {
             />
 
             {/* Checkbox */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="optInGiftDeliveries"
               render={({ field }) => (
@@ -190,7 +232,7 @@ const SignUpForm = () => {
                   </FormLabel>
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Submit */}
             <Button type="submit" className="w-full text-base md:text-lg">

@@ -1,6 +1,9 @@
 import { StaticImageData } from 'next/image';
 import { ReactNode } from 'react';
 
+
+export type userRole = 'investor' |'entrepreneur'
+
 export type ContactItem = {
   title: string;
   icon: ReactNode;

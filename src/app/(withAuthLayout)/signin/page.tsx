@@ -14,56 +14,74 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Label } from "@/components/ui/label";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group";
 import Link from "next/link";
 import { setCookie } from "cookies-next/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { myFetch } from "@/utils copy/myFetch";
 
 // Schema
-const signUpFormSchema = z.object({
-  role: z.enum(["investor", "entrepreneur"], {
-    required_error: "Please select a role.",
-  }),
+const signInFormSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  rememberMe: z.boolean().optional(),
 });
 
 // Type
-type SignUpFormValues = z.infer<typeof signUpFormSchema>;
+type SigninFormValues = z.infer<typeof signInFormSchema>;
 
-const defaultValues: Partial<SignUpFormValues> = {
-  role: "investor",
+const defaultValues: Partial<SigninFormValues> = {
   email: "",
   password: "",
-  rememberMe: false,
 };
 
 const SignInForm = () => {
   const router = useRouter();
-  const form = useForm<SignUpFormValues>({
-    resolver: zodResolver(signUpFormSchema),
+  const redirect = useSearchParams().get("redirect");
+  const form = useForm<SigninFormValues>({
+    resolver: zodResolver(signInFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  function onSubmit(data: SignUpFormValues) {
-    toast("Sign In successfully!");
-    console.log("Submitted Data:", data);
+  const onSubmit = async (data: SigninFormValues) => {
+    toast.loading("Logging in...", {
+      id: "login",
+    });
 
-    setCookie("su_role", data.role);
-    router.push(`/${data.role}/portfolio`)
-  }
+    const payload = {
+      email: data.email,
+      password: data.password,
+    };
+    // console.log(payload);
+
+    try {
+      const res = await myFetch("/auth/login", {
+        method: "POST",
+        body: payload,
+      });
+      if (res.success) {
+        setCookie("qwert_accessToken", res.data.accessToken);
+        
+        const user = await myFetch("/users/me", {
+          method: "GET"
+        });
+        // console.log("User Data:", user);
+        if (user.success) {
+          setCookie("qwert_role", user.data.role);
+          toast.success("Login successful", { id: "login" });
+        }
+        router.push(redirect || "/");
+      } else {
+        toast.error(res?.message || "Login failed", { id: "login" });
+      }
+    } catch (error: unknown) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   return (
     <div className="w-full flex justify-center py-10 px-4">
@@ -75,26 +93,6 @@ const SignInForm = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Role Radio Group */}
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem className="flex justify-center gap-2 py-4 md:py-8">
-                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="investor" id="investor" />
-                      <Label htmlFor="investor" className="text-gray-800 font-semibold">Investor</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="entrepreneur" id="entrepreneur" />
-                      <Label htmlFor="entrepreneur" className="text-gray-800 font-semibold">Entrepreneur</Label>
-                    </div>
-                  </RadioGroup>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             {/* Email */}
             <FormField
@@ -126,22 +124,8 @@ const SignInForm = () => {
               )}
             />
 
-            <div className="flex justify-between items-center">
-              {/* Checkbox */}
-              <FormField
-                control={form.control}
-                name="rememberMe"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2 md:gap-4">
-                    <FormControl>
-                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                    <FormLabel className="text-sm sm:text-base">
-                      Remember Me
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
+            {/* Forgot Password */}
+            <div className="flex justify-end items-center">
               <Link href="/forgot-password" className="font-semibold text-sm sm:text-base text-gray-600">
                 Forgot Password?
               </Link>

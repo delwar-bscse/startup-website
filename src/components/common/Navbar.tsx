@@ -25,22 +25,37 @@ import {
 import { Menu } from 'lucide-react'
 import { getCookie, deleteCookie } from "cookies-next/client";
 import { usePathname, useRouter } from 'next/navigation'
+import { myFetch } from '@/utils copy/myFetch'
+
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [user, setUser] = useState<any>({});
   const pathname = usePathname();
   const router = useRouter();
 
+
+
   useEffect(() => {
-    // Get the userRole cookie when the component mounts
-    const role = getCookie('su_role') as string | undefined; // Ensure it can be string or undefined
-    setUserRole(role || null); // If role is undefined, set null
+    const getUser = async () => {
+      const response = await myFetch("/users/me", {
+        method: "GET"
+      });
+      console.log("User Data:", response);
+      setUserRole(response?.data?.role);
+      setUser(response?.data);
+    };
+    getUser();
+
+    // const role = getCookie('qwert_role') as string | undefined;
+    // setUserRole(role || null);
+
   }, [pathname]);
 
   const handleLogout = () => {
     // Clear the userRole cookie when logging out
-    deleteCookie('su_role');
+    deleteCookie('qwert_role');
     setUserRole(null); // Set userRole to null after logout
     router.push('/signin');
   };
@@ -74,7 +89,7 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className='max-md:hidden w-12 h-12 block rounded-full overflow-hidden border-2 border-primary cursor-pointer'>
-                  <Image src={UserImage} alt="User Profile" width={200} height={200} className='object-fit' />
+                  <Image src={user?.profileImg} alt="User Profile" width={200} height={200} className='object-contain' />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-60 relative top-4 right-24">
@@ -85,8 +100,8 @@ const Navbar = () => {
                         <Image src={UserImage} alt="User Profile" width={100} height={100} />
                       </span>
                       <span className='flex flex-col text-gray-600 text-sm'>
-                        <span>Rohan Chopra</span>
-                        <span>@jennywilson</span>
+                        <span className='font-semibold capitalize text-xl'>{user?.name}</span>
+                        <span className='font-semibold capitalize'>{user?.role}</span>
                       </span>
                     </span>
                   </DropdownMenuItem>
@@ -128,8 +143,8 @@ const Navbar = () => {
                         <Image src={UserImage} alt="User Profile" width={100} height={100} />
                       </span>
                       <span className='flex flex-col text-gray-600 text-sm'>
-                        <span>Rohan Chopra</span>
-                        <span>@jennywilson</span>
+                        <span className='font-semibold capitalize text-xl'>{user?.name}</span>
+                        <span className='font-semibold capitalize'>{user?.role}</span>
                       </span>
                     </Link>
                   </li>}
