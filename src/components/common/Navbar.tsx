@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Menu } from 'lucide-react'
-import { getCookie, deleteCookie } from "cookies-next/client";
+import { deleteCookie } from "cookies-next/client";
 import { usePathname, useRouter } from 'next/navigation'
 import { myFetch } from '@/utils copy/myFetch'
 
@@ -34,38 +34,51 @@ const Navbar = () => {
   const [user, setUser] = useState<any>({});
   const pathname = usePathname();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
 
   useEffect(() => {
-    const getUser = async () => {
-      const response = await myFetch("/users/me", {
-        method: "GET"
-      });
-      console.log("User Data:", response);
-      setUserRole(response?.data?.role);
-      setUser(response?.data);
-    };
-    getUser();
-
-    // const role = getCookie('qwert_role') as string | undefined;
-    // setUserRole(role || null);
+    setIsLoading(true);
+    try {
+      const getUser = async () => {
+        const response = await myFetch("/users/me", {
+          method: "GET"
+        });
+        // console.log("User Data:", response);
+        setUserRole(response?.data?.role);
+        setUser(response?.data);
+      };
+      getUser();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
 
   }, [pathname]);
 
   const handleLogout = () => {
     // Clear the userRole cookie when logging out
     deleteCookie('qwert_role');
+    deleteCookie('qwert_accessToken');
     setUserRole(null); // Set userRole to null after logout
     router.push('/signin');
   };
+  if (isLoading) {
+    return (
+      <div className='flex justify-center items-center'>
+        <span className='loader text-primary'>Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div className='shadow-md'>
       <div className='grid grid-cols-2 md:grid-cols-5 maxWidth py-3 px-2'>
         {/* Brand Logo */}
         <Link href="/" className='col-span-1 flex justify-start items-center'>
-          <Image src={BrandLogo} alt="Vercel Logo" width={160} height={30} />
+          <Image src={BrandLogo} alt="Vercel Logo" width={160} height={160} className='object-cover' />
         </Link>
 
         {/* Desktop Navigation */}
@@ -89,7 +102,7 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className='max-md:hidden w-12 h-12 block rounded-full overflow-hidden border-2 border-primary cursor-pointer'>
-                  <Image src={user?.profileImg} alt="User Profile" width={200} height={200} className='object-contain' />
+                  <Image src={user?.profileImg} alt="User Profile" width={300} height={300} className='object-cover min-w-12 min-h-12' />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-60 relative top-4 right-24">

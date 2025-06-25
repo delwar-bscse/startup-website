@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 
@@ -10,6 +11,7 @@ type FilterOptions = {
 };
 
 const HeroFilter = () => {
+  const router = useRouter();
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     search: '',
     categories: '',
@@ -26,6 +28,7 @@ const HeroFilter = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    router.push(`?search=${filterOptions.search}&categories=${filterOptions.categories}&projectType=${filterOptions.projectType}`);
     // Handle form submission here
     console.log('Form submitted with:', filterOptions);
   };

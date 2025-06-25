@@ -2,7 +2,6 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { BASE_URL } from "../config/envConfig";
 import { getToken } from "./getToken";
 
 export interface FetchResponse {
@@ -55,7 +54,7 @@ export const myFetch = async (
   };
 
   try {
-    const response = await fetch(`${BASE_URL}${url}`, {
+    const response = await fetch(`${process.env.BASE_URL}${url}`, {
       method,
       headers: reqHeaders,
       ...(hasBody && { body: isFormData ? body : JSON.stringify(body) }),

@@ -1,5 +1,8 @@
 "use client";
 
+// This component is used to collect financial and investment details from the user.
+// ---------------------------- INVESTOR SECTION ----------------------------//
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -79,9 +82,18 @@ const FinancialInvestmentDetails2: React.FC<PersonalInformationProps> = ({ onHan
     mode: "onChange",
   });
 
-  function onSubmit(data: PersonalInfoValues) {
+  async function onSubmit(data: PersonalInfoValues) {
     toast("Form submitted successfully!");
     console.log("Submitted Data:", data);
+
+    // const response = await myFetch("/users/personalInfo", {
+    //   method: "PUT",
+    //   body: JSON.stringify(data),
+    // });
+    // console.log("Response:", response);
+
+    onHandleStep(4);
+
   }
 
   return (
@@ -651,7 +663,7 @@ const FinancialInvestmentDetails2: React.FC<PersonalInformationProps> = ({ onHan
                 Back
               </Button>
 
-              <Button onClick={() => onHandleStep(4)} type="submit" className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900">
+              <Button type="submit" className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900">
                 Next
               </Button>
             </div>

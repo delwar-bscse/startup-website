@@ -39,6 +39,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useState } from "react";
+// import { myFetch } from "@/utils copy/myFetch";
 
 const interestedIndustryDatas = [
   {
@@ -152,9 +153,23 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({onHandleStep})
     mode: "onChange",
   });
 
-  function onSubmit(data: PersonalInfoValues) {
+  async function onSubmit(data: PersonalInfoValues) {
     toast("Form submitted successfully!");
-    console.log("Submitted Data:", data);
+    // console.log("Submitted Data:", data);
+    // Remove image1 and image2 from the data object for payload if needed
+    const { image1, image2, ...newData } = data;
+
+    const formData = new FormData();
+    formData.append("files", image1);
+    formData.append("files", image2);
+    formData.append("data", JSON.stringify(newData));
+
+    // const response = await myFetch("/users/personalInfo", {
+    //   method: "PUT",
+    //   body: formData,
+    // });
+    // console.log("Response:", response);
+
     onHandleStep(2);
   }
 

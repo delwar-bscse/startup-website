@@ -24,19 +24,20 @@ import { Textarea } from "@/components/ui/textarea"
 import ContactUsImg from "@/assets/contact/contact-us.png";
 import { contactData } from "@/constants/contactData";
 import Image from "next/image";
+import { myFetch } from "@/utils copy/myFetch";
 
 // Schema
 const signUpFormSchema = z.object({
-  fullName: z.string().min(2, {
+  name: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  phoneNumber: z.string().min(10, {
+  phone: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
   }),
-  msg: z.string().min(2, {
+  message: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
 });
@@ -45,10 +46,10 @@ const signUpFormSchema = z.object({
 type SignUpFormValues = z.infer<typeof signUpFormSchema>;
 
 const defaultValues: Partial<SignUpFormValues> = {
-  fullName: "",
+  name: "",
   email: "",
-  phoneNumber: "",
-  msg: "",
+  phone: "",
+  message: "",
 };
 {/* ---------------------------- Sign Up Form ---------------------------- */}
 const SignUpForm = () => {
@@ -58,9 +59,20 @@ const SignUpForm = () => {
     mode: "onChange",
   });
 
-  function onSubmit(data: SignUpFormValues) {
-    toast("Message send successfully!");
-    console.log("Submitted Data:", data);
+  async function onSubmit (data: SignUpFormValues) {
+    const response = await myFetch("/users/get-in-touch",
+      {
+        method: "POST",
+        body: data,
+      }
+    )
+    if( response?.success) {
+      toast.success("Message sent successfully!");
+      form.reset();
+      // console.log("Form Data:", response?.data);
+    } else {
+      toast.error("Failed to send message. Please try again.");
+    }
   }
 
   return (
@@ -95,7 +107,7 @@ const SignUpForm = () => {
             {/* Full Name */}
             <FormField
               control={form.control}
-              name="fullName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
@@ -131,7 +143,7 @@ const SignUpForm = () => {
             {/* Phone Number */}
             <FormField
               control={form.control}
-              name="phoneNumber"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
@@ -149,7 +161,7 @@ const SignUpForm = () => {
             {/* Full Name */}
             <FormField
               control={form.control}
-              name="msg"
+              name="message"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Message</FormLabel>

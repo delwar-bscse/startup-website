@@ -10,12 +10,12 @@ const nextConfig: NextConfig = {
     // OR use remotePatterns for more control:
     remotePatterns: [
       {
+        protocol: 'http',
+        hostname: '**',
+      },
+      {
         protocol: 'https',
-        hostname: '**', // Allows all HTTPS domains
-        // For more specific control:
-        // hostname: 'images.unsplash.com',
-        // port: '',
-        // pathname: '/photo-**',
+        hostname: '**',
       },
     ],
   },

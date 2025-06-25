@@ -56,17 +56,26 @@ export interface OurMission {
   imgs: StaticImageData[];  // Array of image URLs.
 }
 
+interface Entrepreneur {
+    _id: string;
+    name: string;
+    profileImg: string;
+}
+
 export interface Project {
-  id: number;
-  name: string;
-  startedDate: string;  // Could be Date type if you'd prefer to handle dates directly.
-  target: number;
-  raised: number;
-  left: number;
-  img: StaticImageData;  // Assuming this is an image path or URL.
-  ourStory: OurStory;
-  ourVision: OurVision;
-  ourMission: OurMission;
+    _id: string;
+    entrepreneurId: Entrepreneur;
+    title: string;
+    industry: string;
+    projectType: string;
+    primaryUrl: string;
+    deadLine: string;
+    fundingGoal: number;
+    fundsRaised: number;
+    equityOffered: number;
+    equitySold: number;
+    fundingStatus: string;
+    isVerified: boolean;
 }
 
 // -------------------------- Home Page Data Type -------------------------- //

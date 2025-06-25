@@ -1,6 +1,6 @@
 import React from 'react';
 import heroImg from '@/assets/projects/project.png';
-import { projectDatas } from '@/constants/projectData';
+// import { projectDatas } from '@/constants/projectData';
 import {
   Pagination,
   PaginationContent,
@@ -12,9 +12,17 @@ import {
 } from "@/components/ui/pagination"
 import HeroFilter from '@/components/shared/HeroFilter';
 import ProjectCard from '@/components/shared/ProjectCard';
+import { Project } from '@/types/types';
+import { myFetch } from '@/utils copy/myFetch';
 
 
-const Projects = () => {
+const Projects = async() => {
+  const allProjectList = await myFetch('/projects', {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
+
   return (
     <div>
 
@@ -34,8 +42,8 @@ const Projects = () => {
       <div className='maxWidth py-20'>
         <h2 className='text-3xl md:text-5xl font-bold pb-8'>Our Projects</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8'>
-          {projectDatas?.map((project) => (
-            <ProjectCard key={project?.id} project={project} detailsUrl={`/projects/${project?.id}`}/>
+          {allProjectList?.data?.data?.map((project:Project) => (
+            <ProjectCard key={project?._id} project={project} detailsUrl={`/projects/${project?._id}`}/>
           ))}
         </div>
         {/* ----------- Pagination Section----------- */}

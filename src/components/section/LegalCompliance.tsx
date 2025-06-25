@@ -70,6 +70,18 @@ const LegalCompliance: React.FC<PersonalInformationProps> = ({ onHandleStep }) =
   function onSubmit(data: PersonalInfoValues) {
     toast("Form submitted successfully!");
     console.log("Submitted Data:", data);
+    const { signature, ...newData } = data;
+
+    const formData = new FormData();
+    formData.append("files", signature);
+    formData.append("data", JSON.stringify(newData));
+
+    // const response = await myFetch("/users/legalCompliance", {
+    //   method: "PUT",
+    //   body: formData,
+    // });
+    // console.log("Response:", response);
+    
     onHandleStep(5);
   }
 

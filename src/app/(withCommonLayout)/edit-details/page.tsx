@@ -8,8 +8,7 @@ import LegalCompliance from '@/components/section/LegalCompliance'
 import PersonalInformation from '@/components/section/PersonalInformation'
 import Subscriptions from '@/components/section/Subscriptions'
 import React, { useEffect, useState } from 'react'
-
-import { getCookie } from "cookies-next/client";
+import { myFetch } from '@/utils copy/myFetch'
 
 type Props = {
   id: number,
@@ -41,7 +40,17 @@ const stepsData: Props[] = [
 
 const EditDetails = () => {
   const [activeStep, setActiveStep] = useState(1);
-  const userRole = getCookie('su_role')
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await myFetch("/users/me", {
+        method: "GET",
+      });
+      setUserRole(response?.data?.role);
+    };
+    getUser();
+  }, []);
 
   const handleStep = (id: number) => {
     setActiveStep(id);
@@ -76,11 +85,11 @@ const EditDetails = () => {
         </div>
       </div>
       {activeStep === 1 && <PersonalInformation onHandleStep={handleStep} />}
-      {activeStep === 2 && <BusinessDetailsInfo  onHandleStep={handleStep}/>}
-      {userRole === 'investor' && activeStep === 3 && <FinancialInvestmentDetails2  onHandleStep={handleStep}/>}
-      {userRole === 'entrepreneur' && activeStep === 3 && <FinancialInvestmentDetails  onHandleStep={handleStep}/>}
-      {activeStep === 4 && <LegalCompliance  onHandleStep={handleStep}/>}
-      {activeStep === 5 && <Subscriptions/>}
+      {activeStep === 2 && <BusinessDetailsInfo onHandleStep={handleStep} />}
+      {userRole === 'entrepreneur' && activeStep === 3 && <FinancialInvestmentDetails onHandleStep={handleStep} />}
+      {userRole === 'investor' && activeStep === 3 && <FinancialInvestmentDetails2 onHandleStep={handleStep} />}
+      {activeStep === 4 && <LegalCompliance onHandleStep={handleStep} />}
+      {activeStep === 5 && <Subscriptions />}
     </div>
   )
 }
