@@ -8,7 +8,7 @@ import StartProjectImg from "@/assets/contact/startProject.png";
 import booking_01 from "@/assets/home/booking_01.png";
 import { RiSendPlaneLine } from "react-icons/ri";
 import React from "react";
-import { projectOverview, whyChooseUsDatas } from "@/constants/homeData";
+import { whyChooseUsDatas } from "@/constants/homeData";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,10 +16,10 @@ import "slick-carousel/slick/slick-theme.css";
 import CustomSlider from "@/components/shared/OurUsersSlide";
 import InvestorsSlider from "@/components/shared/BestInvestorSlide";
 import Link from "next/link";
-import ProjectCard from "@/components/shared/ProjectCard";
-import { myFetch } from "@/utils copy/myFetch";
-import { Project } from "@/types/types";
 import { useGetTotalCountsQuery } from "@/Redux/apis/utilityApi";
+import { useGetAllProjectsQuery } from "@/Redux/apis/projectsApi";
+import ProjectCard from "@/components/shared/ProjectCard";
+import { Project } from "@/types/types";
 
 const Home = () => {
   const {
@@ -28,6 +28,36 @@ const Home = () => {
     isLoading,
   } = useGetTotalCountsQuery({});
   console.log(totalCountsData);
+
+  const {
+    data: allProjectsData,
+    error: errorProjects,
+    isLoading: loadingProjects,
+  } = useGetAllProjectsQuery({});
+
+  const totalCount = totalCountsData?.data;
+  const allProjects = allProjectsData?.data?.data;
+
+  console.log(totalCount);
+  console.log(allProjects);
+
+  if (isLoading || loadingProjects) {
+    return (
+      <div className="w-full flex justify-center items-center py-10">
+        <div className="text-lg font-semibold">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error || errorProjects) {
+    return (
+      <div className="w-full flex justify-center items-center py-10">
+        <div className="text-lg font-semibold text-red-600">
+          Something went wrong. Please try again later.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -84,20 +114,49 @@ const Home = () => {
       {/* ----------- Project Overview (Mini Card) Section ----------- */}
       <div className="bg-secondary">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 maxWidth py-20">
-          {projectOverview?.map((item) => (
-            <div
-              key={item?.id}
-              className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden"
-            >
-              <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
-                {item?.title}
-              </h2>
-              <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
-                {item?.number}
-              </p>
-              <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
-            </div>
-          ))}
+          {/* Entrepreneur */}
+          <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
+            <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
+              Total Entrepreneurs
+            </h2>
+            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
+              {totalCount?.totalEntrepreneurs || 0}
+            </p>
+            <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
+          </div>
+
+          {/* Investors */}
+          <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
+            <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
+              Total Investors
+            </h2>
+            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
+              {totalCount?.totalInvestors || 0}
+            </p>
+            <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
+          </div>
+
+          {/* Projects */}
+          <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
+            <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
+              Total Projects
+            </h2>
+            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
+              {totalCount?.totalProjects || 0}
+            </p>
+            <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
+          </div>
+
+          {/* Revenue */}
+          <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
+            <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
+              Total Revenue
+            </h2>
+            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
+              ${totalCount?.totalRevenue || 0}
+            </p>
+            <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
+          </div>
         </div>
       </div>
 
@@ -145,15 +204,15 @@ const Home = () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold pb-8">
           Exclusive Projects
         </h2>
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {allProjectList?.data?.data.slice(0, 6)?.map((project: Project) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          {allProjects.slice(0, 6)?.map((project: Project) => (
             <ProjectCard
               key={project?._id}
               project={project}
               detailsUrl={`/projects/${project?._id}`}
             />
           ))}
-        </div> */}
+        </div>
         <div className="flex items-center justify-center py-3">
           <Link
             href="/projects"

@@ -1,8 +1,8 @@
 import { baseApi } from "@/Redux/baseApi";
 
-const utilityApi = baseApi.injectEndpoints({
+const projectsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getTotalCounts: builder.query({
+    getAllProjects: builder.query({
       query: () => {
         const accessToken = localStorage.getItem("accessToken");
         console.log({ accessToken });
@@ -11,17 +11,17 @@ const utilityApi = baseApi.injectEndpoints({
         //   console.error("Access token not found.");
         // }
         return {
-          url: "/users/total-counts",
+          url: "/projects/",
           method: "get",
-          headers: {
-            "content-type": "application/json",
-            authorization: accessToken,
-          },
+          //   headers: {
+          //     "content-type": "application/json",
+          //     authorization: accessToken,
+          //   },
         };
       },
-      providesTags: ["utilities"],
+      providesTags: ["projects"],
     }),
   }),
 });
 
-export const { useGetTotalCountsQuery } = utilityApi;
+export const { useGetAllProjectsQuery } = projectsApi;

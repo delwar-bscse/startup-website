@@ -81,7 +81,8 @@ const SignInForm = () => {
         toast.error(res?.message || "Login failed", { id: "login" });
       }
     } catch (error: unknown) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", { id: "login" });
+      toast.error(res?.message || "Login failed", { id: "login" });
     }
   };
 

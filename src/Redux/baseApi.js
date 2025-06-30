@@ -8,5 +8,5 @@ export const baseApi = createApi({
     baseUrl: getBaseUrl(),
   }),
   endpoints: () => ({}),
-  tagTypes: ["user", "utilities"],
+  tagTypes: ["user", "utilities", "projects"],
 });
