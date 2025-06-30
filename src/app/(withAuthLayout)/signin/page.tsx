@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,13 +20,14 @@ import Link from "next/link";
 import { setCookie } from "cookies-next/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { myFetch } from "@/utils copy/myFetch";
+import { useLogInMutation } from "@/Redux/apis/authApi";
 
 // Schema
 const signInFormSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  password: z.string().min(8, {
+  password: z.string().min(5, {
     message: "Password must be at least 8 characters.",
   }),
 });
@@ -40,12 +42,14 @@ const defaultValues: Partial<SigninFormValues> = {
 
 const SignInForm = () => {
   const router = useRouter();
-  const redirect = useSearchParams().get("redirect");
+  // const redirect = useSearchParams().get("redirect");
   const form = useForm<SigninFormValues>({
     resolver: zodResolver(signInFormSchema),
     defaultValues,
     mode: "onChange",
   });
+
+  const [logIn] = useLogInMutation();
 
   const onSubmit = async (data: SigninFormValues) => {
     toast.loading("Logging in...", {
@@ -56,25 +60,23 @@ const SignInForm = () => {
       email: data.email,
       password: data.password,
     };
-    // console.log(payload);
+    console.log(payload);
 
     try {
-      const res = await myFetch("/auth/login", {
-        method: "POST",
-        body: payload,
-      });
+      const res = await logIn(payload).unwrap();
+
+      console.log(res);
       if (res.success) {
-        setCookie("qwert_accessToken", res.data.accessToken);
-        
-        const user = await myFetch("/users/me", {
-          method: "GET"
-        });
+        localStorage.setItem("accessToken", res.data.accessToken);
+        toast.success("Login successful");
+        router.push("/");
+        // const user = await myFetch("/users/me", {
+        //   method: "GET",
+        // });
         // console.log("User Data:", user);
-        if (user.success) {
-          setCookie("qwert_role", user.data.role);
-          toast.success("Login successful", { id: "login" });
-        }
-        router.push(redirect || "/");
+        // if (user.success) {
+        // }
+        // router.push(redirect || "/");
       } else {
         toast.error(res?.message || "Login failed", { id: "login" });
       }
@@ -86,14 +88,15 @@ const SignInForm = () => {
   return (
     <div className="w-full flex justify-center py-10 px-4">
       <div className="w-full max-w-[800px] py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Sign In</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          Sign In
+        </h2>
         <p className="text-center text-gray-800 text-sm mb-6">
           Login to your account to continue
         </p>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-
             {/* Email */}
             <FormField
               control={form.control}
@@ -117,7 +120,11 @@ const SignInForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Enter password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -126,7 +133,10 @@ const SignInForm = () => {
 
             {/* Forgot Password */}
             <div className="flex justify-end items-center">
-              <Link href="/forgot-password" className="font-semibold text-sm sm:text-base text-gray-600">
+              <Link
+                href="/forgot-password"
+                className="font-semibold text-sm sm:text-base text-gray-600"
+              >
                 Forgot Password?
               </Link>
             </div>

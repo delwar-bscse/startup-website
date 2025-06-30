@@ -1,4 +1,4 @@
-import baseApi from "../baseApi/baseApi";
+import { baseApi } from "@/Redux/baseApi";
 
 const utilityApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -24,4 +24,4 @@ const utilityApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetTotalCounts } = utilityApi;
+export const { useGetTotalCountsQuery } = utilityApi;

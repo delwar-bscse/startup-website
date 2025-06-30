@@ -1,3 +1,5 @@
+"use client";
+
 // import { projectDatas } from '@/constants/projectData'
 import Image from "next/image";
 import homeHeroImg from "@/assets/home/home_hero.png";
@@ -17,13 +19,15 @@ import Link from "next/link";
 import ProjectCard from "@/components/shared/ProjectCard";
 import { myFetch } from "@/utils copy/myFetch";
 import { Project } from "@/types/types";
+import { useGetTotalCountsQuery } from "@/Redux/apis/utilityApi";
 
-const Home = async () => {
-  const allProjectList = await myFetch("/projects", {
-    method: "GET",
-    cache: "no-store",
-  });
-  // console.log("All Project List:", allProjectList?.data?.data);
+const Home = () => {
+  const {
+    data: totalCountsData,
+    error,
+    isLoading,
+  } = useGetTotalCountsQuery({});
+  console.log(totalCountsData);
 
   return (
     <div className="w-full">
@@ -141,7 +145,7 @@ const Home = async () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold pb-8">
           Exclusive Projects
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {allProjectList?.data?.data.slice(0, 6)?.map((project: Project) => (
             <ProjectCard
               key={project?._id}
@@ -149,7 +153,7 @@ const Home = async () => {
               detailsUrl={`/projects/${project?._id}`}
             />
           ))}
-        </div>
+        </div> */}
         <div className="flex items-center justify-center py-3">
           <Link
             href="/projects"

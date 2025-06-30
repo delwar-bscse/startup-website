@@ -33,7 +33,7 @@ export default function RootLayout({
           <footer>
             <Footer />
           </footer>
-          <Toaster />
+          <Toaster position="top-right" richColors />
         </Providers>
       </body>
     </html>
