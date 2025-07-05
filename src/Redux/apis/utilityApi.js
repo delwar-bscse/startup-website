@@ -21,7 +21,23 @@ const utilityApi = baseApi.injectEndpoints({
       },
       providesTags: ["utilities"],
     }),
+    contactUs: builder.mutation({
+      query: (data) => {
+        // const token = localStorage.getItem("createUserToken");
+        //  console.log("vetifyOtpToken", token);
+        return {
+          url: "/users/get-in-touch",
+          method: "POST",
+          body: data,
+          headers: {
+            "content-type": "application/json",
+            // token: token,
+          },
+        };
+      },
+      invalidatesTags: ["utilities"],
+    }),
   }),
 });
 
-export const { useGetTotalCountsQuery } = utilityApi;
+export const { useGetTotalCountsQuery, useContactUsMutation } = utilityApi;
