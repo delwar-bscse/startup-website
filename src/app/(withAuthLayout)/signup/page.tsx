@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,15 +18,9 @@ import { Input } from "@/components/ui/input";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { IoCameraOutline } from "react-icons/io5";
-import { myFetch } from "@/utils copy/myFetch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRouter } from "next/navigation";
+import { useSignUpMutation } from "@/Redux/apis/authApi";
 
 // Schema
 const signUpFormSchema = z.object({
@@ -61,56 +56,44 @@ const defaultValues: Partial<SignUpFormValues> = {
 
 const SignUpForm = () => {
   const router = useRouter();
-  const userRef = useRef<HTMLInputElement>(null);
-  const [imageUrl, setImageUrl] = useState<string>("");
-  const [imageError, setImageError] = useState<string>("");
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues,
     mode: "onChange",
   });
-
-  const handleImageChange = () => {
-    const file = userRef.current?.files?.[0];
-    if (file) {
-      setImageUrl(URL.createObjectURL(file));
-      setImageError("");
-    }
-  };
+  const [signUp, { isLoading }] = useSignUpMutation();
 
   const onSubmit = async (data: SignUpFormValues) => {
-    if (!imageUrl) {
-      setImageError("Please select a profile image.");
-      return;
-    }
-    const formData = new FormData();
-    const file = userRef.current?.files?.[0];
-    if (file) {
-      formData.append("file", file);
-    }
-    formData.append("data", JSON.stringify(data));
+    console.log("Sending Data", data);
 
     try {
-      const res = await myFetch("/users/register", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await signUp(data).unwrap();
+      console.log("response", res);
       if (res.success) {
+        console.log("sign up response", res);
+        localStorage.setItem("createUserToken", res?.data?.token);
         toast.success("Sign up successful", { id: "signup" });
-        router.push("/signin");
+        router.push("/verify-otp");
       } else {
-        toast.error(res?.message || "Sign up failed", { id: "signup" });
+        toast.error(
+          res?.data?.message || res?.error?.data?.message || "Sign up failed",
+          { id: "signup" }
+        );
       }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("An unexpected error occurred. Please try again.", {
+        id: "signup",
+      });
     }
-
-  }
+  };
 
   return (
     <div className="w-full flex justify-center py-10 px-4">
       <div className="w-full max-w-[800px] py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Sign Up</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          Sign Up
+        </h2>
         <p className="text-center text-gray-800 text-sm mb-6">
           Join us and start making every moment unforgettable!
         </p>
@@ -123,14 +106,28 @@ const SignUpForm = () => {
               name="role"
               render={({ field }) => (
                 <FormItem className="flex justify-center gap-2 py-4 md:py-8">
-                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    className="flex space-x-4"
+                  >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="investor" id="investor" />
-                      <Label htmlFor="investor" className="text-gray-800 font-semibold">Investor</Label>
+                      <Label
+                        htmlFor="investor"
+                        className="text-gray-800 font-semibold"
+                      >
+                        Investor
+                      </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="entrepreneur" id="entrepreneur" />
-                      <Label htmlFor="entrepreneur" className="text-gray-800 font-semibold">Entrepreneur</Label>
+                      <Label
+                        htmlFor="entrepreneur"
+                        className="text-gray-800 font-semibold"
+                      >
+                        Entrepreneur
+                      </Label>
                     </div>
                   </RadioGroup>
                   <FormMessage />
@@ -139,7 +136,7 @@ const SignUpForm = () => {
             />
 
             {/* Profile Image */}
-            <div className="relative w-40 h-40 mx-auto rounded-full bg-gray-100">
+            {/* <div className="relative w-40 h-40 mx-auto rounded-full bg-gray-100">
               <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-primary">
                 <Image
                   src={imageUrl}
@@ -149,14 +146,25 @@ const SignUpForm = () => {
                   className="object-cover w-full h-full"
                 />
               </div>
-              <span onClick={() => userRef.current?.click()} className="absolute bottom-2.5 right-2.5 p-1.5 bg-white rounded-full flex items-center justify-center cursor-pointer">
+              <span
+                onClick={() => userRef.current?.click()}
+                className="absolute bottom-2.5 right-2.5 p-1.5 bg-white rounded-full flex items-center justify-center cursor-pointer"
+              >
                 <IoCameraOutline size={16} />
               </span>
-              <input ref={userRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+              <input
+                ref={userRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
             </div>
             {imageError && (
-              <p className="text-red-500 text-center pb-4 text-sm">{imageError}</p>
-            )}
+              <p className="text-red-500 text-center pb-4 text-sm">
+                {imageError}
+              </p>
+            )} */}
 
             {/* Full Name */}
             <FormField
@@ -211,7 +219,11 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Enter password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -82,7 +82,7 @@ const SignInForm = () => {
       }
     } catch (error: unknown) {
       console.error("Error fetching data:", { id: "login" });
-      toast.error(res?.message || "Login failed", { id: "login" });
+      toast.error("Login failed", { id: "login" });
     }
   };
 
