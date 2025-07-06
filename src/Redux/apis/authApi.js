@@ -84,11 +84,14 @@ const authApi = baseApi.injectEndpoints({
 
     // sign up
     signUp: builder.mutation({
-      query: (data) => ({
-        url: "/users/create",
-        method: "POST",
-        body: data,
-      }),
+      query: (data) => {
+        console.log("Data inside mutation query:", data);
+        return {
+          url: "/users/register",
+          method: "POST",
+          body: data,
+        };
+      },
       invalidatesTags: ["user"],
     }),
 
