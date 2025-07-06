@@ -1,19 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import React, { useState, useEffect } from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import dayjs from "dayjs";
 
-interface Data {
-  name: string;
-  value: number;
+interface Project {
+  fundingGoal: number;
+  fundsRaised: number;
+  deadLine: string;
 }
 
-const data: Data[] = [
-  { name: 'Group A', value: 600 },
-  { name: 'Group B', value: 400 },
-];
+interface TargetVsRaisedAmountProps {
+  project: Project;
+}
 
-const COLORS = ['#5F46D9', '#D0C8FA'];
+const COLORS = ["#5F46D9", "#D0C8FA"];
 
 const RADIAN = Math.PI / 180;
 
@@ -23,7 +24,7 @@ const renderCustomizedLabel = ({
   midAngle,
   innerRadius,
   outerRadius,
-  percent
+  percent,
 }: {
   cx: number;
   cy: number;
@@ -37,17 +38,24 @@ const renderCustomizedLabel = ({
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
   return (
-    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
 };
 
-const TargetVsRaisedAmount: React.FC = () => {
-  const [outerRadius, setOuterRadius] = useState(220); // Default size for larger screens
-  
+const TargetVsRaisedAmount: React.FC<TargetVsRaisedAmountProps> = ({
+  project,
+}) => {
+  const [outerRadius, setOuterRadius] = useState(220);
+
   useEffect(() => {
-    // This code will only run on the client side
     const handleResize = () => {
       if (window.innerWidth < 640) {
         setOuterRadius(100);
@@ -59,27 +67,36 @@ const TargetVsRaisedAmount: React.FC = () => {
         setOuterRadius(200);
       }
     };
-    
-    // Set initial size
+
     handleResize();
-    
-    // Add event listener for window resize
-    window.addEventListener('resize', handleResize);
-    
-    // Clean up
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Prepare the data for the chart using project.fundingGoal and project.fundsRaised
+  const chartData = [
+    { name: "Raised Amount", value: project.fundsRaised },
+    {
+      name: "Remaining Amount",
+      value: project.fundingGoal - project.fundsRaised,
+    },
+  ];
+
+  const daysLeft = dayjs(project.deadLine).diff(dayjs(), "day");
+
   return (
-    <div className='maxWidth'>
-      <h2 className='text-xl sm:text-3xl md:text-5xl font-bold pb-8 text-gray-700'>Targeted Vs Raised Amount</h2>
-      <div className=''>
-        <div className='flex flex-col md:flex-row justify-center items-center gap-12 border border-gray-200 p-4'>
+    <div className="maxWidth">
+      <h2 className="text-xl sm:text-3xl md:text-5xl font-bold pb-8 text-gray-700">
+        Targeted Vs Raised Amount
+      </h2>
+      <div className="">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-12 border border-gray-200 p-4">
           <div className="w-[260px] md:w-[300px] lg:w-[400px] h-[260px] md:[300px] lg:h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart width={400} height={400}>
                 <Pie
-                  data={data}
+                  data={chartData}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -88,23 +105,32 @@ const TargetVsRaisedAmount: React.FC = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {chartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <ul className='ps-4 list-disc flex flex-col justify-center gap-2 text-xl font-semibold'>
-            <li>Target Amount - $5000</li>
-            <li className='text-[#5F46D9]'>Raised Amount - $3000</li>
-            <li className='text-[#D0C8FA]'>Remaining Amount - $2000</li>
+          <ul className="ps-4 list-disc flex flex-col justify-center gap-2 text-xl font-semibold">
+            <li>Target Amount - ${project.fundingGoal}</li>
+            <li className="text-[#5F46D9]">
+              Raised Amount - ${project.fundsRaised}
+            </li>
+            <li className="text-[#D0C8FA]">
+              Remaining Amount - ${project.fundingGoal - project.fundsRaised}
+            </li>
           </ul>
         </div>
       </div>
-      <div className='flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-xl md:text-2xl font-semibold py-8 sm:gap-4'>
-        <p className='text-primary'>Time Left</p>
-        <p className='bg-secondary p-4 text-gray-700'>27 Days  -  18 hours  -  52 Minutes</p>
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-xl md:text-2xl font-semibold py-8 sm:gap-4">
+        <p className="text-primary">Time Left</p>
+        <p className="bg-secondary p-4 text-gray-700">
+          {daysLeft < 0 ? "Project Ended" : `${daysLeft} Days Left`}
+        </p>
       </div>
     </div>
   );
