@@ -99,14 +99,14 @@ const authApi = baseApi.injectEndpoints({
     UserOtpVerify: builder.mutation({
       query: (data) => {
         const token = localStorage.getItem("createUserToken");
-        //  console.log("vetifyOtpToken", token);
+        console.log("api otp data", data);
         return {
-          url: "/users/create-user-verify-otp",
+          url: "/users/create-user",
           method: "POST",
           body: data,
           headers: {
             "content-type": "application/json",
-            token: token,
+            authorization: token,
           },
         };
       },
