@@ -3,14 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-
 import {
   Form,
   FormControl,
@@ -19,8 +17,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useUserOtpVerifyMutation } from "@/Redux/apis/authApi";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useUserOtpVerifyMutation,
+  useVerifyChangePasswordOtpMutation,
+} from "@/Redux/apis/authApi";
 
 // Schema
 const verifyOtpSchema = z.object({
@@ -38,16 +39,22 @@ const defaultValues: Partial<VerifyOtpValues> = {
 
 const VerifyOTP = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const source = searchParams.get("source");
+
   const form = useForm<VerifyOtpValues>({
     resolver: zodResolver(verifyOtpSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  const [verifyOtp] = useUserOtpVerifyMutation();
+  const email = localStorage.getItem("userEmail");
 
-  const onSubmit = async (data: VerifyOtpValues) => {
-    const response = await verifyOtp(data).unwrap();
+  const [verifyCreateUserOtp] = useUserOtpVerifyMutation();
+  const [verifyChangePasswordOtp] = useVerifyChangePasswordOtpMutation();
+
+  const onCreateUserSubmit = async (data: VerifyOtpValues) => {
+    const response = await verifyCreateUserOtp(data).unwrap();
     try {
       if (response.success) {
         localStorage.removeItem("createUserToken");
@@ -56,6 +63,7 @@ const VerifyOTP = () => {
       }
     } catch (error: unknown) {
       console.error("Error verifying OTP:", error);
+      toast.error("An Error Occured");
       // if (error.data?.message === "Invalid OTP") {
       //   toast.error("Invalid OTP. Please try again.");
       // }
@@ -67,6 +75,51 @@ const VerifyOTP = () => {
     }
 
     // router.push("/reset-password")
+  };
+  const onChangePasswordSubmit = async (data: VerifyOtpValues) => {
+    const changePassData = {
+      otp: data?.otp,
+      email,
+    };
+
+    console.log("clicked onChangePasswordSubmit");
+
+    console.log(changePassData);
+    const response = await verifyChangePasswordOtp(changePassData).unwrap();
+    console.log(response);
+    const resetToken = response.data;
+
+    try {
+      if (response.success) {
+        localStorage.removeItem("userMail");
+        localStorage.setItem("resetToken", resetToken);
+        toast.success("OTP Verified successfully!");
+        router.push("/reset-password");
+      }
+    } catch (error: unknown) {
+      toast.error("An Error Occured");
+      console.error("Error verifying OTP:", error);
+      const err = error as { data?: { message?: string } };
+      console.log(err);
+      if (err?.data?.message === "OTP code Expired! Please try again.!") {
+        toast.error("OTP code Expired! Please try again.!");
+      }
+      if (err?.data?.message === "OTP did not match") {
+        toast.error(" OTP did not match");
+      } else {
+        toast.error("Failed to verify OTP. Please try again.");
+      }
+    }
+  };
+
+  const handleSubmit = (data: VerifyOtpValues) => {
+    if (source === "signup") {
+      onCreateUserSubmit(data);
+    } else if (source === "forgot-password") {
+      onChangePasswordSubmit(data);
+    } else {
+      toast.error("Invalid OTP flow source");
+    }
   };
 
   return (
@@ -82,7 +135,10 @@ const VerifyOTP = () => {
         </p>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             {/* Email */}
             <FormField
               control={form.control}

@@ -52,9 +52,9 @@ const SignInForm = () => {
   const [logIn] = useLogInMutation();
 
   const onSubmit = async (data: SigninFormValues) => {
-    toast.loading("Logging in...", {
-      id: "login",
-    });
+    // toast.loading("Logging in...", {
+    //   id: "login",
+    // });
 
     const payload = {
       email: data.email,

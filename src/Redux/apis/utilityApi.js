@@ -2,7 +2,7 @@ import { baseApi } from "@/Redux/baseApi";
 
 const utilityApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getTotalCounts: builder.query({
+    getQuantityCounts: builder.query({
       query: () => {
         const accessToken = localStorage.getItem("accessToken");
         console.log({ accessToken });
@@ -11,7 +11,7 @@ const utilityApi = baseApi.injectEndpoints({
         //   console.error("Access token not found.");
         // }
         return {
-          url: "/users/total-counts",
+          url: "/users/qty-count",
           method: "get",
           headers: {
             "content-type": "application/json",
@@ -37,7 +37,38 @@ const utilityApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["utilities"],
     }),
+    getTermsAndConditions: builder.query({
+      query: () => {
+        return {
+          url: "/legal/tc",
+          method: "get",
+        };
+      },
+      providesTags: ["utilities"],
+    }),
+    getPrivacyPolicy: builder.query({
+      query: () => {
+        return {
+          url: "/legal/tc",
+          method: "get",
+        };
+      },
+      providesTags: ["utilities"],
+    }),
+    getFAQs: builder.query({
+      query: () => {
+        return {
+          url: "/legal/tc",
+          method: "get",
+        };
+      },
+      providesTags: ["utilities"],
+    }),
   }),
 });
 
-export const { useGetTotalCountsQuery, useContactUsMutation } = utilityApi;
+export const {
+  useGetQuantityCountsQuery,
+  useContactUsMutation,
+  useGetTermsAndConditionsQuery,
+} = utilityApi;

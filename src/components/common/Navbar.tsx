@@ -29,12 +29,22 @@ import { getImageUrl } from "@/utils/baseUrl";
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
   const router = useRouter();
 
   const { data: userProfile, isLoading } = useGetUserProfileQuery({});
   const user = userProfile?.data;
   console.log(user);
+
+  const userRole = user?.role;
+  console.log(userRole);
+
+  // Setting cookies on the client side is not supported with Next.js app router's cookies() API.
+  // If you need to set a cookie from the client, use document.cookie or a library like js-cookie.
+  // Alternatively, set the cookie on the server (middleware, API route, or server action).
+  // Example (client-side, not secure for httpOnly):
+  if (typeof window !== "undefined" && userRole) {
+    document.cookie = `role=${userRole}; path=/; max-age=${60 * 60 * 24}`;
+  }
 
   const imageUrl = getImageUrl(user?.profileImg ?? "");
 

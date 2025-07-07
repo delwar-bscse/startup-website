@@ -70,10 +70,9 @@ const SignUpForm = () => {
       const res = await signUp(data).unwrap();
       console.log("response", res);
       if (res.success) {
-        console.log("sign up response", res);
         localStorage.setItem("createUserToken", res?.data?.token);
         toast.success("Sign up successful", { id: "signup" });
-        router.push("/verify-otp");
+        router.push("/verify-otp?source=signup");
       } else {
         toast.error(
           res?.data?.message || res?.error?.data?.message || "Sign up failed",
