@@ -38,18 +38,18 @@ const Home = () => {
   const totalCount = totalCountsData?.data;
   const allProjects = allProjectsData?.data?.data;
 
-  const userToken = localStorage.getItem("accessToken");
+  // const userToken = localStorage.getItem("accessToken");
 
   console.log(totalCount);
   console.log(allProjects);
 
-  if (!userToken) {
-    return (
-      <p className="text-center py-20 text-2xl font-semibold text-red-600">
-        Please Log In First
-      </p>
-    );
-  }
+  // if (!userToken) {
+  //   return (
+  //     <p className="text-center py-20 text-2xl font-semibold text-red-600">
+  //       Please Log In First
+  //     </p>
+  //   );
+  // }
 
   if (isLoading || loadingProjects) {
     return (
