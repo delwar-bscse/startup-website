@@ -15,7 +15,39 @@ const userApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getPersonalDetailsFields: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: "/users/pd-field",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+    }),
+    updatePersonalInfo: builder.mutation({
+      query: (data) => {
+        console.log("update info data", data);
+        const token = localStorage.getItem("accessToken");
+        return {
+          url: "/users/personalInfo",
+          method: "put",
+          body: data,
+          headers: {
+            // "content-type": "application/json",
+            authorization: token,
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetUserProfileQuery } = userApi;
+export const {
+  useGetUserProfileQuery,
+  useGetPersonalDetailsFieldsQuery,
+  useUpdatePersonalInfoMutation,
+} = userApi;
