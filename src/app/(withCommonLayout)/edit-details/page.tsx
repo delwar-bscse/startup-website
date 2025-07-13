@@ -42,7 +42,7 @@ const EditDetails = () => {
   const [activeStep, setActiveStep] = useState(1);
   const { data: userData } = useGetUserProfileQuery({});
   const user = userData?.data;
-  console.log(user);
+  console.log("user", user);
 
   const userRole = user?.role;
 
@@ -102,7 +102,7 @@ const EditDetails = () => {
         <FinancialInvestmentDetails onHandleStep={handleStep} />
       )}
       {userRole === "investor" && activeStep === 3 && (
-        <FinancialInvestmentDetails2 onHandleStep={handleStep} />
+        <FinancialInvestmentDetails2 onHandleStep={handleStep} user={user} />
       )}
       {activeStep === 4 && <LegalCompliance onHandleStep={handleStep} />}
       {activeStep === 5 && <Subscriptions />}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -19,6 +20,7 @@ import {
   useGetBusinessDetailsFieldsQuery,
   useUpdateBusinessInfoMutation,
 } from "@/Redux/apis/businessApi";
+import dayjs from "dayjs";
 
 // const MAX_FILE_SIZE = 1024 * 1024 * 5;
 // const ACCEPTED_IMAGE_TYPES = [
@@ -69,26 +71,30 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
   const form = useForm({
     mode: "onChange",
     defaultValues: {
-      occupation: user?.occupation || "",
-      companyName: user?.companyName || "",
-      companyType: user?.companyType || "",
-      companyRegistrationNumber: user?.companyRegistrationNumber || "",
-      establishmentDate: user?.establishmentDate || "",
-      businessWebURL: user?.businessWebURL || "",
-      achievement: user?.achievement || "",
+      occupation: user?.businessInfo?.occupation || "",
+      companyName: user?.businessInfo?.companyName || "",
+      companyType: user?.businessInfo?.companyType || "",
+      companyRegistrationNumber:
+        user?.businessInfo?.companyRegistrationNumber || "",
+      establishmentDate: user?.businessInfo?.establishmentDate || "",
+      businessWebURL: user?.businessInfo?.businessWebURL || "",
+      achievement: user?.businessInfo?.achievement || "",
     },
   });
 
   useEffect(() => {
     if (user) {
       form.reset({
-        occupation: user?.occupation || "",
-        companyName: user?.companyName || "",
-        companyType: user?.companyType || "",
-        companyRegistrationNumber: user?.companyRegistrationNumber || "",
-        establishmentDate: user?.establishmentDate || "",
-        businessWebURL: user?.businessWebURL || "",
-        achievement: user?.achievement || "",
+        occupation: user?.businessInfo?.occupation || "",
+        companyName: user?.businessInfo?.companyName || "",
+        companyType: user?.businessInfo?.companyType || "",
+        companyRegistrationNumber:
+          user?.businessInfo?.companyRegistrationNumber || "",
+        establishmentDate: user?.businessInfo?.establishmentDate
+          ? dayjs(user.businessInfo.establishmentDate).format("YYYY-MM-DD") // Format date
+          : "",
+        businessWebURL: user?.businessInfo?.businessWebURL || "",
+        achievement: user?.businessInfo?.achievement || "",
       });
     }
   }, [user, form]);
@@ -161,7 +167,7 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
 
               <Button
                 type="submit"
-                className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
+                className="cursor-pointer text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
               >
                 Next
               </Button>
