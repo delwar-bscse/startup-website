@@ -95,7 +95,9 @@ const EditDetails = () => {
       {activeStep === 1 && (
         <PersonalInformation onHandleStep={handleStep} user={user} />
       )}
-      {activeStep === 2 && <BusinessDetailsInfo onHandleStep={handleStep} />}
+      {activeStep === 2 && (
+        <BusinessDetailsInfo onHandleStep={handleStep} user={user} />
+      )}
       {userRole === "entrepreneur" && activeStep === 3 && (
         <FinancialInvestmentDetails onHandleStep={handleStep} />
       )}

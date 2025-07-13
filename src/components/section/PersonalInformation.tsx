@@ -2,25 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import { Checkbox } from "@/components/ui/checkbox";
 import { CiImageOn } from "react-icons/ci";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 import {
   Form,
@@ -30,13 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -163,10 +141,10 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
   const [newInterest, setNewInterest] = useState("");
   const [updatePersonalInfo] = useUpdatePersonalInfoMutation();
 
-  console.log("user", user);
+  // console.log("user", user);
 
   const { data: detailsFields } = useGetPersonalDetailsFieldsQuery({});
-  console.log("detailsFields", detailsFields?.data);
+  // console.log("detailsFields", detailsFields?.data);
   // const form = useForm<>({
   //   // resolver: zodResolver(PersonalInfoSchema),
   //   mode: "onChange",
@@ -186,9 +164,10 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
       city: user?.city || "",
       state: user?.state || "",
       designation: user?.designation || "",
-      aboutYourself: user?.aboutYourself || "",
+      about: user?.about || "",
       experience: user?.experience || "",
       skills: user?.skills || [],
+      passportOrNIDDocs: user?.passportOrNIDDocs || [],
       taxCode: user?.taxCode || "",
       interestedIndustries: user?.interestedIndustries || [], // Default to empty array if undefined
       image1: undefined, // Image fields should default to undefined
@@ -204,17 +183,18 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         phone: user.phone || "",
         dob: user.dob || "",
         gender: user.gender || "",
-        occupation: user.occupation || "",
-        nationality: user.nationality || "",
-        address: user.address || "",
-        city: user.city || "",
-        state: user.state || "",
-        designation: user?.designation || "",
-        experience: user?.experience || "",
-        aboutYourself: user.aboutYourself || "",
-        interestedIndustries: user.interestedIndustries || [],
-        skills: user?.skills || [],
-        taxCode: user?.taxCode || "",
+        occupation: user.personalInfo.occupation || "",
+        nationality: user.personalInfo.nationality || "",
+        address: user.personalInfo.address || "",
+        city: user.personalInfo.city || "",
+        state: user.personalInfo.state || "",
+        designation: user.personalInfo.designation || "",
+        experience: user.personalInfo.experience || "",
+        about: user.personalInfo.about || "",
+        interestedIndustries: user.personalInfo.interestedIndustries || [],
+        passportOrNIDDocs: user.personalInfo.passportOrNIDDocs || [],
+        skills: user.personalInfo.skills || [],
+        taxCode: user.personalInfo.taxCode || "",
         image1: undefined,
         image2: undefined,
       });
@@ -224,20 +204,16 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
   const handleAddSkill = (newSkill: string) => {
     if (newSkill.trim()) {
       const currentSkills = form.getValues("skills");
-      if (
-        !currentSkills.some(
-          (skill: { name: string }) => skill.name === newSkill
-        )
-      ) {
-        form.setValue("skills", [...currentSkills, { name: newSkill }]);
+      if (!currentSkills.includes(newSkill)) {
+        form.setValue("skills", [...currentSkills, newSkill]);
       }
     }
   };
 
-  const handleRemoveSkill = (skill: { name: string }) => {
+  const handleRemoveSkill = (skill: string) => {
     const currentSkills = form.getValues("skills");
     const updatedSkills = currentSkills.filter(
-      (item: { name: string }) => item.name !== skill.name
+      (item: string) => item !== skill
     );
     form.setValue("skills", updatedSkills);
   };
@@ -276,7 +252,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
     console.log("submitted Data", data);
     try {
       // Create a FormData object for image uploads
-      const { email, image1, image2, ...newData } = data;
+      const { email, image1, image2, passportOrNIDDocs, ...newData } = data;
       const formData = new FormData();
 
       // Only append fields with valid values
@@ -292,6 +268,10 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         "interestedIndustries",
         JSON.stringify(data.interestedIndustries)
       );
+      formData.append(
+        "passportOrNIDDocs",
+        JSON.stringify(data.passportOrNIDDocs)
+      );
 
       if (image1) formData.append("files", image1);
       if (image2) formData.append("files", image2);
@@ -299,6 +279,10 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
       formData.append("data", JSON.stringify(newData));
 
       console.log("new", newData);
+
+      // passportOrNIDDocs?.forEach((doc: File) => {
+      //   formData.append("passportOrNIDDocs", doc);
+      // });
 
       // API call to update user data
       const response = await updatePersonalInfo(formData).unwrap();
@@ -339,40 +323,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
                         <FormItem>
                           <FormLabel>{inputField.label}</FormLabel>
                           <FormControl>
-                            {field.name === "skills" ? (
-                              // Skills input field with dynamic adding
-                              <div>
-                                <Input
-                                  type="text"
-                                  value={newSkill}
-                                  onChange={(e) => setNewSkill(e.target.value)}
-                                  onBlur={(e) =>
-                                    handleSkillBlur(e.target.value)
-                                  }
-                                  placeholder="Add a skill"
-                                />
-                                <div className="mt-2">
-                                  {form
-                                    .getValues("skills")
-                                    .map((skill: { name: string }) => (
-                                      <span
-                                        key={skill.name}
-                                        className="inline-block bg-primary text-white py-1 px-2 rounded-full m-1"
-                                      >
-                                        {skill.name}
-                                        <span
-                                          className="ml-2 cursor-pointer text-red-500"
-                                          onClick={() =>
-                                            handleRemoveSkill(skill)
-                                          }
-                                        >
-                                          x
-                                        </span>
-                                      </span>
-                                    ))}
-                                </div>
-                              </div>
-                            ) : field.name === "interestedIndustries" ? (
+                            {field.name === "interestedIndustries" ? (
                               // Skills input field with dynamic adding
                               <div>
                                 <Input
@@ -392,7 +343,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
                                     .map((interest: string) => (
                                       <span
                                         key={interest}
-                                        className="inline-block bg-primary text-white py-1 px-2 rounded-full m-1"
+                                        className="inline-block bg-transparent border border-[#5F46D9] text-[#2C2064] p-3 rounded-lg m-1 font-semibold"
                                       >
                                         {interest}
                                         <span
@@ -410,7 +361,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
                             ) : (
                               <Input
                                 placeholder={inputField.placeholder}
-                                {...field}
+                                // {...field}
                                 {...form.register(inputField.name, {
                                   required: `${inputField.label} is required`,
                                 })}
@@ -424,6 +375,33 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
                     />
                   );
                 })}
+              </div>
+
+              {/* Add Skills */}
+              <div>
+                <Input
+                  type="text"
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
+                  onBlur={(e) => handleSkillBlur(e.target.value)}
+                  placeholder="Add a skill"
+                />
+                <div className="mt-2">
+                  {form.getValues("skills").map((skill: string) => (
+                    <span
+                      key={skill}
+                      className="inline-block bg-transparent border border-[#5F46D9] text-[#2C2064] p-3 rounded-lg m-1 font-semibold"
+                    >
+                      {skill}
+                      <span
+                        className="ml-2 cursor-pointer text-red-500"
+                        onClick={() => handleRemoveSkill(skill)}
+                      >
+                        x
+                      </span>
+                    </span>
+                  ))}
+                </div>
               </div>
 
               {/* Image Upload */}
