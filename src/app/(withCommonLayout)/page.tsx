@@ -16,7 +16,7 @@ import "slick-carousel/slick/slick-theme.css";
 import CustomSlider from "@/components/shared/OurUsersSlide";
 import InvestorsSlider from "@/components/shared/BestInvestorSlide";
 import Link from "next/link";
-import { useGetTotalCountsQuery } from "@/Redux/apis/utilityApi";
+import { useGetQuantityCountsQuery } from "@/Redux/apis/utilityApi";
 import { useGetAllProjectsQuery } from "@/Redux/apis/projectsApi";
 import ProjectCard from "@/components/shared/ProjectCard";
 import { Project } from "@/types/types";
@@ -26,7 +26,7 @@ const Home = () => {
     data: totalCountsData,
     error,
     isLoading,
-  } = useGetTotalCountsQuery({});
+  } = useGetQuantityCountsQuery({});
   console.log(totalCountsData);
 
   const {
@@ -38,8 +38,18 @@ const Home = () => {
   const totalCount = totalCountsData?.data;
   const allProjects = allProjectsData?.data?.data;
 
+  // const userToken = localStorage.getItem("accessToken");
+
   console.log(totalCount);
   console.log(allProjects);
+
+  // if (!userToken) {
+  //   return (
+  //     <p className="text-center py-20 text-2xl font-semibold text-red-600">
+  //       Please Log In First
+  //     </p>
+  //   );
+  // }
 
   if (isLoading || loadingProjects) {
     return (
@@ -117,26 +127,15 @@ const Home = () => {
           {/* Entrepreneur */}
           <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
             <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
-              Total Entrepreneurs
+              Total Users
             </h2>
             <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
-              {totalCount?.totalEntrepreneurs || 0}
+              {totalCount?.totalUsers || 0}
             </p>
             <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
           </div>
 
           {/* Investors */}
-          <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
-            <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
-              Total Investors
-            </h2>
-            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
-              {totalCount?.totalInvestors || 0}
-            </p>
-            <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
-          </div>
-
-          {/* Projects */}
           <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
             <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
               Total Projects
@@ -147,8 +146,19 @@ const Home = () => {
             <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
           </div>
 
-          {/* Revenue */}
+          {/* Projects */}
           <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
+            <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
+              Total Investments
+            </h2>
+            <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary">
+              {totalCount?.totalInvestments || 0}
+            </p>
+            <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
+          </div>
+
+          {/* Revenue */}
+          {/* <div className="relative flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 overflow-hidden">
             <h2 className="text-gray-600 md:text-xl lg:text-2xl font-semibold pb-4 lg:pb-8 max-w-[300px] text-center">
               Total Revenue
             </h2>
@@ -156,7 +166,7 @@ const Home = () => {
               ${totalCount?.totalRevenue || 0}
             </p>
             <div className="bg-primary2 w-30 md:w-40 xl:w-50 h-30 md:h-40 xl:h-50 rounded-full absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2" />
-          </div>
+          </div> */}
         </div>
       </div>
 

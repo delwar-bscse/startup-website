@@ -15,33 +15,24 @@ const authApi = baseApi.injectEndpoints({
     }),
     ForgetPassword: builder.mutation({
       query: (data) => {
-        // const accessToken = localStorage.getItem("accessToken");
-        ////  console.log("forgot pass accessToken", token);
+        console.log(data);
         return {
-          url: "/auth/forgot-password-otp",
+          url: "/auth/forget-password",
           method: "POST",
           body: data,
-          // headers: {
-          //   "content-type": "application/json",
-          //   Authorization: `Bearer ${accessToken}`,
-          // },
         };
       },
-      invalidatesTags: ["forgotPasswordEmail"],
+      invalidatesTags: ["user"],
     }),
     // Verify Otp
-    VerifyOtp: builder.mutation({
+    VerifyChangePasswordOtp: builder.mutation({
       query: (data) => {
-        const token = localStorage.getItem("otpToken");
         //  console.log("vetifyOtpToken", token);
+        console.log("otp compare data", data);
         return {
-          url: "/auth/forgot-password-otp-match",
-          method: "PATCH",
+          url: "/auth/otp-compare",
+          method: "post",
           body: data,
-          headers: {
-            "content-type": "application/json",
-            token: token,
-          },
         };
       },
       invalidatesTags: ["user"],
@@ -50,15 +41,16 @@ const authApi = baseApi.injectEndpoints({
     // Reset Password
     ResetPassword: builder.mutation({
       query: (data) => {
-        const token = localStorage.getItem("verifiedOtpToken");
-        console.log({ token });
+        const token = localStorage.getItem("resetToken");
+        console.log(token);
+        console.log("ResetPassword", data);
         return {
-          url: "/auth/forgot-password-reset",
-          method: "PATCH",
+          url: "/auth/reset-password",
+          method: "post",
           body: data,
           headers: {
             // "content-type": "application/json",
-            token: token,
+            authorization: token,
           },
         };
       },
@@ -99,14 +91,14 @@ const authApi = baseApi.injectEndpoints({
     UserOtpVerify: builder.mutation({
       query: (data) => {
         const token = localStorage.getItem("createUserToken");
-        //  console.log("vetifyOtpToken", token);
+        console.log("api otp data", data);
         return {
-          url: "/users/create-user-verify-otp",
+          url: "/users/create-user",
           method: "POST",
           body: data,
           headers: {
             "content-type": "application/json",
-            token: token,
+            authorization: token,
           },
         };
       },
@@ -118,7 +110,7 @@ const authApi = baseApi.injectEndpoints({
 export const {
   useLogInMutation,
   useForgetPasswordMutation,
-  useVerifyOtpMutation,
+  useVerifyChangePasswordOtpMutation,
   useResendOtpMutation,
   useResetPasswordMutation,
   useSignUpMutation,
