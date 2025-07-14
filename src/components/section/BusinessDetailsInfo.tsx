@@ -160,7 +160,7 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
               <Button
                 onClick={() => onHandleStep(1)}
                 variant={"outline"}
-                className="text-base md:text-lg min-w-[150px] px-3 border border-primary2"
+                className="cursor-pointer text-base md:text-lg min-w-[150px] px-3 border border-primary2"
               >
                 Back
               </Button>

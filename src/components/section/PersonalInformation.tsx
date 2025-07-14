@@ -29,12 +29,12 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
   const [imagePreview2, setImagePreview2] = useState<string | null>(null);
   const [newSkill, setNewSkill] = useState("");
   const [newInterest, setNewInterest] = useState("");
-  const [updatePersonalInfo] = useUpdatePersonalInfoMutation();
-
-  // console.log("user", user);
 
   const { data: detailsFields } = useGetPersonalDetailsFieldsQuery({});
   // console.log("detailsFields", detailsFields?.data);
+  const [updatePersonalInfo] = useUpdatePersonalInfoMutation();
+
+  // console.log("user", user);
 
   const form = useForm({
     mode: "onChange",

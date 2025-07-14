@@ -144,14 +144,14 @@ const FinancialInvestmentDetails2: React.FC<any> = ({ onHandleStep, user }) => {
                 onClick={() => onHandleStep(2)}
                 type="submit"
                 variant={"outline"}
-                className="text-base md:text-lg min-w-[150px] px-3 border border-primary2"
+                className="cursor-pointer text-base md:text-lg min-w-[150px] px-3 border border-primary2"
               >
                 Back
               </Button>
 
               <Button
                 type="submit"
-                className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
+                className="cursor-pointer text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
               >
                 Next
               </Button>

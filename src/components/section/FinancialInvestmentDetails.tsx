@@ -8,10 +8,9 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "@/components/ui/textarea";
 import { CiImageOn } from "react-icons/ci";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import {
   Form,
@@ -27,7 +26,12 @@ import Image from "next/image";
 import { useState } from "react";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 // Schema
 const PersonalInfoSchema = z.object({
@@ -44,18 +48,24 @@ const PersonalInfoSchema = z.object({
     required_error: "You need to select Team Yes/No.",
   }),
   ifHaveCompany: z.string(),
-  needCapital: z.enum(["", "00-50000", "50000-250000", "250000-1000000", "1000000+"], {
-    required_error: "You need to select one.",
-  }),
+  needCapital: z.enum(
+    ["", "00-50000", "50000-250000", "250000-1000000", "1000000+"],
+    {
+      required_error: "You need to select one.",
+    }
+  ),
   percentageSell: z.enum(["", "00-20", "20-40", "40-60", "60-100"], {
     required_error: "You need to select one.",
   }),
   experience: z.enum(["", "beginner", "intermediate", "advanced"], {
     required_error: "You need to select experience level.",
   }),
-  shareSell: z.enum(["", "00-50000", "50000-250000", "250000-1000000", "1000000+"], {
-    required_error: "You need to select one.",
-  }),
+  shareSell: z.enum(
+    ["", "00-50000", "50000-250000", "250000-1000000", "1000000+"],
+    {
+      required_error: "You need to select one.",
+    }
+  ),
   image1: z
     .any()
     .refine((file) => file, "Image is required.") // Required
@@ -93,7 +103,9 @@ interface PersonalInformationProps {
   onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
 }
 
-const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHandleStep }) => {
+const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({
+  onHandleStep,
+}) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const [imagePreview2, setImagePreview2] = useState<string | null>(null);
   const form = useForm<PersonalInfoValues>({
@@ -126,11 +138,12 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
   return (
     <div className="w-full flex justify-center py-10 px-4">
       <div className="w-full max-w-[1000px]">
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md space-y-6">
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">Financial & Investment Details</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">
+                Financial & Investment Details
+              </h2>
               {/* Title of the project */}
               <FormField
                 control={form.control}
@@ -154,7 +167,11 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                   <FormItem>
                     <FormLabel>What&apos;s it about? (Your Story)</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Project des..." className="h-32 bg-white" {...field} />
+                      <Textarea
+                        placeholder="Project des..."
+                        className="h-32 bg-white"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -180,17 +197,13 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                               <FormControl>
                                 <RadioGroupItem value="yes" />
                               </FormControl>
-                              <FormLabel className="font-normal">
-                                Yes
-                              </FormLabel>
+                              <FormLabel className="font-normal">Yes</FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-1">
                               <FormControl>
                                 <RadioGroupItem value="no" />
                               </FormControl>
-                              <FormLabel className="font-normal">
-                                No
-                              </FormLabel>
+                              <FormLabel className="font-normal">No</FormLabel>
                             </FormItem>
                           </RadioGroup>
                         </FormControl>
@@ -217,17 +230,13 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                               <FormControl>
                                 <RadioGroupItem value="yes" />
                               </FormControl>
-                              <FormLabel className="font-normal">
-                                Yes
-                              </FormLabel>
+                              <FormLabel className="font-normal">Yes</FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-1">
                               <FormControl>
                                 <RadioGroupItem value="no" />
                               </FormControl>
-                              <FormLabel className="font-normal">
-                                No
-                              </FormLabel>
+                              <FormLabel className="font-normal">No</FormLabel>
                             </FormItem>
                           </RadioGroup>
                         </FormControl>
@@ -245,9 +254,14 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                   name="ifHaveCompany"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>If yes, put your company name and SIRET number</FormLabel>
+                      <FormLabel>
+                        If yes, put your company name and SIRET number
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter Company Name and SIRET number"  {...field} />
+                        <Input
+                          placeholder="Enter Company Name and SIRET number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -269,7 +283,7 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                           <div className="relative w-full h-[150px] bg-purple-100 rounded-md border-2 border-primary flex justify-center items-center cursor-pointer overflow-hidden">
                             {!imagePreview1 ? (
                               <span className="text-primary">
-                                <CiImageOn className='text-8xl' />
+                                <CiImageOn className="text-8xl" />
                               </span>
                             ) : (
                               <Image
@@ -294,7 +308,6 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                               className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
                             />
                           </div>
-
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -310,7 +323,7 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                           <div className="relative w-full h-[150px] bg-purple-100 rounded-md border-2 border-primary flex justify-center items-center cursor-pointer overflow-hidden">
                             {!imagePreview2 ? (
                               <span className="text-primary">
-                                <CiImageOn className='text-8xl' />
+                                <CiImageOn className="text-8xl" />
                               </span>
                             ) : (
                               <Image
@@ -335,7 +348,6 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                               className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
                             />
                           </div>
-
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -405,7 +417,9 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                     name="percentageSell"
                     render={({ field }) => (
                       <FormItem className="">
-                        <FormLabel>How many percentage of your company do you sell ?</FormLabel>
+                        <FormLabel>
+                          How many percentage of your company do you sell ?
+                        </FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -461,7 +475,9 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
                     name="shareSell"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>How much company&apos;s shares do you sell ?</FormLabel>
+                        <FormLabel>
+                          How much company&apos;s shares do you sell ?
+                        </FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -557,18 +573,25 @@ const FinancialInvestmentDetails: React.FC<PersonalInformationProps> = ({ onHand
 
             {/* Back  ||  Submit then Next */}
             <div className="w-full flex justify-between">
-              <Button onClick={() => onHandleStep(2)} variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
+              <Button
+                onClick={() => onHandleStep(2)}
+                variant={"outline"}
+                className="cursor-pointer text-base md:text-lg min-w-[150px] px-3 border border-primary2"
+              >
                 Back
               </Button>
 
-              <Button type="submit" className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900">
+              <Button
+                type="submit"
+                className="cursor-pointer text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
+              >
                 Next
               </Button>
             </div>
           </form>
         </Form>
       </div>
-    </div >
+    </div>
   );
 };
 

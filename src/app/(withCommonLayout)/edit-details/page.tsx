@@ -104,7 +104,9 @@ const EditDetails = () => {
       {userRole === "investor" && activeStep === 3 && (
         <FinancialInvestmentDetails2 onHandleStep={handleStep} user={user} />
       )}
-      {activeStep === 4 && <LegalCompliance onHandleStep={handleStep} />}
+      {activeStep === 4 && (
+        <LegalCompliance onHandleStep={handleStep} user={user} />
+      )}
       {activeStep === 5 && <Subscriptions />}
     </div>
   );

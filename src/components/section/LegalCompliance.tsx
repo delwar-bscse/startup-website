@@ -1,13 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { PiUploadSimple } from "react-icons/pi";
 
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { format } from "date-fns"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import {
   Form,
@@ -17,252 +13,271 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  useGetLegalComplianceFieldsQuery,
+  useUpdateLegalComplianceInfoMutation,
+} from "@/Redux/apis/legalComplianceApi";
+import { CiImageOn } from "react-icons/ci";
+import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
-// Schema
-const PersonalInfoSchema = z.object({
-  accreditedInvestor: z.enum(["", "yes", "no"], {
-    required_error: "You need to select Company Yes/No.",
-  }),
-  legalOrRegulatory: z.enum(["", "yes", "no"], {
-    required_error: "You need to select Team Yes/No.",
-  }),
-  iAgree: z
-    .boolean(),
-  signature: z
-    .any()
-    .refine((file) => file, "Image is required.") // Required
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    ),
-  date: z.date(),
-});
-
-// Type
-type PersonalInfoValues = z.infer<typeof PersonalInfoSchema>;
-
-const defaultValues: Partial<PersonalInfoValues> = {
-  accreditedInvestor: "",
-  legalOrRegulatory: "",
-  iAgree: false,
-  date: new Date(),
-};
-interface PersonalInformationProps {
-  onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
-}
-
-const LegalCompliance: React.FC<PersonalInformationProps> = ({ onHandleStep }) => {
+const LegalCompliance: React.FC<any> = ({ onHandleStep, user }) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
-  const form = useForm<PersonalInfoValues>({
-    resolver: zodResolver(PersonalInfoSchema),
-    defaultValues,
+  const router = useRouter();
+
+  const { data: legalFields } = useGetLegalComplianceFieldsQuery({});
+  console.log("legalFields", legalFields?.data);
+  const [updateLegallInfo] = useUpdateLegalComplianceInfoMutation();
+
+  console.log(user);
+
+  const userRole = user?.role;
+  // console.log(userRole);
+
+  const form = useForm({
     mode: "onChange",
+    defaultValues: {
+      accreditedInvestor: user?.legalCompliance?.accreditedInvestor || "",
+      legalOrRegulatoryIssuesWithInvestments:
+        user?.legalCompliance?.legalOrRegulatoryIssuesWithInvestments || "",
+      declareInfoIsTrue: user?.legalCompliance?.declareInfoIsTrue || false,
+      date: user?.legalCompliance?.date
+        ? dayjs(user?.legalCompliance?.date).format("YYYY-MM-DD")
+        : "",
+      signature: undefined,
+    },
   });
 
-  function onSubmit(data: PersonalInfoValues) {
-    toast("Form submitted successfully!");
-    console.log("Submitted Data:", data);
-    const { signature, ...newData } = data;
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        accreditedInvestor: user?.legalCompliance?.accreditedInvestor || "",
+        legalOrRegulatoryIssuesWithInvestments:
+          user?.legalCompliance?.legalOrRegulatoryIssuesWithInvestments || "",
+        declareInfoIsTrue: user?.legalCompliance?.declareInfoIsTrue || false,
+        date: user?.legalCompliance?.date
+          ? dayjs(user?.legalCompliance?.date).format("YYYY-MM-DD")
+          : "",
+        signature: undefined,
+      });
+    }
+  }, [user, form]);
 
-    const formData = new FormData();
-    formData.append("files", signature);
-    formData.append("data", JSON.stringify(newData));
+  const onSubmit = async (data: any) => {
+    console.log("Submitted Data:", data);
+    try {
+      const { signature, ...newData } = data;
+      const formData = new FormData();
+
+      if (signature) formData.append("file", signature);
+      formData.append("data", JSON.stringify(newData));
+      console.log("new", newData);
+
+      // API call to update user data
+      const response = await updateLegallInfo(formData).unwrap();
+      console.log(response);
+      if (response.error) {
+        toast.error("Error updating legal compliances.");
+        console.log(response.error);
+      } else {
+        toast.success("Legal Compliances Updated Successfully!");
+
+        // onHandleStep(5);
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
+      console.log("Form Submission Error", error);
+    }
 
     // const response = await myFetch("/users/legalCompliance", {
     //   method: "PUT",
     //   body: formData,
     // });
     // console.log("Response:", response);
-    
-    onHandleStep(5);
-  }
+
+    // onHandleStep(5);
+  };
+
+  const handleComplete = () => {
+    router.push(`/${userRole}/portfolio`);
+  };
 
   return (
     <div className="w-full flex justify-center py-10 px-4">
       <div className="w-full max-w-[1000px]">
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md space-y-6">
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">Legal Compliance</h2>
-              
+              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">
+                Legal Compliance
+              </h2>
               <div className="grid grid-cols-2 gap-4">
                 {/* Are you an accredited investor */}
-                <div>
-                <FormField
-                  control={form.control}
-                  name="accreditedInvestor"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Are you an accredited investor ?</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1 text-gray-600"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="yes" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Yes
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="no" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              No
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                </div>
-                {/* Do you have a team */}
-                <div>
-                <FormField
-                  control={form.control}
-                  name="legalOrRegulatory"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Are you involved in any legal or regulatory issues related to investments ?</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-1 text-gray-600"
-                        >
-                          <FormItem className="flex items-center space-x-1 ">
-                            <FormControl>
-                              <RadioGroupItem value="yes" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              Yes
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1">
-                            <FormControl>
-                              <RadioGroupItem value="no" />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              No
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                </div>
-              </div>
-
-              <p>I hereby declare that the information provided is accurate and complete to the best of my knowledge.</p>
-
-              {/* Title of the project */}
-              <FormField
-                control={form.control}
-                name="iAgree"
-                render={({ field }) => (
-                  <FormItem className="flex items-center space-x-0 space-y-0">
-                    <FormControl>
-                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                    <FormLabel>I Agree</FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Image Upload */}
-              <div className="flex flex-wrap gap-3">
-                <p className="text-primary font-semibold">Signature : </p>
-                {/* Image Upload Field */}
-                <FormField
-                  control={form.control}
-                  name="signature"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="relative w-[250px] h-[80px] bg-purple-100 rounded-md border-2 border-primary flex justify-center items-center cursor-pointer overflow-hidden">
-                          {!imagePreview1 ? (
-                            <>
-                              <PiUploadSimple className="text-4xl text-primary" />
-                            </>
-                          ) : (
-                            <Image
-                              src={imagePreview1} // Use the base64 string for the src
-                              alt="Uploaded Preview"
-                              width={300} // Set width and height
-                              height={80}
-                              objectFit="cover" // Make sure it covers the area properly
+                {legalFields?.data.map((eachField: any, index: number) => {
+                  return (
+                    <FormField
+                      key={index}
+                      control={form.control}
+                      name={eachField.name}
+                      render={({ field }) => {
+                        if (eachField.type === "Date") {
+                          return (
+                            <FormItem>
+                              <FormLabel>{eachField.label}</FormLabel>
+                              <FormControl>
+                                <input
+                                  type="date"
+                                  value={field.value}
+                                  onChange={(e) =>
+                                    field.onChange(e.target.value)
+                                  }
+                                  className="px-4 py-2 rounded-md border border-primary2"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          );
+                        }
+                        if (eachField.name === "declareInfoIsTrue") {
+                          return (
+                            <FormField
+                              key={index}
+                              control={form.control}
+                              name={eachField.name}
+                              render={({ field }) => (
+                                <FormItem className="flex items-center space-x-0 space-y-0">
+                                  <FormLabel>{eachField.label}</FormLabel>
+                                  <FormControl>
+                                    <input
+                                      type="checkbox"
+                                      checked={field.value === true}
+                                      onChange={(e) =>
+                                        field.onChange(e.target.checked)
+                                      }
+                                      className="form-checkbox h-5 w-5 text-primary2"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
                             />
-                          )}
+                          );
+                        }
 
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                field.onChange(file);
-                                setImagePreview1(URL.createObjectURL(file));
-                              }
-                            }}
-                            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                          />
-                        </div>
+                        return (
+                          <FormItem className="flex items-center space-x-0 space-y-0">
+                            <FormLabel>{eachField.label}</FormLabel>
+                            <FormControl>
+                              <RadioGroup
+                                value={field.value}
+                                onValueChange={(value) => field.onChange(value)}
+                                className="flex flex-col ps-2 sm:ps-20 pt-3 space-y-3 text-gray-600"
+                              >
+                                {eachField.selectOptions?.map(
+                                  (option: any, optionIndex: number) => {
+                                    const booleanValue =
+                                      option.name === "true"
+                                        ? true
+                                        : option.name === "false"
+                                        ? false
+                                        : option.name;
 
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                                    return (
+                                      <FormItem
+                                        key={optionIndex}
+                                        className="flex items-center space-x-1 cursor-pointer"
+                                      >
+                                        <FormControl>
+                                          <RadioGroupItem
+                                            value={booleanValue}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {option.label}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }
+                                )}
+                              </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  );
+                })}
               </div>
-              {/* Date */}
+
+              {/* Signature Image */}
               <FormField
                 control={form.control}
-                name="date"
+                name="signature"
                 render={({ field }) => (
-                  <FormItem className="flex gap-3">
-                    <FormLabel>Date : </FormLabel>
+                  <FormItem>
                     <FormControl>
-                      <p className="font-semibold">{field.value && (format(field.value, "PPP"))}</p>
+                      <div className="relative w-1/2 h-[150px] bg-purple-100 rounded-md border-2 border-primary flex justify-center items-center cursor-pointer overflow-hidden">
+                        {!imagePreview1 ? (
+                          <span className="text-primary">
+                            <CiImageOn className="text-8xl" />
+                          </span>
+                        ) : (
+                          <Image
+                            src={imagePreview1} // Use the base64 string for the src
+                            alt="Uploaded Preview"
+                            width={280} // Set width and height
+                            height={140}
+                            objectFit="cover" // Make sure it covers the area properly
+                          />
+                        )}
+
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              field.onChange(file);
+                              setImagePreview1(URL.createObjectURL(file));
+                            }
+                          }}
+                          className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            
+
             {/* Back  ||  Submit then Next */}
             <div className="w-full flex justify-between">
-              <Button onClick={() => onHandleStep(3)} variant={"outline"} className="text-base md:text-lg min-w-[150px] px-3 border border-primary2">
+              <Button
+                onClick={() => onHandleStep(3)}
+                variant={"outline"}
+                className="cursor-pointer text-base md:text-lg min-w-[150px] px-3 border border-primary2"
+              >
                 Back
               </Button>
 
-              <Button type="submit" className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900">
-                Next
+              <Button
+                type="submit"
+                onClick={handleComplete}
+                className="cursor-pointer text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
+              >
+                {/* Next */}
+                Complete
               </Button>
             </div>
           </form>
         </Form>
       </div>
-    </div >
+    </div>
   );
 };
 
