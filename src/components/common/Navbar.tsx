@@ -33,7 +33,7 @@ const Navbar = () => {
 
   const { data: userProfile, isLoading } = useGetUserProfileQuery({});
   const user = userProfile?.data;
-  console.log(user);
+  console.log("navbar user", user);
 
   const userRole = user?.role;
   console.log(userRole);
@@ -52,7 +52,7 @@ const Navbar = () => {
     localStorage.removeItem("accessToken");
     router.push("/signin");
   };
-  if (isLoading) {
+  if (!user || isLoading) {
     return (
       <div className="flex justify-center items-center">
         <span className="loader text-primary">Loading...</span>

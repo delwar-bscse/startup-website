@@ -31,7 +31,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
   const [newInterest, setNewInterest] = useState("");
 
   const { data: detailsFields } = useGetPersonalDetailsFieldsQuery({});
-  // console.log("detailsFields", detailsFields?.data);
+  console.log("detailsFields", detailsFields?.data);
   const [updatePersonalInfo] = useUpdatePersonalInfoMutation();
 
   // console.log("user", user);
@@ -45,12 +45,12 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
       dob: user?.dob ? new Date(user.dob) : "", // Handle undefined or missing dob
       gender: user?.gender || "",
       occupation: user?.occupation || "",
-      nationality: user?.nationality || "",
+      Nationality: user?.Nationality || "",
       address: user?.address || "",
       city: user?.city || "",
       state: user?.state || "",
       designation: user?.designation || "",
-      about: user?.about || "",
+      About: user?.About || "",
       experience: user?.experience || "",
       skills: user?.skills || [],
       passportOrNIDDocs: user?.passportOrNIDDocs || [],
@@ -69,18 +69,18 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         phone: user.phone || "",
         dob: user.dob || "",
         gender: user.gender || "",
-        occupation: user.personalInfo.occupation || "",
-        nationality: user.personalInfo.nationality || "",
-        address: user.personalInfo.address || "",
-        city: user.personalInfo.city || "",
-        state: user.personalInfo.state || "",
-        designation: user.personalInfo.designation || "",
-        experience: user.personalInfo.experience || "",
-        about: user.personalInfo.about || "",
-        interestedIndustries: user.personalInfo.interestedIndustries || [],
-        passportOrNIDDocs: user.personalInfo.passportOrNIDDocs || [],
-        skills: user.personalInfo.skills || [],
-        taxCode: user.personalInfo.taxCode || "",
+        occupation: user?.personalInfo?.occupation || "",
+        Nationality: user?.personalInfo?.Nationality || "",
+        address: user?.personalInfo?.address || "",
+        city: user?.personalInfo?.city || "",
+        state: user?.personalInfo?.state || "",
+        designation: user?.personalInfo?.designation || "",
+        experience: user?.personalInfo?.experience || "",
+        About: user?.personalInfo?.About || "",
+        interestedIndustries: user?.personalInfo?.interestedIndustries || [],
+        passportOrNIDDocs: user?.personalInfo?.passportOrNIDDocs || [],
+        skills: user?.personalInfo?.skills || [],
+        taxCode: user?.personalInfo?.taxCode || "",
         image1: undefined,
         image2: undefined,
       });
@@ -159,8 +159,8 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         JSON.stringify(data.passportOrNIDDocs)
       );
 
-      if (image1) formData.append("files", image1);
-      if (image2) formData.append("files", image2);
+      if (data.image1) formData.append("images", data.image1);
+      if (data.image2) formData.append("images", data.image2);
 
       formData.append("data", JSON.stringify(newData));
 

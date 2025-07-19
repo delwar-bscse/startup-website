@@ -114,7 +114,7 @@ const LegalCompliance: React.FC<any> = ({ onHandleStep, user }) => {
               <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">
                 Legal Compliance
               </h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-8">
                 {/* Are you an accredited investor */}
                 {legalFields?.data.map((eachField: any, index: number) => {
                   return (
@@ -148,7 +148,7 @@ const LegalCompliance: React.FC<any> = ({ onHandleStep, user }) => {
                               control={form.control}
                               name={eachField.name}
                               render={({ field }) => (
-                                <FormItem className="flex items-center space-x-0 space-y-0">
+                                <FormItem className="flex items-center gap-5">
                                   <FormLabel>{eachField.label}</FormLabel>
                                   <FormControl>
                                     <input
@@ -168,7 +168,7 @@ const LegalCompliance: React.FC<any> = ({ onHandleStep, user }) => {
                         }
 
                         return (
-                          <FormItem className="flex items-center space-x-0 space-y-0">
+                          <FormItem className="flex">
                             <FormLabel>{eachField.label}</FormLabel>
                             <FormControl>
                               <RadioGroup
@@ -219,6 +219,9 @@ const LegalCompliance: React.FC<any> = ({ onHandleStep, user }) => {
                 name="signature"
                 render={({ field }) => (
                   <FormItem>
+                    <p className="text-gray-600 underline font-semibold">
+                      Add Signature:
+                    </p>
                     <FormControl>
                       <div className="relative w-1/2 h-[150px] bg-purple-100 rounded-md border-2 border-primary flex justify-center items-center cursor-pointer overflow-hidden">
                         {!imagePreview1 ? (

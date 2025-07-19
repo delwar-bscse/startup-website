@@ -71,13 +71,13 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
   const form = useForm({
     mode: "onChange",
     defaultValues: {
-      occupation: user?.businessInfo?.occupation || "",
+      Occupation: user?.businessInfo?.Occupation || "",
       companyName: user?.businessInfo?.companyName || "",
-      companyType: user?.businessInfo?.companyType || "",
-      companyRegistrationNumber:
-        user?.businessInfo?.companyRegistrationNumber || "",
-      establishmentDate: user?.businessInfo?.establishmentDate || "",
-      businessWebURL: user?.businessInfo?.businessWebURL || "",
+      CompanyType: user?.businessInfo?.CompanyType || "",
+      CompanyRegistrationNumber:
+        user?.businessInfo?.CompanyRegistrationNumber || "",
+      EstablishmentDate: user?.businessInfo?.EstablishmentDate || "",
+      BusinessWebsiteURL: user?.businessInfo?.BusinessWebsiteURL || "",
       achievement: user?.businessInfo?.achievement || "",
     },
   });
@@ -85,15 +85,15 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
   useEffect(() => {
     if (user) {
       form.reset({
-        occupation: user?.businessInfo?.occupation || "",
+        Occupation: user?.businessInfo?.Occupation || "",
         companyName: user?.businessInfo?.companyName || "",
-        companyType: user?.businessInfo?.companyType || "",
-        companyRegistrationNumber:
-          user?.businessInfo?.companyRegistrationNumber || "",
-        establishmentDate: user?.businessInfo?.establishmentDate
-          ? dayjs(user.businessInfo.establishmentDate).format("YYYY-MM-DD") // Format date
+        CompanyType: user?.businessInfo?.CompanyType || "",
+        CompanyRegistrationNumber:
+          user?.businessInfo?.CompanyRegistrationNumber || "",
+        EstablishmentDate: user?.businessInfo?.EstablishmentDate
+          ? dayjs(user.businessInfo.EstablishmentDate).format("YYYY-MM-DD") // Format date
           : "",
-        businessWebURL: user?.businessInfo?.businessWebURL || "",
+        BusinessWebsiteURL: user?.businessInfo?.BusinessWebsiteURL || "",
         achievement: user?.businessInfo?.achievement || "",
       });
     }

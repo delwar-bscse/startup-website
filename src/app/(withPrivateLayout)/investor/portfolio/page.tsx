@@ -1,17 +1,23 @@
+"use client";
 
-import About03 from "@/assets/projects/Entrepreneur/aboutme03.png"
-import About04 from "@/assets/projects/Entrepreneur/aboutme04.png"
-import React from 'react'
-import Achievement from '@/components/section/Achievement'
-import AboutMe from "@/components/section/AboutMe"
-import InterestedIndustry from "@/components/section/InterestedIndustry"
-import PersonalAndBusiness from "@/components/section/PersonalAndBusiness"
+import About03 from "@/assets/projects/Entrepreneur/aboutme03.png";
+import About04 from "@/assets/projects/Entrepreneur/aboutme04.png";
+import React from "react";
+import Achievement from "@/components/section/Achievement";
+import AboutMe from "@/components/section/AboutMe";
+import InterestedIndustry from "@/components/section/InterestedIndustry";
+import PersonalAndBusiness from "@/components/section/PersonalAndBusiness";
+import { useGetUserProfileQuery } from "@/Redux/apis/userApi";
 
-const page = () => {
+const Page = () => {
+  const { data: userData } = useGetUserProfileQuery({});
+  const user = userData?.data;
+  console.log("portfolio user", user);
   return (
-    <div className=''>
+    <div className="">
       <>
-        <AboutMe image1={About03} image2={About04} /></>
+        <AboutMe image1={About03} image2={About04} user={user} />
+      </>
       <>
         <Achievement />
       </>
@@ -23,7 +29,7 @@ const page = () => {
         <PersonalAndBusiness />
       </>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
