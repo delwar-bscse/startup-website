@@ -24,7 +24,11 @@ import {
   useUpdateFinancialInfoMutation,
 } from "@/Redux/apis/financialDetailsApi";
 
-const FinancialInvestmentDetails2: React.FC<any> = ({ onHandleStep, user }) => {
+const FinancialInvestmentDetails2: React.FC<any> = ({
+  onHandleStep,
+  user,
+  refetch,
+}) => {
   const { data: financialFields } = useGetFinancialDetailsFieldsQuery({});
   console.log("financialFields", financialFields?.data);
   console.log("user", user);
@@ -74,7 +78,7 @@ const FinancialInvestmentDetails2: React.FC<any> = ({ onHandleStep, user }) => {
         console.log(response.error);
       } else {
         toast.success("Financial information updated successfully!");
-
+        refetch();
         onHandleStep(4);
       }
     } catch (error) {

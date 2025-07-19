@@ -24,7 +24,11 @@ import {
   useUpdatePersonalInfoMutation,
 } from "@/Redux/apis/userApi";
 
-const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
+const PersonalInformation: React.FC<any> = ({
+  onHandleStep,
+  user,
+  refetch,
+}) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const [imagePreview2, setImagePreview2] = useState<string | null>(null);
   const [newSkill, setNewSkill] = useState("");
@@ -51,7 +55,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
       state: user?.state || "",
       designation: user?.designation || "",
       About: user?.About || "",
-      experience: user?.experience || "",
+      Experience: user?.Experience || "",
       skills: user?.skills || [],
       passportOrNIDDocs: user?.passportOrNIDDocs || [],
       taxCode: user?.taxCode || "",
@@ -75,7 +79,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         city: user?.personalInfo?.city || "",
         state: user?.personalInfo?.state || "",
         designation: user?.personalInfo?.designation || "",
-        experience: user?.personalInfo?.experience || "",
+        Experience: user?.personalInfo?.Experience || "",
         About: user?.personalInfo?.About || "",
         interestedIndustries: user?.personalInfo?.interestedIndustries || [],
         passportOrNIDDocs: user?.personalInfo?.passportOrNIDDocs || [],
@@ -178,7 +182,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         console.log(response.error);
       } else {
         toast.success("Personal information updated successfully!");
-
+        refetch();
         // Move to the next step after successful submission
         onHandleStep(2);
       }

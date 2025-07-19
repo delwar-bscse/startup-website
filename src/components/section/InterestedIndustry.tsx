@@ -1,50 +1,59 @@
-import Image, { StaticImageData } from 'next/image'
-import React from 'react'
-import fashionImg from '@/assets/industry/fashion.png';
-import technologyImg from '@/assets/industry/technology.png';
-import cookingImg from '@/assets/industry/cooking.png';
+import Image, { StaticImageData } from "next/image";
+import React from "react";
+import fashionImg from "@/assets/industry/fashion.png";
+import technologyImg from "@/assets/industry/technology.png";
+import cookingImg from "@/assets/industry/cooking.png";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 type Props = {
   id: number;
   name: string;
   image: StaticImageData;
-}
+};
 
 const industries: Props[] = [
   {
     id: 1,
     name: "Fashion",
-    image: fashionImg
+    image: fashionImg,
   },
   {
     id: 2,
     name: "Technology",
-    image: technologyImg
+    image: technologyImg,
   },
   {
     id: 3,
     name: "Cooking",
-    image: cookingImg
-  }
-]
+    image: cookingImg,
+  },
+];
 
-
-const InterestedIndustry = () => {
+const InterestedIndustry = ({ user }) => {
+  console.log(
+    "InterestedIndustry user",
+    user?.personalInfo?.interestedIndustries
+  );
   return (
-    <div className='maxWidth py-20'>
-      <h1 className='text-3xl md:text-4xl lg:text-5xl font-bold pb-4 lg:pb-8 text-gray-700'>Interested Industry</h1>
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
-        {industries?.map((industry) => (
-          <div key={industry.id} className='flex items-center gap-2 border border-primary py-2 px-4'>
-            <div className='w-14 h-14 overflow-hidden'>
+    <div className="maxWidth py-20">
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold pb-4 lg:pb-8 text-gray-700">
+        Interested Industry
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {user?.personalInfo?.interestedIndustries.map((industry: { id: React.Key | null | undefined; image: string | StaticImport; name: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }) => (
+          <div
+            key={industry.id}
+            className="flex items-center gap-2 border border-primary py-2 px-4"
+          >
+            <div className="w-14 h-14 overflow-hidden">
               <Image src={industry.image} alt="" width={100} height={100} />
             </div>
-            <p className='text-lg font-semibold'>{industry.name}</p>
+            <p className="text-lg font-semibold">{industry.name}</p>
           </div>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default InterestedIndustry
+export default InterestedIndustry;

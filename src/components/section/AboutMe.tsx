@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 
 const AboutMe: React.FC<any> = ({ user }) => {
-  console.log(user);
+  console.log("about user", user);
   return (
     <>
       {/* ----------- About Me Section ----------- */}
@@ -11,17 +11,21 @@ const AboutMe: React.FC<any> = ({ user }) => {
         <h2 className="text-4xl lg:text-6xl font-bold text-purple-950">
           About Me
         </h2>
-        <p className="text-gray-700">{user?.personalInfo?.about}</p>
+        <p className="text-gray-700">{user?.personalInfo?.About}</p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-10">
           {user?.personalInfo?.images.map((image: any, index: number) => {
-            <Image
-              key={index}
-              src={image}
-              width={500}
-              height={360}
-              alt="Cover"
-              sizes="100vw"
-            />;
+            return (
+              <div key={index} className="flex-shrink-0">
+                <Image
+                  src={image}
+                  width={300}
+                  height={216}
+                  alt={`Cover ${index + 1}`}
+                  sizes="(max-width: 600px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+            );
           })}
         </div>
       </div>

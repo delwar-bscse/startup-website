@@ -63,7 +63,11 @@ import dayjs from "dayjs";
 // Type
 // type PersonalInfoValues = z.infer<typeof PersonalInfoSchema>;
 
-const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
+const BusinessDetailsInfo: React.FC<any> = ({
+  onHandleStep,
+  user,
+  refetch,
+}) => {
   const { data: businessFields } = useGetBusinessDetailsFieldsQuery({});
   console.log("businessFields", businessFields);
   const [updateBusinessInfo] = useUpdateBusinessInfoMutation();
@@ -110,7 +114,7 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
         console.log(response.error);
       } else {
         toast.success("Business information updated successfully!");
-
+        refetch();
         // Move to the next step after successful submission
         onHandleStep(3);
       }

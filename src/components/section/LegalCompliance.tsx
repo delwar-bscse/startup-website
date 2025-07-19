@@ -24,7 +24,7 @@ import { CiImageOn } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 
-const LegalCompliance: React.FC<any> = ({ onHandleStep, user }) => {
+const LegalCompliance: React.FC<any> = ({ onHandleStep, user, refetch }) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const router = useRouter();
 
@@ -84,7 +84,7 @@ const LegalCompliance: React.FC<any> = ({ onHandleStep, user }) => {
         console.log(response.error);
       } else {
         toast.success("Legal Compliances Updated Successfully!");
-
+        refetch();
         // onHandleStep(5);
       }
     } catch (error) {
