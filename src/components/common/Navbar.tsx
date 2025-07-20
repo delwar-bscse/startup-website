@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BrandLogo from "@/assets/logo/brandLogo.png";
 import UserImage from "@/assets/projects/Entrepreneur/profile.png";
 import { Button } from "@/components/ui/button";
@@ -29,36 +29,71 @@ import { getImageUrl } from "@/utils/baseUrl";
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [hasToken, setHasToken] = useState<boolean>(false);
+
   const router = useRouter();
 
-  const { data: userProfile, isLoading } = useGetUserProfileQuery({});
+  const { data: userProfile, isLoading, refetch } = useGetUserProfileQuery({});
   const user = userProfile?.data;
-  console.log("navbar user", user);
-
   const userRole = user?.role;
+  console.log("navbar user", user);
   console.log(userRole);
+  // const isLoggedIn = !!user;
 
-  // Setting cookies on the client side is not supported with Next.js app router's cookies() API.
-  // If you need to set a cookie from the client, use document.cookie or a library like js-cookie.
-  // Alternatively, set the cookie on the server (middleware, API route, or server action).
-  // Example (client-side, not secure for httpOnly):
-  if (typeof window !== "undefined" && userRole) {
-    document.cookie = `role=${userRole}; path=/; max-age=${60 * 60 * 24}`;
-  }
+  useEffect(() => {
+    const checkToken = () => {
+      const accessToken = localStorage.getItem("accessToken");
+      setHasToken(!!accessToken);
 
-  const imageUrl = getImageUrl(user?.profileImg ?? "");
+      if (accessToken && !user && !isLoading) {
+        refetch();
+      }
+    };
+
+    checkToken();
+
+    const interval = setInterval(checkToken, 1000);
+
+    return () => clearInterval(interval);
+  }, [user, isLoading, refetch]);
+
+  // Update isLoggedIn based on both token and user data
+  useEffect(() => {
+    setIsLoggedIn(hasToken && !!user && !!userRole);
+  }, [hasToken, user, userRole]);
+
+  const imageUrl = getImageUrl();
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    setHasToken(false);
+    setIsLoggedIn(false);
     router.push("/signin");
   };
-  if (!user || isLoading) {
+
+  console.log(
+    "Debug - isLoggedIn:",
+    isLoggedIn,
+    "user:",
+    !!user,
+    "userRole:",
+    userRole,
+    "isLoading:",
+    isLoading
+  );
+
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center">
         <span className="loader text-primary">Loading...</span>
       </div>
     );
   }
+
+  const getProfileImageUrl = () => {
+    return user?.profileImg ? `${imageUrl}/${user.profileImg}` : UserImage;
+  };
 
   return (
     <div className="shadow-md">
@@ -89,23 +124,16 @@ const Navbar = () => {
 
         {/* Sign In / Mobile Menu Trigger */}
         <div className="col-span-1 flex justify-end items-center gap-4 relative">
-          {!user ? (
-            <Link
-              href="/signin"
-              className="hidden md:inline-block bg-primary text-white py-2 px-4"
-            >
-              Sign In
-            </Link>
-          ) : (
+          {isLoggedIn && userRole ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="max-md:hidden w-12 h-12 block rounded-full overflow-hidden border-2 border-primary cursor-pointer">
                   <Image
-                    src={`${imageUrl}/${user?.profileImg}`}
+                    src={getProfileImageUrl()}
                     alt="User Profile"
                     width={300}
                     height={300}
-                    className="object-cover min-w-12 min-h-12"
+                    className="object-cover min-w-10 min-h-10"
                   />
                 </div>
               </DropdownMenuTrigger>
@@ -115,7 +143,7 @@ const Navbar = () => {
                     <span className="flex gap-2 items-center">
                       <span className="w-12 h-12 block rounded-full overflow-hidden border-2 border-primary">
                         <Image
-                          src={`${imageUrl}/${user?.profileImg}`}
+                          src={getProfileImageUrl()}
                           alt="User Profile"
                           width={100}
                           height={100}
@@ -157,6 +185,13 @@ const Navbar = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+          ) : (
+            <Link
+              href="/signin"
+              className="hidden md:inline-block bg-primary text-white py-2 px-4"
+            >
+              Sign In
+            </Link>
           )}
 
           {/* ------------ Mobile Menu ------------- */}
@@ -179,7 +214,7 @@ const Navbar = () => {
                   </SheetTitle>
                 </SheetHeader>
                 <ul className="flex flex-col mt-6 gap-2 font-medium text-gray-700">
-                  {userRole && (
+                  {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
                       className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
@@ -190,7 +225,7 @@ const Navbar = () => {
                       >
                         <span className="w-12 h-12 block rounded-full overflow-hidden border-2 border-primary">
                           <Image
-                            src={UserImage}
+                            src={getProfileImageUrl()}
                             alt="User Profile"
                             width={100}
                             height={100}
@@ -225,7 +260,7 @@ const Navbar = () => {
                   >
                     <Link href="/contact">Contact Us</Link>
                   </li>
-                  {userRole && (
+                  {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
                       className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
@@ -235,7 +270,7 @@ const Navbar = () => {
                       </Link>
                     </li>
                   )}
-                  {userRole && (
+                  {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
                       className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
@@ -243,7 +278,7 @@ const Navbar = () => {
                       <Link href="/privacy-policy">Privacy Policy</Link>
                     </li>
                   )}
-                  {userRole && (
+                  {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
                       className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
@@ -252,20 +287,24 @@ const Navbar = () => {
                     </li>
                   )}
                   <li className="px-3 py-4">
-                    {!userRole ? (
-                      <Link
-                        href="/signin"
-                        className="block bg-primary text-white px-4 py-2 rounded mt-2 text-center"
-                      >
-                        Sign In
-                      </Link>
-                    ) : (
+                    {isLoggedIn && userRole ? (
                       <button
-                        onClick={handleLogout}
+                        onClick={() => {
+                          handleLogout();
+                          setOpen(false);
+                        }}
                         className="block w-full bg-primary text-white px-4 py-2 rounded mt-2 text-center"
                       >
                         Sign Out
                       </button>
+                    ) : (
+                      <Link
+                        href="/signin"
+                        onClick={() => setOpen(false)}
+                        className="block bg-primary text-white px-4 py-2 rounded mt-2 text-center"
+                      >
+                        Sign In
+                      </Link>
                     )}
                   </li>
                 </ul>

@@ -63,6 +63,7 @@ interface Entrepreneur {
 }
 
 export interface Project {
+    [x: string]: any;
     _id: string;
     entrepreneurId: Entrepreneur;
     title: string;

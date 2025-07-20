@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import CoverImg from "@/assets/projects/Entrepreneur/cover.png";
 import { getImageUrl } from "@/utils/baseUrl";
+import UserImage from "@/assets/projects/Entrepreneur/profile.png";
 
 interface EditUserImageProps {
   user: {
@@ -12,7 +13,12 @@ interface EditUserImageProps {
 }
 
 const EditUserImage: React.FC<EditUserImageProps> = ({ user }) => {
-  const imageUrl = getImageUrl(user?.profileImg ?? "");
+  const imageUrl = getImageUrl();
+
+  const getProfileImageUrl = () => {
+    return user?.profileImg ? `${imageUrl}/${user.profileImg}` : UserImage;
+  };
+
   return (
     <div>
       {/* Profile & Cover Images */}
@@ -26,7 +32,7 @@ const EditUserImage: React.FC<EditUserImageProps> = ({ user }) => {
         />
         <div className="absolute bottom-0 left-0 md:left-1/2 md:-translate-x-1/2 translate-y-1/2 w-28 h-28 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-primary2">
           <Image
-            src={`${imageUrl}/${user?.profileImg}`}
+            src={getProfileImageUrl()}
             width={600}
             height={600}
             alt="Profile"
