@@ -26,35 +26,43 @@ import { Menu } from "lucide-react";
 import { useGetUserProfileQuery } from "../../Redux/apis/userApi";
 import { useRouter } from "next/navigation";
 import { getImageUrl } from "@/utils/baseUrl";
+import { deleteCookie, getCookie, setCookie } from "cookies-next/client";
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [hasToken, setHasToken] = useState<boolean>(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const router = useRouter();
 
   const { data: userProfile, isLoading, refetch } = useGetUserProfileQuery({});
   const user = userProfile?.data;
-  const userRole = user?.role;
   console.log("navbar user", user);
-  console.log(userRole);
   // const isLoggedIn = !!user;
 
   useEffect(() => {
     const checkToken = () => {
       const accessToken = localStorage.getItem("accessToken");
+      const storedRole = getCookie("userRole")?.toString() || null;
       setHasToken(!!accessToken);
+      setUserRole(storedRole);
 
       if (accessToken && !user && !isLoading) {
         refetch();
+      }
+      if (user?.role && user.role !== storedRole) {
+        setCookie("userRole", user.role, {
+          maxAge: 7 * 24 * 60 * 60, // 7 days
+          path: "/",
+          sameSite: "strict",
+        });
       }
     };
 
     checkToken();
 
-    const interval = setInterval(checkToken, 1000);
-
+    const interval = setInterval(checkToken, 2000);
     return () => clearInterval(interval);
   }, [user, isLoading, refetch]);
 
@@ -67,9 +75,16 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    deleteCookie("userRole", {
+      path: "/",
+      sameSite: "strict",
+    });
     setHasToken(false);
     setIsLoggedIn(false);
-    router.push("/signin");
+    setUserRole(null);
+    setTimeout(() => {
+      router.push("/signin");
+    }, 500);
   };
 
   console.log(

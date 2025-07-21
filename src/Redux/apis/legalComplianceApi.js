@@ -14,6 +14,7 @@ const legalComplianceApi = baseApi.injectEndpoints({
           },
         };
       },
+      providesTags: ["legalCompliance"],
     }),
     updateLegalComplianceInfo: builder.mutation({
       query: (data) => {
@@ -29,6 +30,7 @@ const legalComplianceApi = baseApi.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["legalCompliance"],
     }),
   }),
 });

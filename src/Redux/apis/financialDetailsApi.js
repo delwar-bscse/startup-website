@@ -14,6 +14,7 @@ const financialDetailsApi = baseApi.injectEndpoints({
           },
         };
       },
+      providesTags: ["financialDetails"],
     }),
     updateFinancialInfo: builder.mutation({
       query: (data) => {
@@ -29,6 +30,7 @@ const financialDetailsApi = baseApi.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["financialDetails"],
     }),
   }),
 });

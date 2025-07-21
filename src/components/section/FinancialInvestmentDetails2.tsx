@@ -96,7 +96,6 @@ const FinancialInvestmentDetails2: React.FC<any> = ({
               <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">
                 Financial & Investment Details
               </h2>
-
               <div className="grid grid-cols-2 gap-4">
                 {financialFields?.data.map((fieldData: any, index: number) => {
                   if (fieldData?.for === "investor") {
