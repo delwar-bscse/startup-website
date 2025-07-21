@@ -6,8 +6,9 @@ import Link from "next/link";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import ActiveTab from "../shared/ActiveTab";
 import { getImageUrl } from "@/utils/baseUrl";
+import UserProfileImg from "@/assets/projects/Entrepreneur/profile.png";
 
-const imageUrl = getImageUrl("");
+const imageUrl = getImageUrl();
 
 interface User {
   name?: string;
@@ -22,6 +23,11 @@ interface UserImageProps {
 
 const UserImage: React.FC<UserImageProps> = ({ user }) => {
   console.log("user", user);
+
+  const getProfileImageUrl = () => {
+    return user?.profileImg ? `${imageUrl}/${user.profileImg}` : UserProfileImg;
+  };
+
   return (
     <div>
       {/* Profile & Cover Images */}
@@ -35,11 +41,11 @@ const UserImage: React.FC<UserImageProps> = ({ user }) => {
         />
         <div className="absolute bottom-0 left-0 md:left-1/2 md:-translate-x-1/2 translate-y-1/2 w-28 h-28 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-primary2">
           <Image
-            src={`${imageUrl}/${user?.profileImg}`}
-            width={600}
-            height={600}
+            src={getProfileImageUrl()}
+            width={650}
+            height={650}
             alt="Profile"
-            sizes="100vw"
+            className=""
           />
         </div>
         <div className="absolute -bottom-8 md:-bottom-12 right-0 bg-secondary text-gray-800 flex items-center gap-2 py-1 md:py-2 px-2 md:px-4">

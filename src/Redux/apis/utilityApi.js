@@ -58,7 +58,7 @@ const utilityApi = baseApi.injectEndpoints({
     getFAQs: builder.query({
       query: () => {
         return {
-          url: "/legal/tc",
+          url: "/legal/faq",
           method: "get",
         };
       },
@@ -71,4 +71,6 @@ export const {
   useGetQuantityCountsQuery,
   useContactUsMutation,
   useGetTermsAndConditionsQuery,
+  useGetPrivacyPolicyQuery,
+  useGetFAQsQuery,
 } = utilityApi;

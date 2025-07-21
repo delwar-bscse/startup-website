@@ -11,6 +11,6 @@ export const getBaseUrl = () => {
   return "http://10.10.7.29:3000/api/v1";
 };
 
-export const getImageUrl = (primaryUrl: string) => {
+export const getImageUrl = () => {
   return "http://10.10.7.29:3000";
 };

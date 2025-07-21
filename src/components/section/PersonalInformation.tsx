@@ -24,131 +24,21 @@ import {
   useUpdatePersonalInfoMutation,
 } from "@/Redux/apis/userApi";
 
-const interestedIndustryDatas = [
-  {
-    id: "healthcare",
-    label: "Healthcare",
-  },
-  {
-    id: "technology",
-    label: "Technology",
-  },
-  {
-    id: "cooking",
-    label: "Cooking",
-  },
-  {
-    id: "fashion",
-    label: "Fashion",
-  },
-  {
-    id: "education",
-    label: "Education",
-  },
-  {
-    id: "software",
-    label: "Software",
-  },
-] as const;
-
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
-// Schema
-// const PersonalInfoSchema = z.object({
-//   name: z.string().min(2, {
-//     message: "First name must be at least 2 characters.",
-//   }),
-//   email: z.string().email({
-//     message: "Please enter a valid email address.",
-//   }),
-//   phone: z.string(),
-//   dob: z.date({
-//     required_error: "A date of birth is required.",
-//   }),
-//   gender: z.string(),
-//   occupation: z.string(),
-//   nationality: z.string(),
-//   address: z.string(),
-//   city: z.string(),
-//   state: z.string(),
-//   aboutYourself: z.string(),
-//   interestedIndustry: z
-//     .array(z.string())
-//     .refine((value) => value.some((item) => item), {
-//       message: "You have to select at least one item.",
-//     })
-//     .refine((value) => value.length >= 1, {
-//       message: "You must select at least one industry.",
-//     })
-//     .refine((value) => value.length <= 3, {
-//       message: "You can select up to 3 industries.",
-//     }),
-//   image1: z
-//     .any()
-//     .refine((file) => file, "Image is required.") // Required
-//     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-//     .refine(
-//       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-//       "Only .jpg, .jpeg, .png and .webp formats are supported."
-//     ),
-//   image2: z
-//     .any()
-//     .refine((file) => file, "Image is required.") // Required
-//     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-//     .refine(
-//       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-//       "Only .jpg, .jpeg, .png and .webp formats are supported."
-//     ),
-// });
-
-// Type
-// type PersonalInfoValues = z.infer<typeof PersonalInfoSchema>;
-
-interface PersonalInformationProps {
-  onHandleStep: (id: number) => void; // Define the type of onHandleStep prop
-  user?: {
-    name: string;
-    label: string;
-    email: string;
-    phone: string;
-    dob: Date;
-    gender: string;
-    occupation: string;
-    nationality: string;
-    address: string;
-    city: string;
-    state: string;
-    aboutYourself: string;
-    about: string;
-    designation: string;
-    experience: string;
-    skills: { name: string }[];
-    interestedIndustry: never[];
-    // Add other user properties here if needed
-  };
-}
-
-const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
+const PersonalInformation: React.FC<any> = ({
+  onHandleStep,
+  user,
+  refetch,
+}) => {
   const [imagePreview1, setImagePreview1] = useState<string | null>(null);
   const [imagePreview2, setImagePreview2] = useState<string | null>(null);
   const [newSkill, setNewSkill] = useState("");
   const [newInterest, setNewInterest] = useState("");
+
+  const { data: detailsFields } = useGetPersonalDetailsFieldsQuery({});
+  console.log("detailsFields", detailsFields?.data);
   const [updatePersonalInfo] = useUpdatePersonalInfoMutation();
 
   // console.log("user", user);
-
-  const { data: detailsFields } = useGetPersonalDetailsFieldsQuery({});
-  // console.log("detailsFields", detailsFields?.data);
-  // const form = useForm<>({
-  //   // resolver: zodResolver(PersonalInfoSchema),
-  //   mode: "onChange",
-  // });
 
   const form = useForm({
     mode: "onChange",
@@ -159,13 +49,13 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
       dob: user?.dob ? new Date(user.dob) : "", // Handle undefined or missing dob
       gender: user?.gender || "",
       occupation: user?.occupation || "",
-      nationality: user?.nationality || "",
+      Nationality: user?.Nationality || "",
       address: user?.address || "",
       city: user?.city || "",
       state: user?.state || "",
       designation: user?.designation || "",
-      about: user?.about || "",
-      experience: user?.experience || "",
+      About: user?.About || "",
+      Experience: user?.Experience || "",
       skills: user?.skills || [],
       passportOrNIDDocs: user?.passportOrNIDDocs || [],
       taxCode: user?.taxCode || "",
@@ -183,18 +73,18 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         phone: user.phone || "",
         dob: user.dob || "",
         gender: user.gender || "",
-        occupation: user.personalInfo.occupation || "",
-        nationality: user.personalInfo.nationality || "",
-        address: user.personalInfo.address || "",
-        city: user.personalInfo.city || "",
-        state: user.personalInfo.state || "",
-        designation: user.personalInfo.designation || "",
-        experience: user.personalInfo.experience || "",
-        about: user.personalInfo.about || "",
-        interestedIndustries: user.personalInfo.interestedIndustries || [],
-        passportOrNIDDocs: user.personalInfo.passportOrNIDDocs || [],
-        skills: user.personalInfo.skills || [],
-        taxCode: user.personalInfo.taxCode || "",
+        occupation: user?.personalInfo?.occupation || "",
+        Nationality: user?.personalInfo?.Nationality || "",
+        address: user?.personalInfo?.address || "",
+        city: user?.personalInfo?.city || "",
+        state: user?.personalInfo?.state || "",
+        designation: user?.personalInfo?.designation || "",
+        Experience: user?.personalInfo?.Experience || "",
+        About: user?.personalInfo?.About || "",
+        interestedIndustries: user?.personalInfo?.interestedIndustries || [],
+        passportOrNIDDocs: user?.personalInfo?.passportOrNIDDocs || [],
+        skills: user?.personalInfo?.skills || [],
+        taxCode: user?.personalInfo?.taxCode || "",
         image1: undefined,
         image2: undefined,
       });
@@ -273,8 +163,8 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         JSON.stringify(data.passportOrNIDDocs)
       );
 
-      if (image1) formData.append("files", image1);
-      if (image2) formData.append("files", image2);
+      if (data.image1) formData.append("images", data.image1);
+      if (data.image2) formData.append("images", data.image2);
 
       formData.append("data", JSON.stringify(newData));
 
@@ -292,7 +182,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
         console.log(response.error);
       } else {
         toast.success("Personal information updated successfully!");
-
+        refetch();
         // Move to the next step after successful submission
         onHandleStep(2);
       }
@@ -495,7 +385,7 @@ const PersonalInformation: React.FC<any> = ({ onHandleStep, user }) => {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                className="text-base md:text-lg bg-primary2 text-gray-900 min-w-[150px] px-3"
+                className="cursor-pointer text-base md:text-lg bg-primary2 text-gray-900 min-w-[150px] px-3"
               >
                 Next
               </Button>

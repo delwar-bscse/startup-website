@@ -27,6 +27,7 @@ const businessApi = baseApi.injectEndpoints({
           },
         };
       },
+      providesTags: ["businessDetails"],
     }),
     updateBusinessInfo: builder.mutation({
       query: (data) => {
@@ -42,6 +43,7 @@ const businessApi = baseApi.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["businessDetails"],
     }),
   }),
 });

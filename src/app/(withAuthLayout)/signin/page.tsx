@@ -17,9 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Link from "next/link";
-import { setCookie } from "cookies-next/client";
-import { useRouter, useSearchParams } from "next/navigation";
-import { myFetch } from "@/utils copy/myFetch";
+import { useRouter } from "next/navigation";
 import { useLogInMutation } from "@/Redux/apis/authApi";
 
 // Schema
@@ -70,19 +68,16 @@ const SignInForm = () => {
         localStorage.setItem("accessToken", res.data.accessToken);
         toast.success("Login successful");
         router.push("/");
-        // const user = await myFetch("/users/me", {
-        //   method: "GET",
-        // });
-        // console.log("User Data:", user);
-        // if (user.success) {
-        // }
-        // router.push(redirect || "/");
       } else {
-        toast.error(res?.message || "Login failed", { id: "login" });
+        toast.error(res?.message || "Login failed");
       }
     } catch (error: unknown) {
-      console.error("Error fetching data:", { id: "login" });
-      toast.error("Login failed", { id: "login" });
+      console.error("Error fetching data", error);
+      if (error?.data?.message === "This user is not found !") {
+        toast.error("User not found");
+      } else {
+        toast.error("Login failed", { id: "login" });
+      }
     }
   };
 

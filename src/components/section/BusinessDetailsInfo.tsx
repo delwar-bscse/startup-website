@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -19,6 +20,7 @@ import {
   useGetBusinessDetailsFieldsQuery,
   useUpdateBusinessInfoMutation,
 } from "@/Redux/apis/businessApi";
+import dayjs from "dayjs";
 
 // const MAX_FILE_SIZE = 1024 * 1024 * 5;
 // const ACCEPTED_IMAGE_TYPES = [
@@ -61,7 +63,11 @@ import {
 // Type
 // type PersonalInfoValues = z.infer<typeof PersonalInfoSchema>;
 
-const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
+const BusinessDetailsInfo: React.FC<any> = ({
+  onHandleStep,
+  user,
+  refetch,
+}) => {
   const { data: businessFields } = useGetBusinessDetailsFieldsQuery({});
   console.log("businessFields", businessFields);
   const [updateBusinessInfo] = useUpdateBusinessInfoMutation();
@@ -69,26 +75,30 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
   const form = useForm({
     mode: "onChange",
     defaultValues: {
-      occupation: user?.occupation || "",
-      companyName: user?.companyName || "",
-      companyType: user?.companyType || "",
-      companyRegistrationNumber: user?.companyRegistrationNumber || "",
-      establishmentDate: user?.establishmentDate || "",
-      businessWebURL: user?.businessWebURL || "",
-      achievement: user?.achievement || "",
+      Occupation: user?.businessInfo?.Occupation || "",
+      companyName: user?.businessInfo?.companyName || "",
+      CompanyType: user?.businessInfo?.CompanyType || "",
+      CompanyRegistrationNumber:
+        user?.businessInfo?.CompanyRegistrationNumber || "",
+      EstablishmentDate: user?.businessInfo?.EstablishmentDate || "",
+      BusinessWebsiteURL: user?.businessInfo?.BusinessWebsiteURL || "",
+      achievement: user?.businessInfo?.achievement || "",
     },
   });
 
   useEffect(() => {
     if (user) {
       form.reset({
-        occupation: user?.occupation || "",
-        companyName: user?.companyName || "",
-        companyType: user?.companyType || "",
-        companyRegistrationNumber: user?.companyRegistrationNumber || "",
-        establishmentDate: user?.establishmentDate || "",
-        businessWebURL: user?.businessWebURL || "",
-        achievement: user?.achievement || "",
+        Occupation: user?.businessInfo?.Occupation || "",
+        companyName: user?.businessInfo?.companyName || "",
+        CompanyType: user?.businessInfo?.CompanyType || "",
+        CompanyRegistrationNumber:
+          user?.businessInfo?.CompanyRegistrationNumber || "",
+        EstablishmentDate: user?.businessInfo?.EstablishmentDate
+          ? dayjs(user.businessInfo.EstablishmentDate).format("YYYY-MM-DD") // Format date
+          : "",
+        BusinessWebsiteURL: user?.businessInfo?.BusinessWebsiteURL || "",
+        achievement: user?.businessInfo?.achievement || "",
       });
     }
   }, [user, form]);
@@ -104,7 +114,7 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
         console.log(response.error);
       } else {
         toast.success("Business information updated successfully!");
-
+        refetch();
         // Move to the next step after successful submission
         onHandleStep(3);
       }
@@ -154,14 +164,14 @@ const BusinessDetailsInfo: React.FC<any> = ({ onHandleStep, user }) => {
               <Button
                 onClick={() => onHandleStep(1)}
                 variant={"outline"}
-                className="text-base md:text-lg min-w-[150px] px-3 border border-primary2"
+                className="cursor-pointer text-base md:text-lg min-w-[150px] px-3 border border-primary2"
               >
                 Back
               </Button>
 
               <Button
                 type="submit"
-                className="text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
+                className="cursor-pointer text-base md:text-lg bg-primary2 min-w-[150px] px-3 text-gray-900"
               >
                 Next
               </Button>

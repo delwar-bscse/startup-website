@@ -40,9 +40,9 @@ const stepsData: Props[] = [
 
 const EditDetails = () => {
   const [activeStep, setActiveStep] = useState(1);
-  const { data: userData } = useGetUserProfileQuery({});
+  const { data: userData, refetch } = useGetUserProfileQuery({});
   const user = userData?.data;
-  console.log(user);
+  console.log("user", user);
 
   const userRole = user?.role;
 
@@ -93,18 +93,20 @@ const EditDetails = () => {
         </div>
       </div>
       {activeStep === 1 && (
-        <PersonalInformation onHandleStep={handleStep} user={user} />
+        <PersonalInformation onHandleStep={handleStep} user={user} refetch={refetch}/>
       )}
       {activeStep === 2 && (
-        <BusinessDetailsInfo onHandleStep={handleStep} user={user} />
+        <BusinessDetailsInfo onHandleStep={handleStep} user={user} refetch={refetch}/>
       )}
       {userRole === "entrepreneur" && activeStep === 3 && (
         <FinancialInvestmentDetails onHandleStep={handleStep} />
       )}
       {userRole === "investor" && activeStep === 3 && (
-        <FinancialInvestmentDetails2 onHandleStep={handleStep} />
+        <FinancialInvestmentDetails2 onHandleStep={handleStep} user={user} refetch={refetch}/>
       )}
-      {activeStep === 4 && <LegalCompliance onHandleStep={handleStep} />}
+      {activeStep === 4 && (
+        <LegalCompliance onHandleStep={handleStep} user={user} refetch={refetch}/>
+      )}
       {activeStep === 5 && <Subscriptions />}
     </div>
   );

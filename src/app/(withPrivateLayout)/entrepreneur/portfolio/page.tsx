@@ -1,37 +1,40 @@
-import React from 'react'
-import About01 from '@/assets/projects/Entrepreneur/aboutme01.png'
-import About02 from '@/assets/projects/Entrepreneur/aboutme02.png'
-import AboutMe from '@/components/section/AboutMe'
-import SkillsAndExperience from '@/components/section/SkillsAndExperience'
-import InterestedIndustry from '@/components/section/InterestedIndustry'
-import PersonalAndBusiness from '@/components/section/PersonalAndBusiness'
+"use client";
 
+import AboutMe from "@/components/section/AboutMe";
+import SkillsAndExperience from "@/components/section/SkillsAndExperience";
+import InterestedIndustry from "@/components/section/InterestedIndustry";
+import PersonalAndBusiness from "@/components/section/PersonalAndBusiness";
+import { useGetUserProfileQuery } from "@/Redux/apis/userApi";
 
-const page = () => {
+const Page = () => {
+  const { data: userData } = useGetUserProfileQuery({});
+  const user = userData?.data;
+  console.log("portfolio user", user);
+
   return (
-    <div className=''>
+    <div className="">
       {/* ----------- About Me Section ----------- */}
       <>
-        <AboutMe image1={About01} image2={About02} />
+        <AboutMe user={user} />
       </>
 
       {/* ----------- Skills & Experience Section ----------- */}
-      <div className='bg-secondary'>
-        <div className='maxWidth space-y-4 py-8'>
+      <div className="bg-secondary">
+        <div className="maxWidth space-y-4 py-8">
           <SkillsAndExperience />
         </div>
       </div>
 
       {/* ----------- Interested Industry Section ----------- */}
-      <>
-        <InterestedIndustry />
-      </>
+      {user?.personalInfo?.interestedIndustry && (
+        <InterestedIndustry user={user} />
+      )}
       {/* ----------- Personal, Business Details Section ----------- */}
       <>
-        <PersonalAndBusiness />
+        <PersonalAndBusiness user={user} />
       </>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

@@ -59,7 +59,7 @@ const VerifyOTP = () => {
       if (response.success) {
         localStorage.removeItem("createUserToken");
         toast.success("OTP Verified successfully!");
-        router.push("/login");
+        router.push("/signin");
       }
     } catch (error: unknown) {
       console.error("Error verifying OTP:", error);

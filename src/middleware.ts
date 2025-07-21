@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  // const token = req.cookies.get('qwert_accessToken')?.value;
-
-  const role = req.cookies.get("role")?.value;
+  const role = req.cookies.get("userRole")?.value;
 
   // console.log("User Role:", role);
 

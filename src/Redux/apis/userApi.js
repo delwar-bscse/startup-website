@@ -14,6 +14,7 @@ const userApi = baseApi.injectEndpoints({
           },
         };
       },
+      providesTags: ["profile"],
     }),
     getPersonalDetailsFields: builder.query({
       query: () => {
