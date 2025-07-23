@@ -22,7 +22,7 @@ interface ProjectDetailsProps {
 const ProjectDetails = ({ project }: ProjectDetailsProps) => {
   const [changeComponent, setChangeComponent] = useState<string>("details");
 
-  const imageUrl = getImageUrl(project?.primaryUrl ?? "");
+  const imageUrl = getImageUrl();
 
   const deadline = project?.deadLine;
   const daysLeft = dayjs(deadline).diff(dayjs(), "day");

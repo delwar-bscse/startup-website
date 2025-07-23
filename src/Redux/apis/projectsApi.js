@@ -21,7 +21,22 @@ const projectsApi = baseApi.injectEndpoints({
       },
       providesTags: ["projects"],
     }),
+
+    getMyProject: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: "/projects/own",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["projects"],
+    }),
   }),
 });
 
-export const { useGetAllProjectsQuery } = projectsApi;
+export const { useGetAllProjectsQuery, useGetMyProjectQuery } = projectsApi;

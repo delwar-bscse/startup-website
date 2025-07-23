@@ -5,13 +5,12 @@ import Link from "next/link";
 
 const ActiveTab = () => {
   const pathname = usePathname();
-  console.log(pathname.split("/")[1]);
+  const role = pathname.split("/")[1];
+  console.log(role);
 
   const isActive = (path: string) => {
-    // Exact match check
     if (pathname === path) return true;
 
-    // Partial match (useful for subcategories)
     if (pathname.startsWith(path)) return true;
 
     // For dynamic routes, you might want to check the path along with query params
@@ -24,33 +23,46 @@ const ActiveTab = () => {
 
   return (
     <div className="px-1">
-      <div className="maxWidth grid grid-cols-2 bg-secondary p-1 my-8">
+      <div
+        className={`maxWidth grid ${
+          role === "entrepreneur" ? "grid-cols-2 md:grid-cols-3" : "grid-cols-2"
+        } bg-secondary p-1 my-8`}
+      >
         <Link
-          href={`/${pathname.split("/")[1]}/portfolio`}
+          href={`/${role}/portfolio`}
           className={`${
-            isActive(`/${pathname.split("/")[1]}/portfolio`)
+            isActive(`/${role}/portfolio`)
               ? "bg-primary text-white"
               : "transparent text-gray-700"
           } py-1 md:py-2 lg:py-3 px-1 text-sm md:text-base md:font-semibold text-center`}
         >
           Portfolio
         </Link>
-        {/* <Link
-          href={`/${pathname.split('/')[1]}/${pathname.split('/')[1] === 'entrepreneur' ? 'investors' : 'investments'}`}
-          className={`${isActive(`/${pathname.split('/')[1]}/${pathname.split('/')[1] === 'entrepreneur' ? 'investors' : 'investments'}`) ? 'bg-primary text-white' : 'transparent text-gray-700'} py-1 md:py-2 lg:py-3 px-1 text-sm md:text-base md:font-semibold text-center`}
-        >
-          {pathname.split('/')[1] === 'entrepreneur' ? 'Investors' : 'Investments'}
-        </Link> */}
+
         <Link
-          href={`/${pathname.split("/")[1]}/projects`}
+          href={`/${role}/projects`}
           className={`${
-            isActive(`/${pathname.split("/")[1]}/projects`)
+            isActive(`/${role}/projects`)
               ? "bg-primary text-white"
               : "transparent text-gray-700"
           } py-1 md:py-2 lg:py-3 px-1 text-sm md:text-base md:font-semibold text-center`}
         >
           Projects
         </Link>
+
+        {/* 3rd tab */}
+        {role === "entrepreneur" && (
+          <Link
+            href={`/${role}/investors`}
+            className={`${
+              isActive(`/${role}/investors`)
+                ? "bg-primary text-white"
+                : "transparent text-gray-700"
+            } py-1 md:py-2 lg:py-3 px-1 text-sm md:text-base md:font-semibold text-center`}
+          >
+            Investors
+          </Link>
+        )}
       </div>
     </div>
   );
