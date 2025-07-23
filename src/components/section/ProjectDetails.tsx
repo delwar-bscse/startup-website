@@ -5,6 +5,7 @@ import BusinessDetails from "../shared/BusinessDetails";
 import TargetVsRaisedAmount from "../shared/TargetVsRaised";
 import { getImageUrl } from "@/utils/baseUrl";
 import dayjs from "dayjs";
+import Link from "next/link";
 
 interface Project {
   deadLine: string;
@@ -31,7 +32,7 @@ const ProjectDetails = ({ project }: ProjectDetailsProps) => {
   return (
     <div>
       {/* Destination Section */}
-      <div className="maxWidth pb-10 md:py-20">
+      <div className="maxWidth">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
           <div>
             {project?.primaryUrl ? (
@@ -63,6 +64,12 @@ const ProjectDetails = ({ project }: ProjectDetailsProps) => {
                   Raised {(project?.fundsRaised * 100) / project?.fundingGoal}%
                 </span>
               </div>
+              <div>
+                <Link href="/invest-now" className="block text-center font-semibold bg-primary2 text-gray-700 px-2 md:px-4 py-1 md:py-2 rounded-sm cursor-pointer w-full text-2xl"
+                >
+                  Invest Now
+                </Link>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:text-lg lg:text-xl">
                 <p className="flex md:flex-col items-center justify-center gap-3 bg-secondary px-3 py-6 rounded-sm">
                   <span className="text-gray-600 font-semibold">Target</span>
@@ -88,9 +95,8 @@ const ProjectDetails = ({ project }: ProjectDetailsProps) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
           <div
-            className={`${
-              changeComponent === "details" ? "bg-secondary" : "bg-white"
-            } p-6 rounded-sm text-sm md:text-lg lg:text-xl space-y-3 shadow-md`}
+            className={`${changeComponent === "details" ? "bg-secondary" : "bg-white"
+              } p-6 rounded-sm text-sm md:text-lg lg:text-xl space-y-3 shadow-md`}
           >
             <p className="font-semibold w-[90%]">
               <span className="text-primary">Business Name - </span>
@@ -110,9 +116,8 @@ const ProjectDetails = ({ project }: ProjectDetailsProps) => {
             </div>
           </div>
           <div
-            className={`${
-              changeComponent === "amounts" ? "bg-secondary" : "bg-white"
-            } p-6 rounded-sm text-sm md:text-lg lg:text-xl space-y-3 shadow-md`}
+            className={`${changeComponent === "amounts" ? "bg-secondary" : "bg-white"
+              } p-6 rounded-sm text-sm md:text-lg lg:text-xl space-y-3 shadow-md`}
           >
             <p className="font-semibold">
               <span className="text-primary">Target Amount - </span>
