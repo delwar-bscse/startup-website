@@ -5,45 +5,46 @@ import technologyImg from "@/assets/industry/technology.png";
 import cookingImg from "@/assets/industry/cooking.png";
 
 type Props = {
-  id: number;
+  id: string;
   name: string;
   image: StaticImageData;
 };
 
 const industries: Props[] = [
   {
-    id: 1,
+    id: "1",
     name: "Fashion",
     image: fashionImg,
   },
   {
-    id: 2,
+    id: "2",
     name: "Technology",
     image: technologyImg,
   },
   {
-    id: 3,
+    id: "3",
     name: "Cooking",
     image: cookingImg,
   },
   {
-    id: 4,
+    id: "4",
     name: "Fashion",
     image: fashionImg,
   },
   {
-    id: 5,
+    id: "5",
     name: "Technology",
     image: technologyImg,
   },
   {
-    id: 6,
+    id: "6",
     name: "Cooking",
     image: cookingImg,
   },
 ];
 
-const InterestedIndustryList = () => {
+const InterestedIndustryList = ({selectedIndustry, setSelectedIndustry} : 
+  {selectedIndustry: string, setSelectedIndustry: React.Dispatch<React.SetStateAction<string>>}) => {
   
   return (
     <div className="">
@@ -54,7 +55,8 @@ const InterestedIndustryList = () => {
         {industries.map((industry) => (
           <div
             key={industry.id}
-            className="flex items-center gap-2 border border-primary hover:bg-white cursor-pointer transition-colors duration-300 py-2 px-4 rounded-sm"
+            onClick={() => setSelectedIndustry(industry.id)}
+            className={`${selectedIndustry === industry.id ? "bg-white" : ""} flex items-center gap-2 border border-primary hover:bg-white cursor-pointer transition-colors duration-300 py-2 px-4 rounded-sm`}
           >
             <div className="w-14 h-14 overflow-hidden">
               <Image src={industry.image} alt="" width={100} height={100} />

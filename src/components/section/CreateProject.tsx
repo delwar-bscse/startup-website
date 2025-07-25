@@ -13,10 +13,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import InterestedIndustryList from "./InterestedIndustryList";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -27,7 +34,8 @@ interface IStep {
 }
 
 
-const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) => {
+const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => void }) => {
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("");
   const [stepList, setStepList] = useState<IStep[]>([] as IStep[]);
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [storyImage01, setStoryImage01] = useState<string | null>(null);
@@ -36,6 +44,7 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
   const [missionImage01, setMissionImage01] = useState<string | null>(null);
   const [missionImage02, setMissionImage02] = useState<string | null>(null);
   const [visionImage, setVisionImage] = useState<string | null>(null);
+  const [selectBusinessType, setSelectBusinessType] = useState<string>("Online");
 
   const form = useForm({
     mode: "onChange",
@@ -53,24 +62,61 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
       storyImage03: undefined,
       missionImage01: undefined,
       missionImage02: undefined,
-      visionImage: undefined
+      visionImage: undefined,
+      businessShareOffered: undefined,
+      businessType: "Online",
+      businessLocationWebsiteUrl: "",
     },
   });
 
 
-
   const onSubmit = async (data: any) => {
     console.log("Create Project Submitted Data", data);
-    checkProject(true);
+    // console.log("Industry : ", selectedIndustry);
+    // console.log("Mission Step List : ", stepList);
+    
+    const projectData = {
+      title: data.projectTitle,
+      description: data.projectBio,
+      story: data.storyOfProject,
+      mission: stepList,
+      vision: data.projectVision,
+      industry: selectedIndustry,
+      fundingGoal: data.targetAmount,
+      equityOffered: data.businessShareOffered,
+      deadLine: data.deadline,
+      projectType: data.businessType,
+      businessLocation: data.businessLocationWebsiteUrl,
+    };
+
+    console.log("Project Object Data:", projectData);
+
+    const formData = new FormData();
+    formData.append("primaryFile", data.coverImage[0]);
+    formData.append("storyFiles", data.storyImage01[0]);
+    formData.append("storyFiles", data.storyImage02[0]);
+    formData.append("storyFiles", data.storyImage03[0]);
+    formData.append("missionFiles", data.missionImage01[0]);
+    formData.append("missionFiles", data.missionImage02[0]);
+    formData.append("visionFile", data.visionImage[0]);
+    formData.append("projectData", JSON.stringify(projectData));
+
+    
+    console.log(checkProject)
+    // checkProject(true);
   };
 
   const handleStepList = ({ stepTitle, stepDescription }: IStep) => {
     console.log(stepTitle, stepDescription);
-    setStepList([{ stepTitle, stepDescription },...stepList]);
+    setStepList([{ stepTitle, stepDescription }, ...stepList]);
     form.resetField("stepTitle");
     form.resetField("stepDescription");
   };
-  
+
+  useEffect(() => {
+    console.log(selectBusinessType)
+  }, [selectBusinessType]);
+
 
   return (
     <div className="w-full flex justify-center py-10 px-4">
@@ -85,7 +131,7 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
               <div>
                 <p className="text-gray-700 font-semibold py-2">Project Cover Image</p>
                 <div className="w-full">
-                  <ImageField control={form.control} name="image1" coverImage={coverImage} setCoverImage={setCoverImage} />
+                  <ImageField control={form.control} name="coverImage" image={coverImage} setImage={setCoverImage} />
                 </div>
               </div>
 
@@ -96,7 +142,7 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
               <TextInputField control={form.control} name="projectBio" label="Project Bio" />
 
               {/* Project Story */}
-              <TextareaInputField control={form.control} name="projectBio" label="Project Bio" />
+              <TextareaInputField control={form.control} name="storyOfProject" label="Story of Project" />
 
 
 
@@ -104,9 +150,9 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
               <div>
                 <p className="text-gray-700 font-semibold py-2">Project’s Story Related Image</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                  <ImageField control={form.control} name="storyImage01" coverImage={storyImage01} setCoverImage={setStoryImage01} />
-                  <ImageField control={form.control} name="storyImage02" coverImage={storyImage02} setCoverImage={setStoryImage02} />
-                  <ImageField control={form.control} name="storyImage03" coverImage={storyImage03} setCoverImage={setStoryImage03} />
+                  <ImageField control={form.control} name="storyImage01" image={storyImage01} setImage={setStoryImage01} />
+                  <ImageField control={form.control} name="storyImage02" image={storyImage02} setImage={setStoryImage02} />
+                  <ImageField control={form.control} name="storyImage03" image={storyImage03} setImage={setStoryImage03} />
                 </div>
               </div>
 
@@ -155,7 +201,7 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
                       <p className="text-gray-600">{step.stepDescription}</p>
                     </div>
                     <button onClick={() => setStepList(stepList.filter((item) => item.stepTitle !== step?.stepTitle))} className="text-2xl font-extrabold w-10 h-8 cursor-pointer">
-                      <RiDeleteBinLine className="text-red-500 hover:text-red-600"/>
+                      <RiDeleteBinLine className="text-red-500 hover:text-red-600" />
                     </button>
                   </div>
                 ))}
@@ -165,8 +211,8 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
               <div>
                 <p className="text-gray-700 font-semibold py-2">Mission Related Image</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <ImageField control={form.control} name="missionImage01" coverImage={missionImage01} setCoverImage={setMissionImage01} />
-                  <ImageField control={form.control} name="missionImage02" coverImage={missionImage02} setCoverImage={setMissionImage02} />
+                  <ImageField control={form.control} name="missionImage01" image={missionImage01} setImage={setMissionImage01} />
+                  <ImageField control={form.control} name="missionImage02" image={missionImage02} setImage={setMissionImage02} />
                 </div>
               </div>
 
@@ -177,11 +223,11 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
               <div>
                 <p className="text-gray-700 font-semibold py-2">Vision Image</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <ImageField control={form.control} name="visionImage" coverImage={visionImage} setCoverImage={setVisionImage} />
+                  <ImageField control={form.control} name="visionImage" image={visionImage} setImage={setVisionImage} />
                 </div>
               </div>
 
-              <InterestedIndustryList />
+              <InterestedIndustryList selectedIndustry={selectedIndustry} setSelectedIndustry={setSelectedIndustry} />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <FormField
@@ -199,6 +245,22 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
                 />
                 <FormField
                   control={form.control}
+                  name="businessShareOffered"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Share Offered</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} max={100} className="block w-full" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
                   name="deadline"
                   render={({ field }) => (
                     <FormItem>
@@ -210,7 +272,47 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="businessType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Type</FormLabel>
+                      <Select onValueChange={
+                        (value) => {
+                          setSelectBusinessType(value);
+                          field.onChange(value);
+                          console.log(value);
+                        }
+                      } defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full bg-white">
+                            <SelectValue placeholder="Select business type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="w-full">
+                          <SelectItem value="Online">Online</SelectItem>
+                          <SelectItem value="Offline">Offline</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
+              <FormField
+                control={form.control}
+                name="businessLocationWebsiteUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{selectBusinessType === "Online" ? "Website URL" : "Business Location"}</FormLabel>
+                    <FormControl>
+                      <Input type="text" className="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
 
             </div>
@@ -236,14 +338,14 @@ const CreateProject = ({checkProject}:{checkProject: (value: boolean) => void}) 
 const ImageField = ({
   control,
   name,
-  coverImage,
-  setCoverImage
+  image,
+  setImage
 
 }: {
   control: any;
   name: string;
-  coverImage: string | null;
-  setCoverImage: Dispatch<SetStateAction<string | null>>
+  image: string | null;
+  setImage: Dispatch<SetStateAction<string | null>>
 }) => {
   return (
     < FormField
@@ -253,13 +355,13 @@ const ImageField = ({
         <FormItem>
           <FormControl>
             <div className="relative w-full h-[150px] bg-purple-100 rounded-md border-2 border-primary flex justify-center items-center cursor-pointer overflow-hidden">
-              {!coverImage ? (
+              {!image ? (
                 <span className="text-primary">
                   <CiImageOn className="text-8xl" />
                 </span>
               ) : (
                 <Image
-                  src={coverImage} // Use the base64 string for the src
+                  src={image} // Use the base64 string for the src
                   alt={name}
                   width={300} // Set width and height
                   height={150}
@@ -274,7 +376,7 @@ const ImageField = ({
                   const file = e.target.files?.[0];
                   if (file) {
                     field.onChange(file);
-                    setCoverImage(URL.createObjectURL(file));
+                    setImage(URL.createObjectURL(file));
                   }
                 }}
                 className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
