@@ -64,6 +64,25 @@ const utilityApi = baseApi.injectEndpoints({
       },
       providesTags: ["utilities"],
     }),
+    getIndustries: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        console.log({ accessToken });
+
+        // if (!accessToken) {
+        //   console.error("Access token not found.");
+        // }
+        return {
+          url: "/industry",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["utilities"],
+    }),
   }),
 });
 
@@ -73,4 +92,5 @@ export const {
   useGetTermsAndConditionsQuery,
   useGetPrivacyPolicyQuery,
   useGetFAQsQuery,
+  useGetIndustriesQuery,
 } = utilityApi;

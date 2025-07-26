@@ -19,12 +19,14 @@ const Page = () => {
       </>
 
       {/* ----------- Skills & Experience Section ----------- */}
-      <div className="bg-secondary">
-        <div className="maxWidth space-y-4 py-8">
-          <SkillsAndExperience />
+      {(user?.personalInfo?.skills?.length > 0 ||
+        user?.personalInfo?.experience?.length > 0) && (
+        <div className="bg-secondary">
+          <div className="maxWidth space-y-4 py-8">
+            <SkillsAndExperience user={user} />
+          </div>
         </div>
-      </div>
-
+      )}
       {/* ----------- Interested Industry Section ----------- */}
       {user?.personalInfo?.interestedIndustry && (
         <InterestedIndustry user={user} />

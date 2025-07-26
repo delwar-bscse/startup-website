@@ -16,5 +16,6 @@ export const baseApi = createApi({
     "legalCompliance",
     "financialDetails",
     "businessDetails",
+    "investors",
   ],
 });

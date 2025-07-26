@@ -36,7 +36,27 @@ const projectsApi = baseApi.injectEndpoints({
       },
       providesTags: ["projects"],
     }),
+    createProject: builder.mutation({
+      query: (data) => {
+        const accessToken = localStorage.getItem("accessToken");
+        console.log("create project api data:", data);
+        return {
+          url: "/projects/",
+          method: "post",
+          body: data,
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      invalidatesTags: ["projects"],
+    }),
   }),
 });
 
-export const { useGetAllProjectsQuery, useGetMyProjectQuery } = projectsApi;
+export const {
+  useGetAllProjectsQuery,
+  useGetMyProjectQuery,
+  useCreateProjectMutation,
+} = projectsApi;
