@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -37,8 +38,10 @@ interface IStep {
 
 const CreateProject = ({
   checkProject,
+  project,
 }: {
   checkProject: (value: boolean) => void;
+  project?: any;
 }) => {
   const [selectedIndustry, setSelectedIndustry] = useState<any>();
   const [stepList, setStepList] = useState<IStep[]>([] as IStep[]);
@@ -53,6 +56,7 @@ const CreateProject = ({
     useState<string>("Online");
 
   const [createProject] = useCreateProjectMutation();
+  console.log("projectttt", project);
 
   const form = useForm({
     mode: "onChange",
@@ -76,6 +80,97 @@ const CreateProject = ({
       businessLocationWebsiteUrl: "",
     },
   });
+
+  // useEffect(() => {
+  //   if (project) {
+  //     console.log("Setting form defaults from project:", project);
+
+  //     // Set form field defaults
+  //     form.reset({
+  //       projectTitle: project.title || "",
+  //       projectBio: project.description || "",
+  //       storyOfProject: project.story || "",
+  //       stepTitle: "",
+  //       stepDescription: "",
+  //       deadline: project.deadLine
+  //         ? new Date(project.deadLine).toISOString().split("T")[0]
+  //         : undefined,
+  //       targetAmount: project.fundingGoal || undefined,
+  //       coverImage: undefined, // Files can't be pre-populated
+  //       storyImage01: undefined,
+  //       storyImage02: undefined,
+  //       storyImage03: undefined,
+  //       missionImage01: undefined,
+  //       missionImage02: undefined,
+  //       visionImage: undefined,
+  //       businessShareOffered: project.equityOffered || undefined,
+  //       businessType: project.projectType || "online",
+  //       businessLocationWebsiteUrl: project.businessLocation || "",
+  //       projectVision: project.vision || "",
+  //     });
+
+  //     // Set other state values
+  //     if (project.industry) {
+  //       // If industry is stored as an object
+  //       if (typeof project.industry === "object") {
+  //         setSelectedIndustry(project.industry);
+  //       } else {
+  //         // If industry is stored as ID, you might need to fetch the full object
+  //         // For now, create a basic object
+  //         setSelectedIndustry({
+  //           _id: project.industry,
+  //           name: project.industryName || project.industry,
+  //         });
+  //       }
+  //     }
+
+  //     // Set mission steps
+  //     if (project.mission && Array.isArray(project.mission)) {
+  //       const formattedSteps = project.mission.map((mission: any) => ({
+  //         stepTitle:
+  //           mission.stepTitle ||
+  //           mission.title ||
+  //           `Step ${project.mission.indexOf(mission) + 1}`,
+  //         stepDescription:
+  //           mission.stepDescription || mission.description || mission,
+  //       }));
+  //       setStepList(formattedSteps);
+  //     }
+
+  //     // Set business type
+  //     if (project.projectType) {
+  //       setSelectBusinessType(project.projectType);
+  //     }
+
+  //     // Set image previews if URLs are available
+  //     if (project.primaryImageUrl) {
+  //       setCoverImage(project.primaryImageUrl);
+  //     }
+
+  //     if (project.storyUrls && project.storyUrls.length > 0) {
+  //       setStoryImage01(project.storyUrls[0] || null);
+  //       setStoryImage02(project.storyUrls[1] || null);
+  //       setStoryImage03(project.storyUrls[2] || null);
+  //     }
+
+  //     if (project.missionUrls && project.missionUrls.length > 0) {
+  //       setMissionImage01(project.missionUrls[0] || null);
+  //       setMissionImage02(project.missionUrls[1] || null);
+  //     }
+
+  //     if (project.visionImageUrl) {
+  //       setVisionImage(project.visionImageUrl);
+  //     }
+  //   }
+  // }, [project, form]);
+
+  // useEffect(() => {
+  //   if (project) {
+  //     setTimeout(() => {
+  //       form.trigger();
+  //     }, 100);
+  //   }
+  // }, [project, form]);
 
   const onSubmit = async (data: any) => {
     try {
@@ -125,7 +220,6 @@ const CreateProject = ({
 
       if (response.success) {
         toast.success("Project created successfully!");
-
         checkProject(true);
       }
     } catch (error: any) {
