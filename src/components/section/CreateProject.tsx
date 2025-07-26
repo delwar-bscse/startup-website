@@ -13,6 +13,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -20,23 +27,16 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import InterestedIndustryList from "./InterestedIndustryList";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { useCreateProjectMutation } from "@/Redux/apis/projectsApi";
-import { toast } from "sonner";
 
 interface IStep {
   stepTitle: string;
   stepDescription: string;
 }
 
-const CreateProject = ({
-  checkProject,
-}: {
-  checkProject: (value: boolean) => void;
-}) => {
-  const [stepList, setStepList] = useState<IStep[]>([]);
-  const [selectedIndustries, setSelectedIndustries] = useState<
-    (string | number)[]
-  >([]);
+
+const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => void }) => {
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("");
+  const [stepList, setStepList] = useState<IStep[]>([] as IStep[]);
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [storyImage01, setStoryImage01] = useState<string | null>(null);
   const [storyImage02, setStoryImage02] = useState<string | null>(null);
@@ -44,9 +44,7 @@ const CreateProject = ({
   const [missionImage01, setMissionImage01] = useState<string | null>(null);
   const [missionImage02, setMissionImage02] = useState<string | null>(null);
   const [visionImage, setVisionImage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [createProject] = useCreateProjectMutation();
+  const [selectBusinessType, setSelectBusinessType] = useState<string>("Online");
 
   const form = useForm({
     mode: "onChange",
@@ -54,12 +52,10 @@ const CreateProject = ({
       projectTitle: "",
       projectBio: "",
       storyOfProject: "",
-      projectVision: "",
       stepTitle: "",
       stepDescription: "",
-      deadline: "",
-      targetAmount: "",
-      industries: [] as (string | number)[],
+      deadline: undefined,
+      targetAmount: undefined,
       coverImage: undefined,
       storyImage01: undefined,
       storyImage02: undefined,
@@ -67,176 +63,64 @@ const CreateProject = ({
       missionImage01: undefined,
       missionImage02: undefined,
       visionImage: undefined,
+      businessShareOffered: undefined,
+      businessType: "Online",
+      businessLocationWebsiteUrl: "",
     },
   });
 
-  useEffect(() => {
-    form.setValue("industries", selectedIndustries);
-  }, [selectedIndustries, form]);
 
   const onSubmit = async (data: any) => {
-    console.log("Create Form Data:", data);
-    console.log("stepList:", stepList);
-    try {
-      setIsSubmitting(true);
+    console.log("Create Project Submitted Data", data);
+    // console.log("Industry : ", selectedIndustry);
+    // console.log("Mission Step List : ", stepList);
+    
+    const projectData = {
+      title: data.projectTitle,
+      description: data.projectBio,
+      story: data.storyOfProject,
+      mission: stepList,
+      vision: data.projectVision,
+      industry: selectedIndustry,
+      fundingGoal: data.targetAmount,
+      equityOffered: data.businessShareOffered,
+      deadLine: data.deadline,
+      projectType: data.businessType,
+      businessLocation: data.businessLocationWebsiteUrl,
+    };
 
-      // Validate required fields
-      if (!data.projectTitle.trim()) {
-        toast.error("Project title is required");
-        return;
-      }
+    console.log("Project Object Data:", projectData);
 
-      if (!data.projectBio.trim()) {
-        toast.error("Project bio is required");
-        return;
-      }
+    const formData = new FormData();
+    formData.append("primaryFile", data.coverImage[0]);
+    formData.append("storyFiles", data.storyImage01[0]);
+    formData.append("storyFiles", data.storyImage02[0]);
+    formData.append("storyFiles", data.storyImage03[0]);
+    formData.append("missionFiles", data.missionImage01[0]);
+    formData.append("missionFiles", data.missionImage02[0]);
+    formData.append("visionFile", data.visionImage[0]);
+    formData.append("projectData", JSON.stringify(projectData));
 
-      if (!data.storyOfProject.trim()) {
-        toast.error("Project story is required");
-        return;
-      }
-
-      if (!data.projectVision.trim()) {
-        toast.error("Project vision is required");
-        return;
-      }
-
-      if (data.industries.length === 0) {
-        toast.error("Please select at least one industry for your project");
-        return;
-      }
-
-      if (!data.coverImage) {
-        toast.error("Cover image is required");
-        return;
-      }
-
-      if (!data.targetAmount || data.targetAmount <= 0) {
-        toast.error("Please enter a valid target amount");
-        return;
-      }
-
-      if (!data.deadline) {
-        toast.error("Deadline is required");
-        return;
-      }
-
-      // Create FormData for file upload
-      const formData = new FormData();
-
-      // Add text fields
-      const textData = {
-        projectTitle: data.projectTitle,
-        projectBio: data.projectBio,
-        storyOfProject: data.storyOfProject,
-        projectVision: data.projectVision,
-        deadline: data.deadline,
-        targetAmount: data.targetAmount.toString(),
-        industries: data.industries,
-      };
-      formData.append("data", JSON.stringify(textData));
-
-      const steps = [...stepList.map((step) => step.stepTitle)];
-      formData.append("steps", JSON.stringify(steps));
-      // Add image files
-      if (data.coverImage) formData.append("coverImage", data.coverImage);
-
-      const storyFiles = [
-        data.storyImage01,
-        data.storyImage02,
-        data.storyImage03,
-      ].filter((file) => file !== undefined);
-      formData.append(
-        "storyFiles",
-        JSON.stringify(storyFiles.map((file) => file.name))
-      );
-      storyFiles.forEach((file, index) => {
-        formData.append(`storyFiles[${index}]`, file);
-      });
-
-      const missionFiles = [data.missionImage01, data.missionImage02].filter(
-        (file) => file !== undefined
-      );
-      formData.append(
-        "missionFiles",
-        JSON.stringify(missionFiles.map((file) => file.name))
-      );
-      missionFiles.forEach((file, index) => {
-        formData.append(`missionFiles[${index}]`, file);
-      });
-
-      if (data.visionImage) formData.append("visionFile", data.visionImage);
-      if (data.primaryFile) formData.append("primaryFile", data.primaryFile);
-      if (data.investmentProposal)
-        formData.append("investmentProposal", data.investmentProposal);
-      if (data.taxComplianceCertificate)
-        formData.append(
-          "taxComplianceCertificate",
-          data.taxComplianceCertificate
-        );
-      if (data.governmentIssuedID)
-        formData.append("governmentIssuedID", data.governmentIssuedID);
-      if (data.verifyAddress)
-        formData.append("verifyAddress", data.verifyAddress);
-
-      console.log("FormData contents before API call:");
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}:`, value instanceof File ? value.name : value);
-      }
-
-      // Make API call
-      const response = await createProject(formData).unwrap();
-      console.log("Response from createProject:", response);
-      toast.success("Project created successfully!");
-
-      // Reset form and states
-      form.reset();
-      setStepList([]);
-      setSelectedIndustries([]);
-      setCoverImage(null);
-      setStoryImage01(null);
-      setStoryImage02(null);
-      setStoryImage03(null);
-      setMissionImage01(null);
-      setMissionImage02(null);
-      setVisionImage(null);
-
-      checkProject(true);
-    } catch (error: any) {
-      console.error("Error creating project:", error);
-      const errorMessage =
-        error?.data?.message || error?.message || "Failed to create project";
-      toast.error(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
+    
+    console.log(checkProject)
+    // checkProject(true);
   };
 
   const handleStepList = ({ stepTitle, stepDescription }: IStep) => {
-    if (!stepTitle.trim() || !stepDescription.trim()) {
-      toast.error("Please fill in both step title and description");
-      return;
-    }
-
     console.log(stepTitle, stepDescription);
     setStepList([{ stepTitle, stepDescription }, ...stepList]);
     form.resetField("stepTitle");
     form.resetField("stepDescription");
   };
 
-  const removeStep = (stepToRemove: IStep) => {
-    setStepList(
-      stepList.filter(
-        (step) =>
-          step.stepTitle !== stepToRemove.stepTitle ||
-          step.stepDescription !== stepToRemove.stepDescription
-      )
-    );
-  };
+  useEffect(() => {
+    console.log(selectBusinessType)
+  }, [selectBusinessType]);
+
 
   return (
     <div className="w-full flex justify-center py-10 px-4">
-      <div className="w-full max-w-[1000px]">
+      <div className="w-full max-w-[1000px] ">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md space-y-6">
@@ -244,244 +128,116 @@ const CreateProject = ({
                 Create Project
               </h2>
 
-              {/* Project Cover Image */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">
-                  Project Cover Image <span className="text-red-500">*</span>
-                </p>
+                <p className="text-gray-700 font-semibold py-2">Project Cover Image</p>
                 <div className="w-full">
-                  <ImageField
-                    control={form.control}
-                    name="coverImage"
-                    coverImage={coverImage}
-                    setCoverImage={setCoverImage}
-                  />
+                  <ImageField control={form.control} name="coverImage" image={coverImage} setImage={setCoverImage} />
                 </div>
               </div>
 
               {/* Project Title */}
-              <TextInputField
-                control={form.control}
-                name="projectTitle"
-                label="Project Title"
-                placeholder="Enter your project title"
-                required
-              />
+              <TextInputField control={form.control} name="projectTitle" label="Project Title" />
 
               {/* Project Bio */}
-              <TextInputField
-                control={form.control}
-                name="projectBio"
-                label="Project Bio"
-                placeholder="Brief description of your project"
-                required
-              />
+              <TextInputField control={form.control} name="projectBio" label="Project Bio" />
 
               {/* Project Story */}
-              <TextareaInputField
-                control={form.control}
-                name="storyOfProject"
-                label="Project Story"
-                placeholder="Tell the story of your project..."
-                required
-              />
+              <TextareaInputField control={form.control} name="storyOfProject" label="Story of Project" />
+
+
 
               {/* Project Story Images */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">
-                  Project&apos;s Story Related Images
-                </p>
+                <p className="text-gray-700 font-semibold py-2">Project’s Story Related Image</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                  <ImageField
-                    control={form.control}
-                    name="storyImage01"
-                    coverImage={storyImage01}
-                    setCoverImage={setStoryImage01}
-                  />
-                  <ImageField
-                    control={form.control}
-                    name="storyImage02"
-                    coverImage={storyImage02}
-                    setCoverImage={setStoryImage02}
-                  />
-                  <ImageField
-                    control={form.control}
-                    name="storyImage03"
-                    coverImage={storyImage03}
-                    setCoverImage={setStoryImage03}
-                  />
+                  <ImageField control={form.control} name="storyImage01" image={storyImage01} setImage={setStoryImage01} />
+                  <ImageField control={form.control} name="storyImage02" image={storyImage02} setImage={setStoryImage02} />
+                  <ImageField control={form.control} name="storyImage03" image={storyImage03} setImage={setStoryImage03} />
                 </div>
               </div>
 
-              {/* Step List Section */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                  Project Steps
-                </h3>
-                <div className="flex items-end gap-2 mb-4">
-                  <div className="flex-1">
-                    <FormField
-                      control={form.control}
-                      name="stepTitle"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Step Title</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              placeholder="Enter step title"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="flex-[2]">
-                    <FormField
-                      control={form.control}
-                      name="stepDescription"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Step Description</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              placeholder="Enter step description"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <Button
-                      type="button"
-                      onClick={() =>
-                        handleStepList({
-                          stepTitle: form.getValues("stepTitle"),
-                          stepDescription: form.getValues("stepDescription"),
-                        })
-                      }
-                      className="bg-primary hover:bg-primary/90"
-                    >
-                      Add Step
-                    </Button>
-                  </div>
+              <div className="flex items-end gap-2">
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="stepTitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Step Title</FormLabel>
+                        <FormControl>
+                          <Input type="text" className="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-
-                {/* Display Added Steps */}
-                {stepList?.length > 0 && (
-                  <div className="space-y-2 border-2 border-gray-300 p-4 rounded-md bg-gray-50">
-                    <h4 className="font-semibold text-gray-700 mb-2">
-                      Added Steps:
-                    </h4>
-                    {stepList.map((step, index) => (
-                      <div
-                        key={`${step.stepTitle}-${index}`}
-                        className="flex items-start justify-between bg-white p-3 rounded border"
-                      >
-                        <div className="flex-1">
-                          <p className="text-gray-700 text-lg font-semibold">
-                            {index + 1}. {step.stepTitle}
-                          </p>
-                          <p className="text-gray-600 text-sm">
-                            {step.stepDescription}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeStep(step)}
-                          className="text-red-500 hover:text-red-600 p-1 ml-2"
-                          title="Remove step"
-                        >
-                          <RiDeleteBinLine className="text-xl" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <div className="flex-1">
+                  <FormField
+                    control={form.control}
+                    name="stepDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Step Description</FormLabel>
+                        <FormControl>
+                          <Input type="text" className="" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="">
+                  <Button type="button" onClick={() => handleStepList({ stepTitle: form.getValues("stepTitle"), stepDescription: form.getValues("stepDescription") })} className="">
+                    Add
+                  </Button>
+                </div>
               </div>
+              {stepList?.length > 0 && <div className="space-y-2 border-2 border-gray-300 p-2 rounded-sm">
+                {stepList.map((step, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-gray-700 text-xl font-semibold">{step.stepTitle}</p>
+                      <p className="text-gray-600">{step.stepDescription}</p>
+                    </div>
+                    <button onClick={() => setStepList(stepList.filter((item) => item.stepTitle !== step?.stepTitle))} className="text-2xl font-extrabold w-10 h-8 cursor-pointer">
+                      <RiDeleteBinLine className="text-red-500 hover:text-red-600" />
+                    </button>
+                  </div>
+                ))}
+              </div>}
 
               {/* Project Mission Images */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">
-                  Mission Related Images
-                </p>
+                <p className="text-gray-700 font-semibold py-2">Mission Related Image</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <ImageField
-                    control={form.control}
-                    name="missionImage01"
-                    coverImage={missionImage01}
-                    setCoverImage={setMissionImage01}
-                  />
-                  <ImageField
-                    control={form.control}
-                    name="missionImage02"
-                    coverImage={missionImage02}
-                    setCoverImage={setMissionImage02}
-                  />
+                  <ImageField control={form.control} name="missionImage01" image={missionImage01} setImage={setMissionImage01} />
+                  <ImageField control={form.control} name="missionImage02" image={missionImage02} setImage={setMissionImage02} />
                 </div>
               </div>
 
-              {/* Project Vision */}
-              <TextareaInputField
-                control={form.control}
-                name="projectVision"
-                label="About Your Vision"
-                placeholder="Describe your project vision..."
-                required
-              />
+              {/* Project Story */}
+              <TextareaInputField control={form.control} name="projectVision" label="About You Vision" />
 
-              {/* Vision Image */}
+              {/* Project Story Images */}
               <div>
                 <p className="text-gray-700 font-semibold py-2">Vision Image</p>
-                <div className="w-full max-w-md">
-                  <ImageField
-                    control={form.control}
-                    name="visionImage"
-                    coverImage={visionImage}
-                    setCoverImage={setVisionImage}
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <ImageField control={form.control} name="visionImage" image={visionImage} setImage={setVisionImage} />
                 </div>
               </div>
 
-              {/* Industry Selection */}
-              <InterestedIndustryList
-                selectedIndustries={
-                  selectedIndustries.every((item) => typeof item === "string")
-                    ? (selectedIndustries as string[])
-                    : (selectedIndustries as number[])
-                }
-                onIndustrySelect={setSelectedIndustries}
-                maxSelection={3}
-                required={true}
-              />
+              <InterestedIndustryList selectedIndustry={selectedIndustry} setSelectedIndustry={setSelectedIndustry} />
 
-              {/* Target Amount and Deadline */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <FormField
                   control={form.control}
                   name="targetAmount"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Target Amount ($){" "}
-                        <span className="text-red-500">*</span>
-                      </FormLabel>
+                      <FormLabel>Target Amount</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          min={1}
-                          placeholder="Enter target amount"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value) || 0)
-                          }
-                        />
+                        <Input type="number" min={0} className="" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -489,41 +245,85 @@ const CreateProject = ({
                 />
                 <FormField
                   control={form.control}
-                  name="deadline"
+                  name="businessShareOffered"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Deadline <span className="text-red-500">*</span>
-                      </FormLabel>
+                      <FormLabel>Business Share Offered</FormLabel>
                       <FormControl>
-                        <Input
-                          type="date"
-                          min={new Date().toISOString().split("T")[0]}
-                          {...field}
-                        />
+                        <Input type="number" min={0} max={100} className="block w-full" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="deadline"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Deadline</FormLabel>
+                      <FormControl>
+                        <Input type="date" className="block w-full" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="businessType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Type</FormLabel>
+                      <Select onValueChange={
+                        (value) => {
+                          setSelectBusinessType(value);
+                          field.onChange(value);
+                          console.log(value);
+                        }
+                      } defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full bg-white">
+                            <SelectValue placeholder="Select business type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="w-full">
+                          <SelectItem value="Online">Online</SelectItem>
+                          <SelectItem value="Offline">Offline</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={form.control}
+                name="businessLocationWebsiteUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{selectBusinessType === "Online" ? "Website URL" : "Business Location"}</FormLabel>
+                    <FormControl>
+                      <Input type="text" className="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+
             </div>
 
-            {/* Submit Button */}
+            {/* Submit then Next */}
             <div className="flex justify-end">
               <Button
                 type="submit"
-                disabled={isSubmitting}
-                className="cursor-pointer text-base md:text-lg bg-primary2 hover:bg-primary2/90 text-gray-900 min-w-[150px] px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="cursor-pointer text-base md:text-lg bg-primary2 text-gray-900 min-w-[150px] px-3"
               >
-                {isSubmitting ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
-                    Creating...
-                  </div>
-                ) : (
-                  "Create Project"
-                )}
+                Create
               </Button>
             </div>
           </form>
@@ -533,66 +333,40 @@ const CreateProject = ({
   );
 };
 
-// Image Input Field Component
+
+// Image Input Fields Components //
 const ImageField = ({
   control,
   name,
-  coverImage,
-  setCoverImage,
+  image,
+  setImage
+
 }: {
   control: any;
   name: string;
-  coverImage: string | null;
-  setCoverImage: Dispatch<SetStateAction<string | null>>;
+  image: string | null;
+  setImage: Dispatch<SetStateAction<string | null>>
 }) => {
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file size (5MB limit)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB");
-        return;
-      }
-
-      // Generate image preview URL
-      const imageUrl = URL.createObjectURL(file);
-      setCoverImage(imageUrl);
-
-      // You can also update the file input field if needed
-      if (e.target.form && e.target.form.elements[name]) {
-        e.target.form.elements[name].files = e.target.files;
-      } else {
-        console.error("Form or element not found!");
-      }
-    }
-  };
-
   return (
-    <FormField
+    < FormField
       control={control}
       name={name}
       render={({ field }) => (
         <FormItem>
           <FormControl>
-            <div className="relative w-full h-[150px] bg-purple-100 rounded-md border-2 border-primary border-dashed flex justify-center items-center cursor-pointer overflow-hidden hover:bg-purple-200 transition-colors">
-              {!coverImage ? (
-                <div className="text-center">
-                  <CiImageOn className="text-6xl text-primary mx-auto mb-2" />
-                  <p className="text-sm text-primary">Click to upload image</p>
-                </div>
+            <div className="relative w-full h-[150px] bg-purple-100 rounded-md border-2 border-primary flex justify-center items-center cursor-pointer overflow-hidden">
+              {!image ? (
+                <span className="text-primary">
+                  <CiImageOn className="text-8xl" />
+                </span>
               ) : (
-                <div className="relative w-full h-full">
-                  <Image
-                    src={coverImage}
-                    alt={name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <p className="absolute inset-0  transition-all flex items-center justify-center">
-                    Change Image
-                  </p>
-                </div>
+                <Image
+                  src={image} // Use the base64 string for the src
+                  alt={name}
+                  width={300} // Set width and height
+                  height={150}
+                  objectFit="object-content h-inherit w-inherit" // Make sure it covers the area properly
+                />
               )}
 
               <input
@@ -602,10 +376,9 @@ const ImageField = ({
                   const file = e.target.files?.[0];
                   if (file) {
                     field.onChange(file);
-                    setCoverImage(URL.createObjectURL(file));
+                    setImage(URL.createObjectURL(file));
                   }
                 }}
-                ref={field.ref}
                 className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
               />
             </div>
@@ -617,36 +390,25 @@ const ImageField = ({
   );
 };
 
-// Text Input Field Component
+// Text Input Fields Components //
 const TextInputField = ({
   control,
   name,
   label,
-  placeholder = "",
-  required = false,
 }: {
   control: any;
   name: string;
   label: string;
-  placeholder?: string;
-  required?: boolean;
 }) => {
   return (
     <FormField
       control={control}
       name={name}
-      rules={
-        required
-          ? { required: `${label.replace(" *", "")} is required` }
-          : undefined
-      }
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-lg">
-            {label} {required && <span className="text-red-500">*</span>}
-          </FormLabel>
+          <FormLabel className="text-lg">{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} />
+            <Input placeholder="Enter full name" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -655,38 +417,27 @@ const TextInputField = ({
   );
 };
 
-// Textarea Input Field Component
+// Textarea Input Fields Components //
 const TextareaInputField = ({
   control,
   name,
   label,
-  placeholder = "Type here...",
-  required = false,
 }: {
   control: any;
   name: string;
   label: string;
-  placeholder?: string;
-  required?: boolean;
 }) => {
   return (
     <FormField
       control={control}
       name={name}
-      rules={
-        required
-          ? { required: `${label.replace(" *", "")} is required` }
-          : undefined
-      }
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-lg">
-            {label} {required && <span className="text-red-500">*</span>}
-          </FormLabel>
+          <FormLabel className="text-lg">{label}</FormLabel>
           <FormControl>
             <Textarea
-              placeholder={placeholder}
-              className="min-h-[120px] bg-white resize-none"
+              placeholder="Type here..."
+              className="min-h-30 bg-white"
               {...field}
             />
           </FormControl>

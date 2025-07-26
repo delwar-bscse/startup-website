@@ -36,7 +36,7 @@ const Home = () => {
   } = useGetAllProjectsQuery({});
 
   const totalCount = totalCountsData?.data;
-  const allProjects = allProjectsData?.data?.data;
+  const allProjects = allProjectsData?.data;
 
   // const userToken = localStorage.getItem("accessToken");
 
