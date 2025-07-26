@@ -19,7 +19,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -27,15 +27,20 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import InterestedIndustryList from "./InterestedIndustryList";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useCreateProjectMutation } from "@/Redux/apis/projectsApi";
+import { toast } from "sonner";
 
 interface IStep {
   stepTitle: string;
   stepDescription: string;
 }
 
-
-const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => void }) => {
-  const [selectedIndustry, setSelectedIndustry] = useState<string>("");
+const CreateProject = ({
+  checkProject,
+}: {
+  checkProject: (value: boolean) => void;
+}) => {
+  const [selectedIndustry, setSelectedIndustry] = useState<any>();
   const [stepList, setStepList] = useState<IStep[]>([] as IStep[]);
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [storyImage01, setStoryImage01] = useState<string | null>(null);
@@ -44,7 +49,10 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
   const [missionImage01, setMissionImage01] = useState<string | null>(null);
   const [missionImage02, setMissionImage02] = useState<string | null>(null);
   const [visionImage, setVisionImage] = useState<string | null>(null);
-  const [selectBusinessType, setSelectBusinessType] = useState<string>("Online");
+  const [selectBusinessType, setSelectBusinessType] =
+    useState<string>("Online");
+
+  const [createProject] = useCreateProjectMutation();
 
   const form = useForm({
     mode: "onChange",
@@ -64,46 +72,74 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
       missionImage02: undefined,
       visionImage: undefined,
       businessShareOffered: undefined,
-      businessType: "Online",
+      businessType: "online",
       businessLocationWebsiteUrl: "",
     },
   });
 
-
   const onSubmit = async (data: any) => {
-    console.log("Create Project Submitted Data", data);
-    // console.log("Industry : ", selectedIndustry);
-    // console.log("Mission Step List : ", stepList);
-    
-    const projectData = {
-      title: data.projectTitle,
-      description: data.projectBio,
-      story: data.storyOfProject,
-      mission: stepList,
-      vision: data.projectVision,
-      industry: selectedIndustry,
-      fundingGoal: data.targetAmount,
-      equityOffered: data.businessShareOffered,
-      deadLine: data.deadline,
-      projectType: data.businessType,
-      businessLocation: data.businessLocationWebsiteUrl,
-    };
+    try {
+      console.log("Create Project Submitted Data", data);
+      console.log("image 00", data.storyImage01);
+      console.log("Mission Step List : ", stepList);
 
-    console.log("Project Object Data:", projectData);
+      const industry = selectedIndustry?._id;
+      const projectData = {
+        title: data.projectTitle,
+        description: data.projectBio,
+        story: data.storyOfProject,
+        mission: stepList,
+        vision: data.projectVision,
+        industry: industry,
+        fundingGoal: data.targetAmount,
+        equityOffered: data.businessShareOffered,
+        deadLine: data.deadline,
+        projectType: data.businessType,
+        businessLocation: data.businessLocationWebsiteUrl,
+      };
 
-    const formData = new FormData();
-    formData.append("primaryFile", data.coverImage[0]);
-    formData.append("storyFiles", data.storyImage01[0]);
-    formData.append("storyFiles", data.storyImage02[0]);
-    formData.append("storyFiles", data.storyImage03[0]);
-    formData.append("missionFiles", data.missionImage01[0]);
-    formData.append("missionFiles", data.missionImage02[0]);
-    formData.append("visionFile", data.visionImage[0]);
-    formData.append("projectData", JSON.stringify(projectData));
+      console.log("Project Object Data:", projectData);
 
-    
-    console.log(checkProject)
-    // checkProject(true);
+      // Create FormData
+      const formData = new FormData();
+      if (data.coverImage && data.coverImage) {
+        formData.append("primaryFile", data.coverImage);
+        console.log("Cover image added:", data.coverImage.name);
+      }
+      if (data.storyImage01) formData.append("storyFiles", data.storyImage01);
+      if (data.storyImage02) formData.append("storyFiles", data.storyImage02);
+      if (data.storyImage03) formData.append("storyFiles", data.storyImage03);
+      if (data.missionImage01)
+        formData.append("missionFiles", data.missionImage01);
+      if (data.missionImage02)
+        formData.append("missionFiles", data.missionImage02);
+      if (data.visionImage) formData.append("visionFile", data.visionImage);
+      formData.append("data", JSON.stringify(projectData));
+
+      console.log("FormData prepared for submission");
+
+      // Call the API
+      const response = await createProject(formData).unwrap();
+
+      console.log("Project created successfully:", response);
+
+      if (response.success) {
+        toast.success("Project created successfully!");
+
+        checkProject(true);
+      }
+    } catch (error: any) {
+      console.error("Error creating project:", error);
+
+      if (error.status) {
+        console.error("API Error:", error.status, error.data);
+        toast.error("Please fill all the required fields correctly.");
+      } else {
+        // Unknown error
+        console.error("Unknown Error:", error);
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   const handleStepList = ({ stepTitle, stepDescription }: IStep) => {
@@ -114,9 +150,8 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
   };
 
   useEffect(() => {
-    console.log(selectBusinessType)
+    console.log(selectBusinessType);
   }, [selectBusinessType]);
-
 
   return (
     <div className="w-full flex justify-center py-10 px-4">
@@ -129,30 +164,64 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
               </h2>
 
               <div>
-                <p className="text-gray-700 font-semibold py-2">Project Cover Image</p>
+                <p className="text-gray-700 font-semibold py-2">
+                  Project Cover Image
+                </p>
                 <div className="w-full">
-                  <ImageField control={form.control} name="coverImage" image={coverImage} setImage={setCoverImage} />
+                  <ImageField
+                    control={form.control}
+                    name="coverImage"
+                    image={coverImage}
+                    setImage={setCoverImage}
+                  />
                 </div>
               </div>
 
               {/* Project Title */}
-              <TextInputField control={form.control} name="projectTitle" label="Project Title" />
+              <TextInputField
+                control={form.control}
+                name="projectTitle"
+                label="Project Title"
+              />
 
               {/* Project Bio */}
-              <TextInputField control={form.control} name="projectBio" label="Project Bio" />
+              <TextInputField
+                control={form.control}
+                name="projectBio"
+                label="Project Bio"
+              />
 
               {/* Project Story */}
-              <TextareaInputField control={form.control} name="storyOfProject" label="Story of Project" />
-
-
+              <TextareaInputField
+                control={form.control}
+                name="storyOfProject"
+                label="Story of Project"
+              />
 
               {/* Project Story Images */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">Project’s Story Related Image</p>
+                <p className="text-gray-700 font-semibold py-2">
+                  Project’s Story Related Image
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                  <ImageField control={form.control} name="storyImage01" image={storyImage01} setImage={setStoryImage01} />
-                  <ImageField control={form.control} name="storyImage02" image={storyImage02} setImage={setStoryImage02} />
-                  <ImageField control={form.control} name="storyImage03" image={storyImage03} setImage={setStoryImage03} />
+                  <ImageField
+                    control={form.control}
+                    name="storyImage01"
+                    image={storyImage01}
+                    setImage={setStoryImage01}
+                  />
+                  <ImageField
+                    control={form.control}
+                    name="storyImage02"
+                    image={storyImage02}
+                    setImage={setStoryImage02}
+                  />
+                  <ImageField
+                    control={form.control}
+                    name="storyImage03"
+                    image={storyImage03}
+                    setImage={setStoryImage03}
+                  />
                 </div>
               </div>
 
@@ -188,46 +257,95 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
                   />
                 </div>
                 <div className="">
-                  <Button type="button" onClick={() => handleStepList({ stepTitle: form.getValues("stepTitle"), stepDescription: form.getValues("stepDescription") })} className="">
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      handleStepList({
+                        stepTitle: form.getValues("stepTitle"),
+                        stepDescription: form.getValues("stepDescription"),
+                      })
+                    }
+                    className=""
+                  >
                     Add
                   </Button>
                 </div>
               </div>
-              {stepList?.length > 0 && <div className="space-y-2 border-2 border-gray-300 p-2 rounded-sm">
-                {stepList.map((step, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <p className="text-gray-700 text-xl font-semibold">{step.stepTitle}</p>
-                      <p className="text-gray-600">{step.stepDescription}</p>
+              {stepList?.length > 0 && (
+                <div className="space-y-2 border-2 border-gray-300 p-2 rounded-sm">
+                  {stepList.map((step, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex-1">
+                        <p className="text-gray-700 text-xl font-semibold">
+                          {step.stepTitle}
+                        </p>
+                        <p className="text-gray-600">{step.stepDescription}</p>
+                      </div>
+                      <button
+                        onClick={() =>
+                          setStepList(
+                            stepList.filter(
+                              (item) => item.stepTitle !== step?.stepTitle
+                            )
+                          )
+                        }
+                        className="text-2xl font-extrabold w-10 h-8 cursor-pointer"
+                      >
+                        <RiDeleteBinLine className="text-red-500 hover:text-red-600" />
+                      </button>
                     </div>
-                    <button onClick={() => setStepList(stepList.filter((item) => item.stepTitle !== step?.stepTitle))} className="text-2xl font-extrabold w-10 h-8 cursor-pointer">
-                      <RiDeleteBinLine className="text-red-500 hover:text-red-600" />
-                    </button>
-                  </div>
-                ))}
-              </div>}
+                  ))}
+                </div>
+              )}
 
               {/* Project Mission Images */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">Mission Related Image</p>
+                <p className="text-gray-700 font-semibold py-2">
+                  Mission Related Image
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <ImageField control={form.control} name="missionImage01" image={missionImage01} setImage={setMissionImage01} />
-                  <ImageField control={form.control} name="missionImage02" image={missionImage02} setImage={setMissionImage02} />
+                  <ImageField
+                    control={form.control}
+                    name="missionImage01"
+                    image={missionImage01}
+                    setImage={setMissionImage01}
+                  />
+                  <ImageField
+                    control={form.control}
+                    name="missionImage02"
+                    image={missionImage02}
+                    setImage={setMissionImage02}
+                  />
                 </div>
               </div>
 
               {/* Project Story */}
-              <TextareaInputField control={form.control} name="projectVision" label="About You Vision" />
+              <TextareaInputField
+                control={form.control}
+                name="projectVision"
+                label="About You Vision"
+              />
 
               {/* Project Story Images */}
               <div>
                 <p className="text-gray-700 font-semibold py-2">Vision Image</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <ImageField control={form.control} name="visionImage" image={visionImage} setImage={setVisionImage} />
+                  <ImageField
+                    control={form.control}
+                    name="visionImage"
+                    image={visionImage}
+                    setImage={setVisionImage}
+                  />
                 </div>
               </div>
 
-              <InterestedIndustryList selectedIndustry={selectedIndustry} setSelectedIndustry={setSelectedIndustry} />
+              <InterestedIndustryList
+                selectedIndustry={selectedIndustry}
+                setSelectedIndustry={setSelectedIndustry}
+              />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <FormField
@@ -250,7 +368,13 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
                     <FormItem>
                       <FormLabel>Business Share Offered</FormLabel>
                       <FormControl>
-                        <Input type="number" min={0} max={100} className="block w-full" {...field} />
+                        <Input
+                          type="number"
+                          min={0}
+                          max={100}
+                          className="block w-full"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -266,7 +390,11 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
                     <FormItem>
                       <FormLabel>Deadline</FormLabel>
                       <FormControl>
-                        <Input type="date" className="block w-full" {...field} />
+                        <Input
+                          type="date"
+                          className="block w-full"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -278,21 +406,22 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Business Type</FormLabel>
-                      <Select onValueChange={
-                        (value) => {
+                      <Select
+                        onValueChange={(value) => {
                           setSelectBusinessType(value);
                           field.onChange(value);
                           console.log(value);
-                        }
-                      } defaultValue={field.value}>
+                        }}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger className="w-full bg-white">
                             <SelectValue placeholder="Select business type" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="w-full">
-                          <SelectItem value="Online">Online</SelectItem>
-                          <SelectItem value="Offline">Offline</SelectItem>
+                          <SelectItem value="online">Online</SelectItem>
+                          <SelectItem value="offline">Offline</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -305,7 +434,11 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
                 name="businessLocationWebsiteUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{selectBusinessType === "Online" ? "Website URL" : "Business Location"}</FormLabel>
+                    <FormLabel>
+                      {selectBusinessType === "online"
+                        ? "Website URL"
+                        : "Business Location"}
+                    </FormLabel>
                     <FormControl>
                       <Input type="text" className="" {...field} />
                     </FormControl>
@@ -313,8 +446,6 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
                   </FormItem>
                 )}
               />
-
-
             </div>
 
             {/* Submit then Next */}
@@ -333,22 +464,20 @@ const CreateProject = ({ checkProject }: { checkProject: (value: boolean) => voi
   );
 };
 
-
 // Image Input Fields Components //
 const ImageField = ({
   control,
   name,
   image,
-  setImage
-
+  setImage,
 }: {
   control: any;
   name: string;
   image: string | null;
-  setImage: Dispatch<SetStateAction<string | null>>
+  setImage: Dispatch<SetStateAction<string | null>>;
 }) => {
   return (
-    < FormField
+    <FormField
       control={control}
       name={name}
       render={({ field }) => (
