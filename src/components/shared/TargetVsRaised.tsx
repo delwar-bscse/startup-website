@@ -50,6 +50,22 @@ const renderCustomizedLabel = ({
   );
 };
 
+export const getRemainingTime = (dateString: string) => {
+  const deadline = new Date(dateString);
+  const now = new Date();
+
+  const diffInMs = deadline.getTime() - now.getTime();
+
+  if (diffInMs <= 0) return "Time's up";
+
+  const totalMinutes = Math.floor(diffInMs / (1000 * 60));
+  const days = Math.floor(totalMinutes / (60 * 24));
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${days} days ${hours} hours ${minutes} minutes`;
+};
+
 const TargetVsRaisedAmount: React.FC<TargetVsRaisedAmountProps> = ({
   project,
 }) => {
@@ -86,7 +102,7 @@ const TargetVsRaisedAmount: React.FC<TargetVsRaisedAmountProps> = ({
   const daysLeft = dayjs(project.deadLine).diff(dayjs(), "day");
 
   return (
-    <div className="maxWidth">
+    <div className="maxWidth py-5">
       <h2 className="text-xl sm:text-3xl md:text-5xl font-bold pb-8 text-gray-700">
         Targeted Vs Raised Amount
       </h2>

@@ -45,7 +45,7 @@ const projectsApi = baseApi.injectEndpoints({
           method: "post",
           body: data,
           headers: {
-            "content-type": "application/json",
+            // "Content-Type": "multipart/form-data",
             authorization: accessToken,
           },
         };
