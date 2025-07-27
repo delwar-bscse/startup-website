@@ -49,7 +49,7 @@ const utilityApi = baseApi.injectEndpoints({
     getPrivacyPolicy: builder.query({
       query: () => {
         return {
-          url: "/legal/tc",
+          url: "/legal/ps",
           method: "get",
         };
       },
