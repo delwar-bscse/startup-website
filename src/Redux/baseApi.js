@@ -17,5 +17,6 @@ export const baseApi = createApi({
     "financialDetails",
     "businessDetails",
     "investors",
+    "entrepreneur",
   ],
 });

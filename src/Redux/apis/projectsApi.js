@@ -36,6 +36,37 @@ const projectsApi = baseApi.injectEndpoints({
       },
       providesTags: ["projects"],
     }),
+
+    getMyInvestedProject: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: "/stripe/my-invested-projects",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["projects"],
+    }),
+
+    getMyInvestedEntrepreneurs: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: "/stripe/my-invested-entrepreneurs",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["projects"],
+    }),
+
     createProject: builder.mutation({
       query: (data) => {
         const accessToken = localStorage.getItem("accessToken");
@@ -52,6 +83,21 @@ const projectsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["projects"],
     }),
+
+    getProjectDetails: builder.query({
+      query: (projectId) => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: `/projects/details/${projectId}`,
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["projects"],
+    }),
   }),
 });
 
@@ -59,4 +105,7 @@ export const {
   useGetAllProjectsQuery,
   useGetMyProjectQuery,
   useCreateProjectMutation,
+  useGetMyInvestedProjectQuery,
+  useGetProjectDetailsQuery,
+  useGetMyInvestedEntrepreneursQuery,
 } = projectsApi;

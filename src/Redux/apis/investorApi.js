@@ -16,7 +16,24 @@ const investorApi = baseApi.injectEndpoints({
       },
       providesTags: ["investors"],
     }),
+    investOnProject: builder.mutation({
+      query: (data) => {
+        const accessToken = localStorage.getItem("accessToken");
+        console.log("invest on project api data:", data);
+
+        return {
+          url: "/stripe/chekout",
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+          body: data,
+        };
+      },
+      invalidatesTags: ["investors"],
+    }),
   }),
 });
 
-export const { useGetInvestorsQuery } = investorApi;
+export const { useGetInvestorsQuery, useInvestOnProjectMutation } = investorApi;

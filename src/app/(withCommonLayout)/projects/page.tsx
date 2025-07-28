@@ -24,7 +24,7 @@ const Projects = () => {
     isLoading,
   } = useGetAllProjectsQuery({});
 
-  const allProjects = allProjectsData?.data?.data;
+  const allProjects = allProjectsData?.data;
   console.log(allProjects);
 
   if (isLoading) {
@@ -73,7 +73,7 @@ const Projects = () => {
       <div className="maxWidth py-20">
         <h2 className="text-3xl md:text-5xl font-bold pb-8">Our Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {allProjects.map((project: Project) => (
+          {allProjects?.map((project: Project) => (
             <ProjectCard
               key={project?._id}
               project={project}

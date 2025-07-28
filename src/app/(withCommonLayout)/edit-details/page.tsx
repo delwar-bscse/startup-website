@@ -93,19 +93,38 @@ const EditDetails = () => {
         </div>
       </div>
       {activeStep === 1 && (
-        <PersonalInformation onHandleStep={handleStep} user={user} refetch={refetch}/>
+        <PersonalInformation
+          onHandleStep={handleStep}
+          user={user}
+          refetch={refetch}
+        />
       )}
       {activeStep === 2 && (
-        <BusinessDetailsInfo onHandleStep={handleStep} user={user} refetch={refetch}/>
+        <BusinessDetailsInfo
+          onHandleStep={handleStep}
+          user={user}
+          refetch={refetch}
+        />
       )}
       {userRole === "entrepreneur" && activeStep === 3 && (
-        <FinancialInvestmentDetails onHandleStep={handleStep} />
+        <FinancialInvestmentDetails
+          onHandleStep={handleStep}
+          refetch={refetch}
+        />
       )}
       {userRole === "investor" && activeStep === 3 && (
-        <FinancialInvestmentDetails2 onHandleStep={handleStep} user={user} refetch={refetch}/>
+        <FinancialInvestmentDetails2
+          onHandleStep={handleStep}
+          user={user}
+          refetch={refetch}
+        />
       )}
       {activeStep === 4 && (
-        <LegalCompliance onHandleStep={handleStep} user={user} refetch={refetch}/>
+        <LegalCompliance
+          onHandleStep={handleStep}
+          user={user}
+          refetch={refetch}
+        />
       )}
       {activeStep === 5 && <Subscriptions />}
     </div>

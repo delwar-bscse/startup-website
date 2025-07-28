@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 const EntrepreneurLayout = ({ children }: { children: ReactNode }) => {
   const { data: userData } = useGetUserProfileQuery({});
   const user = userData?.data;
-  console.log(user);
+  // console.log(user);
   return (
     <>
       <UserImage user={user} />

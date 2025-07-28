@@ -8,13 +8,13 @@ import { IoIosArrowUp } from "react-icons/io";
 import { useGetFAQsQuery } from "@/Redux/apis/utilityApi";
 
 interface FAQItem {
-  _id: string; // Assuming _id is a string from the API
+  _id: string;
   question: string;
   answer: string;
 }
 
 const CollapsibleFAQ: React.FC = () => {
-  const { data: faqs } = useGetFAQsQuery({});
+  const { data: faqs, isLoading } = useGetFAQsQuery({});
   const faqData = faqs?.data;
   // console.log("FAQs Data:", faqData);
 
@@ -23,6 +23,10 @@ const CollapsibleFAQ: React.FC = () => {
   const toggleOpen = (index: string) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  if (isLoading) {
+    return <div className="text-center py-8">Loading FAQs...</div>;
+  }
 
   return (
     <div>
