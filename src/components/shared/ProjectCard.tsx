@@ -1,5 +1,6 @@
 import { Project } from "@/types/types";
 import { getImageUrl } from "@/utils/baseUrl";
+import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -12,13 +13,17 @@ const ProjectCard = ({
   project: Project;
   detailsUrl: string;
 }) => {
-  const imageUrl = getImageUrl(project?.primaryUrl);
+  const imageUrl = getImageUrl();
+
+  const daysLeft = dayjs(project.deadLine).diff(dayjs(), "day");
+
+  console.log("Project Card Data:", project);
 
   return (
     <div className="flex flex-col border border-gray-300">
       <div className="w-full">
         <Image
-          src={imageUrl}
+          src={`${imageUrl}/${project.img}`}
           alt={project?.title}
           width={700}
           height={400}
@@ -38,7 +43,9 @@ const ProjectCard = ({
               <span>
                 <LuClock />
               </span>
-              <span className="text-gray-500">20 Days Left</span>
+              <span className="text-gray-500">
+                {daysLeft < 0 ? "Project Ended" : `${daysLeft} Days Left`}
+              </span>
             </p>
           </div>
           <div className="relative flex items-center justify-start w-full bg-gray-200">

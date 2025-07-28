@@ -1,11 +1,14 @@
+"use client";
+
 import ProjectBreakdown from "@/components/shared/ProjectBreakdown";
 import ProjectCard from "@/components/shared/ProjectCard";
-import { projectDatas } from "@/constants/projectData";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React from "react";
 import Profile from "@/assets/projects/project.png";
 import Profile2 from "@/assets/projects/project_01.png";
+import { useGetMyInvestedProjectQuery } from "@/Redux/apis/projectsApi";
+import { Project } from "@/types/types";
 
 interface Investor {
   name: string;
@@ -51,7 +54,23 @@ const investors: Investor[] = [
   },
 ];
 
-const page = () => {
+const Page = () => {
+  const {
+    data: projectsData,
+    isLoading,
+    refetch,
+  } = useGetMyInvestedProjectQuery({});
+  const projects = projectsData?.data;
+  console.log("Projects Data:", projects);
+
+  if (isLoading) {
+    return (
+      <div className="maxWidth flex justify-center items-center h-screen">
+        <h1 className="text-xl text-gray-700">Loading your projects...</h1>
+      </div>
+    );
+  }
+
   return (
     <div>
       {/* ----------- My Projects Section ----------- */}
@@ -60,11 +79,11 @@ const page = () => {
           Invested Projects
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {projectDatas.slice(0, 3)?.map((project) => (
+          {projects.slice(0, 3)?.map((project: Project) => (
             <ProjectCard
               key={project?.id}
               project={project}
-              detailsUrl={`/investor/projects/${project?.id}`}
+              detailsUrl={`/investor/projects/${project?._id}`}
             />
           ))}
         </div>
@@ -147,4 +166,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

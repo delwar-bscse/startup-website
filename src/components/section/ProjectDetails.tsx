@@ -7,6 +7,7 @@ import TargetVsRaisedAmount from "../shared/TargetVsRaised";
 import { getImageUrl } from "@/utils/baseUrl";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useGetUserProfileQuery } from "@/Redux/apis/userApi";
 
 interface Project {
   [x: string]: any;
@@ -26,6 +27,10 @@ interface ProjectDetailsProps {
 const ProjectDetails = ({ project }: ProjectDetailsProps) => {
   const [changeComponent, setChangeComponent] = useState<string>("details");
 
+  const { data: profileUser, isLoading } = useGetUserProfileQuery({});
+  const user = profileUser?.data;
+  console.log("profileUser", user);
+
   const imageUrl = getImageUrl();
 
   const deadline = project?.deadLine;
@@ -37,6 +42,22 @@ const ProjectDetails = ({ project }: ProjectDetailsProps) => {
   );
   const isOverfunded =
     (project?.fundsRaised * 100) / project?.fundingGoal > 100;
+
+  const investData = {
+    projectId: project?._id,
+    entrepreneurId: project?.entrepreneurId,
+    target: project?.fundingGoal,
+    raised: project?.fundsRaised,
+    daysLeft: daysLeft,
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full flex justify-center items-center py-10">
+        <div className="text-lg font-semibold">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -99,10 +120,13 @@ const ProjectDetails = ({ project }: ProjectDetailsProps) => {
                   </p>
                 )}
               </div>
-              {!project?.entrepreneurId && (
+              {user?.role === "investor" && (
                 <div>
                   <Link
-                    href="/invest-now"
+                    href={{
+                      pathname: "/invest-now",
+                      query: investData,
+                    }}
                     className="block text-center font-semibold bg-primary2 text-gray-700 px-2 md:px-4 py-1 md:py-2 rounded-sm cursor-pointer w-full text-2xl"
                   >
                     Invest Now
