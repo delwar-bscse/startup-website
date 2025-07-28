@@ -9,7 +9,7 @@ const AboutMe: React.FC<any> = ({ user }) => {
       {/* ----------- About Me Section ----------- */}
       <div className="maxWidth space-y-4 py-16">
         <h2 className="text-4xl lg:text-6xl font-bold text-purple-950">
-          About Me
+          About
         </h2>
         <p className="text-gray-700">{user?.personalInfo?.About}</p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-10">

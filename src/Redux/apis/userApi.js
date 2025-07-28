@@ -28,6 +28,7 @@ const userApi = baseApi.injectEndpoints({
           },
         };
       },
+      providesTags: "user",
     }),
     updatePersonalInfo: builder.mutation({
       query: (data) => {
@@ -43,6 +44,22 @@ const userApi = baseApi.injectEndpoints({
           },
         };
       },
+      invalidatesTags: "user",
+    }),
+    getUserDetails: builder.query({
+      query: (userId) => {
+        console.log("user id", userId);
+        const token = localStorage.getItem("accessToken");
+        return {
+          url: `/users/details/${userId}`,
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: token,
+          },
+        };
+      },
+      providesTags: "user",
     }),
   }),
 });
@@ -51,4 +68,5 @@ export const {
   useGetUserProfileQuery,
   useGetPersonalDetailsFieldsQuery,
   useUpdatePersonalInfoMutation,
+  useGetUserDetailsQuery,
 } = userApi;
