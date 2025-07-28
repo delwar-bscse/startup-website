@@ -1,9 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
-import { FC } from "react";
+import {
+  FC,
+  JSXElementConstructor,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+} from "react";
 import Link from "next/link";
 import { useGetInvestorsQuery } from "@/Redux/apis/investorApi";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import dayjs from "dayjs";
 
 //   {
 //     name: "John Doe",
@@ -91,7 +100,7 @@ const InvestorsTable: FC = () => {
   const { data: investorsData, isLoading: investorsLoading } =
     useGetInvestorsQuery({});
   const investors = investorsData?.data;
-  console.log("investorsData", investorsData);
+  console.log("investorsData", investors);
 
   if (investorsLoading) {
     return <div>Loading...</div>;
@@ -113,9 +122,9 @@ const InvestorsTable: FC = () => {
                 <th className="py-1 md:py-2 lg:py-3 px-1 lg:px-3 text-left">
                   Investors
                 </th>
-                <th className="py-1 md:py-2 lg:py-3 px-1 lg:px-3 text-left">
+                {/* <th className="py-1 md:py-2 lg:py-3 px-1 lg:px-3 text-left">
                   Email
-                </th>
+                </th> */}
                 <th className="py-1 md:py-2 lg:py-3 px-1 lg:px-3 text-left">
                   Amount
                 </th>
@@ -131,40 +140,192 @@ const InvestorsTable: FC = () => {
               </tr>
             </thead>
             <tbody className="text-sm md lg:text-base font-light">
-              {investors.map((investor, index: number) => (
-                <tr key={index}>
-                  <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3 flex items-center">
-                    <Image
-                      src={investor.profileUrl}
-                      width={400}
-                      height={400}
-                      alt={investor.name}
-                      className="w-[30px] lg:w-[40px] xl:w-[48px] h-[30px] lg:h-[40px] xl:h-[48px] rounded-full border-2 border-primary"
-                    />
-                    <span className="ml-2">{investor.name}</span>
-                  </td>
-                  <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
-                    {investor.email}
-                  </td>
-                  <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
-                    {investor.amount}
-                  </td>
-                  <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
-                    {investor.shareholder}
-                  </td>
-                  <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
-                    {investor.date}
-                  </td>
-                  <td className="py-1 md:py-2 lg:py-3 w-24 lg:w-30">
-                    <Link
-                      href={`/entrepreneur/investors/${index + 1}`}
-                      className="bg-primary2 block text-center text-gray-600 font-semibold py-1 md:py-2 w-full rounded-md"
-                    >
-                      See Profile
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+              {investors.map(
+                (
+                  investor: {
+                    equity: ReactNode;
+                    timestamp: ReactNode;
+                    investorId: {
+                      _id: any;
+                      profileImg: string | StaticImport;
+                      name: string;
+                    };
+                    name:
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | ReactElement<
+                          unknown,
+                          string | JSXElementConstructor<any>
+                        >
+                      | Iterable<ReactNode>
+                      | ReactPortal
+                      | Promise<
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactPortal
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<any>
+                            >
+                          | Iterable<ReactNode>
+                          | null
+                          | undefined
+                        >
+                      | null
+                      | undefined;
+                    email:
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | ReactElement<
+                          unknown,
+                          string | JSXElementConstructor<any>
+                        >
+                      | Iterable<ReactNode>
+                      | ReactPortal
+                      | Promise<
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactPortal
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<any>
+                            >
+                          | Iterable<ReactNode>
+                          | null
+                          | undefined
+                        >
+                      | null
+                      | undefined;
+                    amount:
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | ReactElement<
+                          unknown,
+                          string | JSXElementConstructor<any>
+                        >
+                      | Iterable<ReactNode>
+                      | ReactPortal
+                      | Promise<
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactPortal
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<any>
+                            >
+                          | Iterable<ReactNode>
+                          | null
+                          | undefined
+                        >
+                      | null
+                      | undefined;
+                    shareholder:
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | ReactElement<
+                          unknown,
+                          string | JSXElementConstructor<any>
+                        >
+                      | Iterable<ReactNode>
+                      | ReactPortal
+                      | Promise<
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactPortal
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<any>
+                            >
+                          | Iterable<ReactNode>
+                          | null
+                          | undefined
+                        >
+                      | null
+                      | undefined;
+                    date:
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | ReactElement<
+                          unknown,
+                          string | JSXElementConstructor<any>
+                        >
+                      | Iterable<ReactNode>
+                      | ReactPortal
+                      | Promise<
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactPortal
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<any>
+                            >
+                          | Iterable<ReactNode>
+                          | null
+                          | undefined
+                        >
+                      | null
+                      | undefined;
+                  },
+                  index: number
+                ) => (
+                  <tr key={index}>
+                    <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3 flex items-center">
+                      <Image
+                        src={investor?.investorId.profileImg}
+                        width={400}
+                        height={400}
+                        alt={investor?.investorId.name}
+                        className="w-[30px] lg:w-[40px] xl:w-[48px] h-[30px] lg:h-[40px] xl:h-[48px] rounded-full border-2 border-primary"
+                      />
+                      <span className="ml-2">{investor?.investorId.name}</span>
+                    </td>
+                    {/* <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
+                      {investor.email}
+                    </td> */}
+                    <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
+                      {investor.amount}
+                    </td>
+                    <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
+                      {investor.equity}
+                    </td>
+                    <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
+                      {typeof investor.timestamp === "string" ||
+                      typeof investor.timestamp === "number" ||
+                      investor.timestamp instanceof Date
+                        ? dayjs(investor.timestamp).format("YYYY-MM-DD HH:mm")
+                        : ""}
+                    </td>
+                    <td className="py-1 md:py-2 lg:py-3 w-24 lg:w-30">
+                      <Link
+                        href={`/entrepreneur/investors/${investor?.investorId?._id}`}
+                        className="bg-primary2 block text-center text-gray-600 font-semibold py-1 md:py-2 w-full rounded-md"
+                      >
+                        See Profile
+                      </Link>
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         </div>

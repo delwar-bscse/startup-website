@@ -1,36 +1,54 @@
-import Profile from "@/assets/projects/Entrepreneur/profile1.png"
-import About03 from "@/assets/projects/Entrepreneur/aboutme03.png"
-import About04 from "@/assets/projects/Entrepreneur/aboutme04.png"
-import React from 'react'
-import AboutMe from '@/components/section/AboutMe';
-import Achievement from '@/components/section/Achievement';
-import UserInfo from '@/components/section/UserInfo';
+"use client";
+import React from "react";
+import AboutMe from "@/components/section/AboutMe";
+import Achievement from "@/components/section/Achievement";
+import UserInfo from "@/components/section/UserInfo";
 import InterestedIndustry from "@/components/section/InterestedIndustry";
+import { useParams } from "next/navigation";
+import { useGetUserDetailsQuery } from "@/Redux/apis/userApi";
 
-const userInfo = {profileImg:Profile, name:"Jenny Wilson", designation:"Fashion Designer", address:"Dhaka, Bangladesh"}
+const Page = () => {
+  const { id } = useParams();
 
-const page = () => {
+  const { data: investorDetails, isLoading } = useGetUserDetailsQuery(id);
+  const investor = investorDetails?.data;
+  console.log("investor", investor);
+
+  if (isLoading) {
+    return (
+      <div className="maxWidth flex justify-center items-center h-screen">
+        <h1 className="text-xl text-gray-700">Loading your projects...</h1>
+      </div>
+    );
+  }
+
   return (
-    <div className=''>
+    <div className="">
       {/* ----------- Pr
       {/* ----------- Profile Section ----------- */}
       <>
-        <UserInfo userInfo={userInfo} />
+        <UserInfo userInfo={investor} />
       </>
       {/* ----------- About Me Section ----------- */}
       <>
-        <AboutMe image1={About03} image2={About04} />
+        <AboutMe user={investor} />
       </>
       {/* ----------- About Me Section ----------- */}
-      <>
-        <Achievement />
-      </>
-      {/* ----------- Interested Industry Section ----------- */}
-      <>
-        <InterestedIndustry />
-      </>
-    </div>
-  )
-}
 
-export default page
+      {investor?.achievement && investor?.achievement.length > 0 && (
+        <>
+          <Achievement />
+        </>
+      )}
+      <></>
+      {/* ----------- Interested Industry Section ----------- */}
+      {investor?.personalInfo?.interestedIndustries.length > 0 && (
+        <>
+          <InterestedIndustry user={investor} />
+        </>
+      )}
+    </div>
+  );
+};
+
+export default Page;
