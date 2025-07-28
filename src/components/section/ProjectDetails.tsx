@@ -27,9 +27,11 @@ interface ProjectDetailsProps {
 const ProjectDetails = ({ project }: ProjectDetailsProps) => {
   const [changeComponent, setChangeComponent] = useState<string>("details");
 
+  console.log("Projectttttt", project);
+
   const { data: profileUser, isLoading } = useGetUserProfileQuery({});
   const user = profileUser?.data;
-  console.log("profileUser", user);
+  // console.log("profileUser", user);
 
   const imageUrl = getImageUrl();
 

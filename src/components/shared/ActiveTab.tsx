@@ -6,7 +6,7 @@ import Link from "next/link";
 const ActiveTab = () => {
   const pathname = usePathname();
   const role = pathname.split("/")[1];
-  console.log(role);
+  // console.log(role);
 
   const isActive = (path: string) => {
     if (pathname === path) return true;

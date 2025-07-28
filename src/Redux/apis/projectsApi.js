@@ -52,6 +52,21 @@ const projectsApi = baseApi.injectEndpoints({
       providesTags: ["projects"],
     }),
 
+    getMyInvestedEntrepreneurs: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: "/stripe/my-invested-entrepreneurs",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["projects"],
+    }),
+
     createProject: builder.mutation({
       query: (data) => {
         const accessToken = localStorage.getItem("accessToken");
@@ -92,4 +107,5 @@ export const {
   useCreateProjectMutation,
   useGetMyInvestedProjectQuery,
   useGetProjectDetailsQuery,
+  useGetMyInvestedEntrepreneursQuery,
 } = projectsApi;

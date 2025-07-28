@@ -55,13 +55,9 @@ const investors: Investor[] = [
 ];
 
 const Page = () => {
-  const {
-    data: projectsData,
-    isLoading,
-    refetch,
-  } = useGetMyInvestedProjectQuery({});
+  const { data: projectsData, isLoading } = useGetMyInvestedProjectQuery({});
   const projects = projectsData?.data;
-  console.log("Projects Data:", projects);
+  console.log("Projects Dataaaaaa:", projects);
 
   if (isLoading) {
     return (
@@ -81,9 +77,11 @@ const Page = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {projects.slice(0, 3)?.map((project: Project) => (
             <ProjectCard
-              key={project?.id}
+              key={project?.project._id || project?._id}
               project={project}
-              detailsUrl={`/investor/projects/${project?._id}`}
+              detailsUrl={`/investor/projects/${
+                project?.project._id || project?._id
+              }`}
             />
           ))}
         </div>

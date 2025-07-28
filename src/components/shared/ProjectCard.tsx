@@ -14,8 +14,12 @@ const ProjectCard = ({
   detailsUrl: string;
 }) => {
   const imageUrl = getImageUrl();
+  const imageUrlPath = project?.primaryUrl || project?.project.primaryUrl;
 
-  const daysLeft = dayjs(project.deadLine).diff(dayjs(), "day");
+  const daysLeft = dayjs(project.deadLine || project.project.deadLine).diff(
+    dayjs(),
+    "day"
+  );
 
   console.log("Project Card Data:", project);
 
@@ -23,21 +27,25 @@ const ProjectCard = ({
     <div className="flex flex-col border border-gray-300">
       <div className="w-full">
         <Image
-          src={`${imageUrl}/${project.img}`}
-          alt={project?.title}
+          src={`${imageUrl}${imageUrlPath}`}
+          alt={project?.title || project?.project.title}
           width={700}
           height={400}
         />
       </div>
       <div className="w-full h-full p-4 flex flex-col justify-between">
         <div className="">
-          <h2 className="text-xl md:text-2xl font-bold">{project?.title}</h2>
+          <h2 className="text-xl md:text-2xl font-bold">
+            {project?.title || project?.project.title}
+          </h2>
         </div>
         <div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 py-4">
             <p className="flex items-center gap-2 font-semibold">
               <span>Target : </span>
-              <span className="text-primary">{project?.fundingGoal} USD</span>
+              <span className="text-primary">
+                {project?.fundingGoal || project?.project.fundingGoal} USD
+              </span>
             </p>
             <p className="flex items-center sm:justify-end gap-2">
               <span>
@@ -51,10 +59,12 @@ const ProjectCard = ({
           <div className="relative flex items-center justify-start w-full bg-gray-200">
             <p
               className={`bg-primary2 text-right h-8`}
-              style={{ width: `${project?.fundsRaised}%` }}
+              style={{
+                width: `${project?.equitySold || project?.project.equitySold}%`,
+              }}
             ></p>
             <span className="absolute left-4 text-gray-800 font-semibold text-sm md:text-base">
-              Raised {project?.fundsRaised}%
+              Raised {project?.equitySold || project?.project.equitySold}%
             </span>
           </div>
           <Link

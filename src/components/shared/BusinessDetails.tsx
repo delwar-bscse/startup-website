@@ -15,6 +15,7 @@ interface MissionStep {
 }
 
 interface Project {
+  [x: string]: any;
   story?: string;
   storyUrls: string[];
   mission?: MissionStep[];
@@ -27,8 +28,9 @@ interface BusinessDetailsProps {
 }
 
 const BusinessDetails = ({ project }: BusinessDetailsProps) => {
-  console.log("Project Details:", project);
+  console.log("Project Detailssss:", project);
   const imageUrl = getImageUrl();
+  const visionUrlPath = project?.visionUrl || project?.project.visionUrl;
 
   return (
     <div className="py-5">
@@ -43,7 +45,7 @@ const BusinessDetails = ({ project }: BusinessDetailsProps) => {
             (image: any, index: any | null | undefined) => (
               <Image
                 key={index}
-                src={`${imageUrl}${image}`}
+                src={`${imageUrl}${image}` || `${imageUrl}${project.image}`}
                 width={700}
                 height={300}
                 alt={`Project Story Image ${index + 1}`}
@@ -148,7 +150,7 @@ const BusinessDetails = ({ project }: BusinessDetailsProps) => {
         </div>
         <div>
           <Image
-            src={`${imageUrl}${project.visionUrl}`}
+            src={`${imageUrl}${visionUrlPath}`}
             width={650}
             height={300}
             alt="Project Vision Image"
