@@ -108,11 +108,7 @@ const Profile = () => {
   };
 
   const getProfileImageUrl = () => {
-    return profile?.profileImg ? (
-      `${imageUrl}${profile.profileImg}`
-    ) : (
-      <FaUser />
-    );
+    return profile?.profileImg ? `${imageUrl}${profile.profileImg}` : "";
   };
 
   if (isLoading) {
@@ -139,8 +135,8 @@ const Profile = () => {
                     unoptimized
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-500">
-                    No Image
+                  <div className="w-full h-full flex items-center justify-center text-gray-500 text-6xl">
+                    <FaUser />
                   </div>
                 )}
               </div>
@@ -153,6 +149,7 @@ const Profile = () => {
               >
                 <MdCameraAlt className="w-full h-full text-gray-500" />
               </button>
+
               <Input
                 id="profileImgCtrl"
                 type="file"

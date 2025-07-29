@@ -1,7 +1,32 @@
 import dayjs from "dayjs";
 import React from "react";
 
-const PersonalAndBusiness = ({ user }) => {
+interface PersonalAndBusinessProps {
+  user: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    dateOfBirth?: string;
+    gender?: string;
+    personalInfo?: {
+      occupation?: string;
+      Nationality?: string;
+      address?: string;
+      city?: string;
+      state?: string;
+    };
+    businessInfo?: {
+      companyName?: string;
+      CompanyType?: string;
+      experience?: string;
+      CompanyRegistrationNumber?: string;
+      EstablishmentDate?: string;
+      BusinessWebsiteURL?: string;
+    };
+  };
+}
+
+const PersonalAndBusiness: React.FC<PersonalAndBusinessProps> = ({ user }) => {
   console.log("personal and business user", user);
   return (
     <>

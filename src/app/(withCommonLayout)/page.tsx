@@ -1,6 +1,5 @@
 "use client";
 
-// import { projectDatas } from '@/constants/projectData'
 import Image from "next/image";
 import homeHeroImg from "@/assets/home/home_hero.png";
 import aboutImg from "@/assets/home/about_us.png";

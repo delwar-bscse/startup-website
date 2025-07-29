@@ -1,8 +1,8 @@
-import { StaticImageData } from 'next/image';
-import { ReactNode } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { StaticImageData } from "next/image";
+import { ReactNode } from "react";
 
-
-export type userRole = 'investor' |'entrepreneur'
+export type userRole = "investor" | "entrepreneur";
 
 export type ContactItem = {
   title: string;
@@ -25,58 +25,57 @@ export type ContactData = {
   icon: StaticImageData;
   desc1: string;
   desc2: string;
-}
-
+};
 
 // -------------------------- Contact Page Data Type -------------------------- //
 
 export interface MissionState {
   id: number;
   status: boolean;
-  title: string;  // You can keep it optional if not always required.
+  title: string; // You can keep it optional if not always required.
   des: string;
 }
 
 export interface OurStory {
   title: string;
   desc: string;
-  imgs: StaticImageData[];  // Array of image URLs.
+  imgs: StaticImageData[]; // Array of image URLs.
 }
 
 export interface OurVision {
   title: string;
   desc: string;
-  lists: string[];  // List of vision points.
-  imgs: StaticImageData[];  // Array of image URLs.
+  lists: string[]; // List of vision points.
+  imgs: StaticImageData[]; // Array of image URLs.
 }
 
 export interface OurMission {
   title: string;
-  state: MissionState[];  // Array of mission states.
-  imgs: StaticImageData[];  // Array of image URLs.
+  state: MissionState[]; // Array of mission states.
+  imgs: StaticImageData[]; // Array of image URLs.
 }
 
 interface Entrepreneur {
-    _id: string;
-    name: string;
-    profileImg: string;
+  _id: string;
+  name: string;
+  profileImg: string;
 }
 
 export interface Project {
-    [x: string]: any;
-    _id: string;
-    entrepreneurId: Entrepreneur;
-    title: string;
-    industry: string;
-    projectType: string;
-    primaryUrl: string;
-    deadLine: string;
-    fundingGoal: number;
-    fundsRaised: number;
-    equityOffered: number;
-    equitySold: number;
-    fundingStatus: string;
-    isVerified: boolean;
+  [x: string]: any;
+  _id: string;
+  entrepreneurId: Entrepreneur;
+  title: string;
+  industry: string;
+  projectType: string;
+  primaryUrl: string;
+  deadLine: string;
+  fundingGoal: number;
+  fundsRaised: number;
+  equityOffered: number;
+  equitySold: number;
+  fundingStatus: string;
+  isVerified: boolean;
 }
 
 // -------------------------- Home Page Data Type -------------------------- //
@@ -90,4 +89,4 @@ export type WhyChooseUs = {
   id: number;
   title: string;
   des: string;
-}
+};
