@@ -38,7 +38,7 @@ const Navbar = () => {
 
   const { data: userProfile, isLoading, refetch } = useGetUserProfileQuery({});
   const user = userProfile?.data;
-  // console.log("navbar user", user);
+  console.log("navbar user", user);
   // const isLoggedIn = !!user;
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const Navbar = () => {
   }
 
   const getProfileImageUrl = () => {
-    return user?.profileImg ? `${imageUrl}/${user.profileImg}` : UserImage;
+    return user?.profileImg ? `${imageUrl}${user.profileImg}` : UserImage;
   };
 
   return (
@@ -176,6 +176,11 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </Link>
                 <DropdownMenuSeparator />
+                <Link href="/my-profile" className="cursor-pointer">
+                  <DropdownMenuItem className="cursor-pointer text-xl text-gray-600">
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
                 <Link href="/terms-and-conditions" className="cursor-pointer">
                   <DropdownMenuItem className="cursor-pointer text-xl text-gray-600">
                     Terms & Conditions

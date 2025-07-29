@@ -25,7 +25,7 @@ const UserImage: React.FC<UserImageProps> = ({ user }) => {
   // console.log("user", user);
 
   const getProfileImageUrl = () => {
-    return user?.profileImg ? `${imageUrl}/${user.profileImg}` : UserProfileImg;
+    return user?.profileImg ? `${imageUrl}${user.profileImg}` : UserProfileImg;
   };
 
   return (
