@@ -9,5 +9,5 @@ export const config = {
   baseURL: process.env.BASE_URL || "http://10.0.80.52:3000/api/v1",
 };
 
-export const BASE_URL = process.env.BASE_URL;
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
