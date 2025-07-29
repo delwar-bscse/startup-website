@@ -33,7 +33,40 @@ const investorApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["investors"],
     }),
+    getMyInvestedIndustries: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: "/stripe/my-invested-industries",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["investors"],
+    }),
+    getTopInvestor: builder.query({
+      query: () => {
+        const accessToken = localStorage.getItem("accessToken");
+        return {
+          url: "/stripe/top-investors",
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+            authorization: accessToken,
+          },
+        };
+      },
+      providesTags: ["investors"],
+    }),
   }),
 });
 
-export const { useGetInvestorsQuery, useInvestOnProjectMutation } = investorApi;
+export const {
+  useGetInvestorsQuery,
+  useInvestOnProjectMutation,
+  useGetMyInvestedIndustriesQuery,
+  useGetTopInvestorQuery,
+} = investorApi;
