@@ -22,6 +22,7 @@ import {
   useUserOtpVerifyMutation,
   useVerifyChangePasswordOtpMutation,
 } from "@/Redux/apis/authApi";
+import { Suspense, useEffect, useState } from "react";
 
 // Schema
 const verifyOtpSchema = z.object({
@@ -37,10 +38,17 @@ const defaultValues: Partial<VerifyOtpValues> = {
   otp: "",
 };
 
-const VerifyOTP = () => {
+const VerifyOTPSuspense = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const source = searchParams.get("source");
+
+  const [source, setSource] = useState<string | null>(null);
+
+  useEffect(() => {
+    const _source = searchParams.get("source");
+
+    setSource(_source);
+  }, [searchParams]);
 
   const form = useForm<VerifyOtpValues>({
     resolver: zodResolver(verifyOtpSchema),
@@ -176,4 +184,10 @@ const VerifyOTP = () => {
   );
 };
 
-export default VerifyOTP;
+export default function VerifyOTP() {
+  return (
+    <Suspense fallback={<div>Loading.....</div>}>
+      <VerifyOTPSuspense />
+    </Suspense>
+  );
+}

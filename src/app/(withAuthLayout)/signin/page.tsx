@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -73,7 +74,15 @@ const SignInForm = () => {
       }
     } catch (error: unknown) {
       console.error("Error fetching data", error);
-      if (error?.data?.message === "This user is not found !") {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof (error as any).data === "object" &&
+        (error as any).data !== null &&
+        "message" in (error as any).data &&
+        (error as any).data.message === "This user is not found !"
+      ) {
         toast.error("User not found");
       } else {
         toast.error("Login failed", { id: "login" });

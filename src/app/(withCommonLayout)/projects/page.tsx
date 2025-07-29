@@ -2,7 +2,6 @@
 
 import React from "react";
 import heroImg from "@/assets/projects/project.png";
-// import { projectDatas } from '@/constants/projectData';
 import {
   Pagination,
   PaginationContent,
