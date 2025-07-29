@@ -68,7 +68,7 @@ const InvestorsSlider: React.FC<InvestorsSliderProps> = ({ topInvestors }) => {
               key={index}
               className="slider-item bg-white p-4 rounded-xl relative overflow-hidden"
             >
-              <div className="relative w-full">
+              <div className="relative h-[450px]">
                 <div className="z-10 w-full h-100 absolute bottom-0 bg-primary2" />
                 <Image
                   src={`${imageUrl}${investor.profileImg}`} // Use the actual image URL from the investor object

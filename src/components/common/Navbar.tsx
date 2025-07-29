@@ -38,7 +38,7 @@ const Navbar = () => {
 
   const { data: userProfile, isLoading, refetch } = useGetUserProfileQuery({});
   const user = userProfile?.data;
-  console.log("navbar user", user);
+  // console.log("navbar user", user);
   // const isLoggedIn = !!user;
 
   useEffect(() => {
