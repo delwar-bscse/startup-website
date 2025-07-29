@@ -13,6 +13,7 @@ import { Project } from "@/types/types";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { useGetMyInvestedIndustriesQuery } from "@/Redux/apis/investorApi";
+import { getImageUrl } from "@/utils/baseUrl";
 
 const Page = () => {
   const { data: projectsData, isLoading } = useGetMyInvestedProjectQuery({});
@@ -22,12 +23,12 @@ const Page = () => {
   const { data: entrepreneurData, isLoading: loadingEntrepreneur } =
     useGetMyInvestedEntrepreneursQuery({});
   const investedEntrepreneur = entrepreneurData?.data;
-  // console.log("Invested Entrepreneur", investedEntrepreneur);
+  console.log("Invested Entrepreneur", investedEntrepreneur);
 
   const { data: investedIndustries, isLoading: loadingIndustries } =
     useGetMyInvestedIndustriesQuery({});
   const industries = investedIndustries?.data;
-  console.log(industries);
+  // console.log(industries);
 
   if (isLoading || loadingEntrepreneur || loadingIndustries) {
     return (
@@ -36,6 +37,8 @@ const Page = () => {
       </div>
     );
   }
+
+  const imageUrl = getImageUrl();
 
   return (
     <div>
@@ -210,22 +213,26 @@ const Page = () => {
                   <tr key={index}>
                     <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3 flex items-center">
                       <Image
-                        src={each.entrepreneur.profileImg}
+                        src={
+                          each?.entrepreneur?.profileImg
+                            ? `${imageUrl}${each?.entrepreneur?.profileImg}`
+                            : ""
+                        }
                         width={400}
                         height={400}
-                        alt={each.entrepreneur.name}
+                        alt={each?.entrepreneur?.name}
                         className="w-[30px] lg:w-[40px] xl:w-[48px] h-[30px] lg:h-[40px] xl:h-[48px] rounded-full border-2 border-primary"
                       />
-                      <span className="ml-2">{each.entrepreneur.name}</span>
+                      <span className="ml-2">{each?.entrepreneur?.name}</span>
                     </td>
                     <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
-                      {each.project.title}
+                      {each?.project?.title}
                     </td>
                     <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
-                      {each.totalInvestedAmount}
+                      {each?.totalInvestedAmount}
                     </td>
                     <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
-                      {each.totalSharePercentage}
+                      {each?.totalSharePercentage}
                     </td>
                     {/* <td className="py-1 md:py-2 lg:py-3 px-1 lg:px-3">
                       {each.date}
@@ -247,7 +254,7 @@ const Page = () => {
       </div>
 
       {/* ----------- Projects Breakedown ----------- */}
-      <ProjectBreakdown />
+      <ProjectBreakdown industries={industries} />
     </div>
   );
 };

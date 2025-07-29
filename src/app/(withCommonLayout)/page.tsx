@@ -13,7 +13,7 @@ import { whyChooseUsDatas } from "@/constants/homeData";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import CustomSlider from "@/components/shared/OurUsersSlide";
+// import CustomSlider from "@/components/shared/OurUsersSlide";
 import InvestorsSlider from "@/components/shared/BestInvestorSlide";
 import Link from "next/link";
 import { useGetQuantityCountsQuery } from "@/Redux/apis/utilityApi";
@@ -275,7 +275,7 @@ const Home = () => {
       </div>
 
       {/* ----------- What Our Users Are Saying Carousel Section ----------- */}
-      <div className="bg-secondary py-10 md:py-20">
+      {/* <div className="bg-secondary py-10 md:py-20">
         <div className="text-center space-y-2">
           <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
             What Our Users Are Saying
@@ -286,7 +286,7 @@ const Home = () => {
           </p>
         </div>
         <CustomSlider />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -60,11 +60,13 @@ const ProjectCard = ({
             <p
               className={`bg-primary2 text-right h-8`}
               style={{
-                width: `${project?.equitySold || project?.project.equitySold}%`,
+                width: `${
+                  project?.equitySold || project?.project?.equitySold
+                }%`,
               }}
             ></p>
             <span className="absolute left-4 text-gray-800 font-semibold text-sm md:text-base">
-              Raised {project?.equitySold || project?.project.equitySold}%
+              Raised {project?.equitySold || project?.project?.equitySold}%
             </span>
           </div>
           <Link
