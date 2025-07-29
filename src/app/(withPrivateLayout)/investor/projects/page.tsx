@@ -12,18 +12,24 @@ import {
 import { Project } from "@/types/types";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
+import { useGetMyInvestedIndustriesQuery } from "@/Redux/apis/investorApi";
 
 const Page = () => {
   const { data: projectsData, isLoading } = useGetMyInvestedProjectQuery({});
   const projects = projectsData?.data;
-  console.log("Projects Dataaaaaa:", projects);
+  // console.log("Projects Dataaaaaa:", projects);
 
   const { data: entrepreneurData, isLoading: loadingEntrepreneur } =
     useGetMyInvestedEntrepreneursQuery({});
   const investedEntrepreneur = entrepreneurData?.data;
-  console.log("Invested Entrepreneur", investedEntrepreneur);
+  // console.log("Invested Entrepreneur", investedEntrepreneur);
 
-  if (isLoading || loadingEntrepreneur) {
+  const { data: investedIndustries, isLoading: loadingIndustries } =
+    useGetMyInvestedIndustriesQuery({});
+  const industries = investedIndustries?.data;
+  console.log(industries);
+
+  if (isLoading || loadingEntrepreneur || loadingIndustries) {
     return (
       <div className="maxWidth flex justify-center items-center h-screen">
         <h1 className="text-xl text-gray-700">Loading your projects...</h1>

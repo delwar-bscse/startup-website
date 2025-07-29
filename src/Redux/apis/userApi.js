@@ -16,6 +16,22 @@ const userApi = baseApi.injectEndpoints({
       },
       providesTags: ["profile"],
     }),
+    updateUserProfile: builder.mutation({
+      query: (data) => {
+        console.log("update info data", data);
+        const token = localStorage.getItem("accessToken");
+        return {
+          url: "/users/update-profile",
+          method: "put",
+          body: data,
+          headers: {
+            "content-type": "multipart/form-data",
+            authorization: token,
+          },
+        };
+      },
+      invalidatesTags: "user",
+    }),
     getPersonalDetailsFields: builder.query({
       query: () => {
         const accessToken = localStorage.getItem("accessToken");
@@ -66,6 +82,7 @@ const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
   useGetPersonalDetailsFieldsQuery,
   useUpdatePersonalInfoMutation,
   useGetUserDetailsQuery,

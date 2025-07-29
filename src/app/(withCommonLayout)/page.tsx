@@ -20,6 +20,7 @@ import { useGetQuantityCountsQuery } from "@/Redux/apis/utilityApi";
 import { useGetAllProjectsQuery } from "@/Redux/apis/projectsApi";
 import ProjectCard from "@/components/shared/ProjectCard";
 import { Project } from "@/types/types";
+import { useGetTopInvestorQuery } from "@/Redux/apis/investorApi";
 
 const Home = () => {
   const {
@@ -35,8 +36,13 @@ const Home = () => {
     isLoading: loadingProjects,
   } = useGetAllProjectsQuery({});
 
+  const { data: topInvestorsData, isLoading: loadingTopInvestors } =
+    useGetTopInvestorQuery({});
+
   const totalCount = totalCountsData?.data;
   const allProjects = allProjectsData?.data;
+  const topInvestors = topInvestorsData?.data;
+  console.log("top investors", topInvestors);
 
   // const userToken = localStorage.getItem("accessToken");
 
@@ -51,7 +57,7 @@ const Home = () => {
   //   );
   // }
 
-  if (isLoading || loadingProjects) {
+  if (isLoading || loadingProjects || loadingTopInvestors) {
     return (
       <div className="w-full flex justify-center items-center py-10">
         <div className="text-lg font-semibold">Loading...</div>
@@ -253,7 +259,7 @@ const Home = () => {
       {/* ----------- Best Investors Slider Section ----------- */}
       <div className="maxWidth flex flex-col-reverse md:flex-row gap-4 pt-12">
         <div className="w-full md:w-[50%]">
-          <InvestorsSlider />
+          <InvestorsSlider topInvestors={topInvestors} />
         </div>
         <div className="flex flex-col gap-4 items-start justify-center px-3 lg:px-20">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
