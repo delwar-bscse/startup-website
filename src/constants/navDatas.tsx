@@ -16,15 +16,15 @@ export const quickLinks: QuickLink[] = [
     title: "Contact Us",
     url: "/contact",
   },
-  {
-    title: "Update News",
-    url: "#",
-  },
+  // {
+  //   title: "Update News",
+  //   url: "#",
+  // },
 ];
 
 export const browseCategory: QuickLink[] = [
   {
-    title: "Terms of Service",
+    title: "Terms and Conditions",
     url: "/terms-and-conditions",
   },
   {
@@ -35,10 +35,10 @@ export const browseCategory: QuickLink[] = [
     title: "FAQ",
     url: "/faqs",
   },
-  {
-    title: "Subscription Plans",
-    url: "#",
-  },
+  // {
+  //   title: "Subscription Plans",
+  //   url: "#",
+  // },
 ];
 
 export const contactInfo: ContactItem[] = [

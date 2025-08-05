@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { BASE_URL, IMAGE_URL } from "@/config/envConfig";
+
 // export const getBaseUrl = () => {
 //   return "https://sakib_3000.binarybards.online/api/v1";
 // };
-
-import { BASE_URL, IMAGE_URL } from "@/config/envConfig";
 
 // export const getImageUrl = (primaryUrl: string) => {
 //   return "https://sakib_3000.binarybards.online/";

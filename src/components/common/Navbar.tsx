@@ -98,13 +98,13 @@ const Navbar = () => {
   //   isLoading
   // );
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center">
-        <span className="loader text-primary">Loading...</span>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center">
+  //       <span className="loader text-primary">Loading...</span>
+  //     </div>
+  //   );
+  // }
 
   const getProfileImageUrl = () => {
     return user?.profileImg ? `${imageUrl}${user.profileImg}` : UserImage;
@@ -112,9 +112,9 @@ const Navbar = () => {
 
   return (
     <div className="shadow-md">
-      <div className="grid grid-cols-2 md:grid-cols-5 maxWidth py-3 px-2">
+      <div className="grid grid-cols-2 px-2 py-3 md:grid-cols-5 maxWidth">
         {/* Brand Logo */}
-        <Link href="/" className="col-span-1 flex justify-start items-center">
+        <Link href="/" className="flex items-center justify-start col-span-1">
           <Image
             src={BrandLogo}
             alt="Vercel Logo"
@@ -125,24 +125,24 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex col-span-3 justify-center items-center gap-5 font-semibold text-gray-700">
-          <li className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-sm">
+        <ul className="items-center justify-center hidden col-span-3 gap-5 font-semibold text-gray-700 md:flex">
+          <li className="px-2 py-1 rounded-sm cursor-pointer hover:bg-gray-100">
             <Link href="/">Home</Link>
           </li>
-          <li className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-sm">
+          <li className="px-2 py-1 rounded-sm cursor-pointer hover:bg-gray-100">
             <Link href="/projects">Projects</Link>
           </li>
-          <li className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-sm">
+          <li className="px-2 py-1 rounded-sm cursor-pointer hover:bg-gray-100">
             <Link href="/contact">Contact Us</Link>
           </li>
         </ul>
 
         {/* Sign In / Mobile Menu Trigger */}
-        <div className="col-span-1 flex justify-end items-center gap-4 relative">
-          {isLoggedIn && userRole ? (
+        <div className="relative flex items-center justify-end col-span-1 gap-4">
+          {isLoggedIn && userRole && !isLoading ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="max-md:hidden w-12 h-12 block rounded-full overflow-hidden border-2 border-primary cursor-pointer">
+                <div className="block w-12 h-12 overflow-hidden border-2 rounded-full cursor-pointer max-md:hidden border-primary">
                   <Image
                     src={getProfileImageUrl()}
                     alt="User Profile"
@@ -152,11 +152,11 @@ const Navbar = () => {
                   />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-60 relative top-4 right-24">
+              <DropdownMenuContent className="relative w-60 top-4 right-24">
                 <Link href={`/${userRole}/portfolio`}>
                   <DropdownMenuItem className="cursor-pointer">
-                    <span className="flex gap-2 items-center">
-                      <span className="w-12 h-12 block rounded-full overflow-hidden border-2 border-primary">
+                    <span className="flex items-center gap-2">
+                      <span className="block w-12 h-12 overflow-hidden border-2 rounded-full border-primary">
                         <Image
                           src={getProfileImageUrl()}
                           alt="User Profile"
@@ -164,8 +164,8 @@ const Navbar = () => {
                           height={100}
                         />
                       </span>
-                      <span className="flex flex-col text-gray-600 text-sm">
-                        <span className="font-semibold capitalize text-xl">
+                      <span className="flex flex-col text-sm text-gray-600">
+                        <span className="text-xl font-semibold capitalize">
                           {user?.name}
                         </span>
                         <span className="font-semibold capitalize">
@@ -177,29 +177,29 @@ const Navbar = () => {
                 </Link>
                 <DropdownMenuSeparator />
                 <Link href="/my-profile" className="cursor-pointer">
-                  <DropdownMenuItem className="cursor-pointer text-xl text-gray-600">
+                  <DropdownMenuItem className="text-xl text-gray-600 cursor-pointer">
                     Profile
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/terms-and-conditions" className="cursor-pointer">
-                  <DropdownMenuItem className="cursor-pointer text-xl text-gray-600">
+                  <DropdownMenuItem className="text-xl text-gray-600 cursor-pointer">
                     Terms & Conditions
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/privacy-policy" className="cursor-pointer">
-                  <DropdownMenuItem className="cursor-pointer text-xl text-gray-600">
+                  <DropdownMenuItem className="text-xl text-gray-600 cursor-pointer">
                     Privacy Policy
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/faqs">
-                  <DropdownMenuItem className="cursor-pointer text-xl text-gray-600">
+                  <DropdownMenuItem className="text-xl text-gray-600 cursor-pointer">
                     FAQ
                   </DropdownMenuItem>
                 </Link>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="cursor-pointer text-xl text-gray-600 font-semibold"
+                  className="text-xl font-semibold text-gray-600 cursor-pointer"
                 >
                   Sign Out
                 </DropdownMenuItem>
@@ -208,7 +208,7 @@ const Navbar = () => {
           ) : (
             <Link
               href="/signin"
-              className="hidden md:inline-block bg-primary text-white py-2 px-4"
+              className="hidden px-4 py-2 text-white md:inline-block bg-primary"
             >
               Sign In
             </Link>
@@ -224,7 +224,7 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent side="left" className="w-64">
                 <SheetHeader>
-                  <SheetTitle className="text-left text-lg">
+                  <SheetTitle className="text-lg text-left">
                     <Image
                       src={BrandLogo}
                       alt="Vercel Logo"
@@ -233,17 +233,17 @@ const Navbar = () => {
                     />
                   </SheetTitle>
                 </SheetHeader>
-                <ul className="flex flex-col mt-6 gap-2 font-medium text-gray-700">
+                <ul className="flex flex-col gap-2 mt-6 font-medium text-gray-700">
                   {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
-                      className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
+                      className="px-3 py-2 rounded cursor-pointer hover:bg-gray-100"
                     >
                       <Link
                         href={`/${userRole}/portfolio`}
-                        className="flex gap-2 items-center"
+                        className="flex items-center gap-2"
                       >
-                        <span className="w-12 h-12 block rounded-full overflow-hidden border-2 border-primary">
+                        <span className="block w-12 h-12 overflow-hidden border-2 rounded-full border-primary">
                           <Image
                             src={getProfileImageUrl()}
                             alt="User Profile"
@@ -251,8 +251,8 @@ const Navbar = () => {
                             height={100}
                           />
                         </span>
-                        <span className="flex flex-col text-gray-600 text-sm">
-                          <span className="font-semibold capitalize text-xl">
+                        <span className="flex flex-col text-sm text-gray-600">
+                          <span className="text-xl font-semibold capitalize">
                             {user?.name}
                           </span>
                           <span className="font-semibold capitalize">
@@ -264,26 +264,26 @@ const Navbar = () => {
                   )}
                   <li
                     onClick={() => setOpen(false)}
-                    className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
+                    className="px-3 py-2 rounded cursor-pointer hover:bg-gray-100"
                   >
                     <Link href="/">Home</Link>
                   </li>
                   <li
                     onClick={() => setOpen(false)}
-                    className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
+                    className="px-3 py-2 rounded cursor-pointer hover:bg-gray-100"
                   >
                     <Link href="/projects">Projects</Link>
                   </li>
                   <li
                     onClick={() => setOpen(false)}
-                    className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
+                    className="px-3 py-2 rounded cursor-pointer hover:bg-gray-100"
                   >
                     <Link href="/contact">Contact Us</Link>
                   </li>
                   {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
-                      className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
+                      className="px-3 py-2 rounded cursor-pointer hover:bg-gray-100"
                     >
                       <Link href="/terms-and-conditions">
                         Terms & Conditions
@@ -293,7 +293,7 @@ const Navbar = () => {
                   {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
-                      className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
+                      className="px-3 py-2 rounded cursor-pointer hover:bg-gray-100"
                     >
                       <Link href="/privacy-policy">Privacy Policy</Link>
                     </li>
@@ -301,7 +301,7 @@ const Navbar = () => {
                   {isLoggedIn && userRole && (
                     <li
                       onClick={() => setOpen(false)}
-                      className="cursor-pointer hover:bg-gray-100 px-3 py-2 rounded"
+                      className="px-3 py-2 rounded cursor-pointer hover:bg-gray-100"
                     >
                       <Link href="/faqs">FAQ</Link>
                     </li>
@@ -313,7 +313,7 @@ const Navbar = () => {
                           handleLogout();
                           setOpen(false);
                         }}
-                        className="block w-full bg-primary text-white px-4 py-2 rounded mt-2 text-center"
+                        className="block w-full px-4 py-2 mt-2 text-center text-white rounded bg-primary"
                       >
                         Sign Out
                       </button>
@@ -321,7 +321,7 @@ const Navbar = () => {
                       <Link
                         href="/signin"
                         onClick={() => setOpen(false)}
-                        className="block bg-primary text-white px-4 py-2 rounded mt-2 text-center"
+                        className="block px-4 py-2 mt-2 text-center text-white rounded bg-primary"
                       >
                         Sign In
                       </Link>
