@@ -43,7 +43,7 @@ const Home = () => {
   const topInvestors = topInvestorsData?.data;
   console.log("allProjects", allProjects);
 
-  // const userToken = localStorage.getItem("accessToken");
+  // const userToken = sessionStorage.getItem("accessToken");
 
   console.log(totalCount);
   console.log(allProjects);

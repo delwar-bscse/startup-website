@@ -43,7 +43,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const checkToken = () => {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = sessionStorage.getItem("accessToken");
       const storedRole = getCookie("userRole")?.toString() || null;
       setHasToken(!!accessToken);
       setUserRole(storedRole);
@@ -74,7 +74,7 @@ const Navbar = () => {
   const imageUrl = getImageUrl();
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
     deleteCookie("userRole", {
       path: "/",
       sameSite: "strict",

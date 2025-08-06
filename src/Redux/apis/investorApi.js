@@ -4,7 +4,7 @@ const investorApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getInvestors: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/stripe/my-investors",
           method: "get",
@@ -18,7 +18,7 @@ const investorApi = baseApi.injectEndpoints({
     }),
     investOnProject: builder.mutation({
       query: (data) => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         console.log("invest on project api data:", data);
 
         return {
@@ -35,7 +35,7 @@ const investorApi = baseApi.injectEndpoints({
     }),
     getMyInvestedIndustries: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/stripe/my-invested-industries",
           method: "get",
@@ -49,7 +49,7 @@ const investorApi = baseApi.injectEndpoints({
     }),
     getTopInvestor: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/stripe/top-investors",
           method: "get",

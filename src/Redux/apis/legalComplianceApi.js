@@ -4,7 +4,7 @@ const legalComplianceApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getLegalComplianceFields: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/users/ld-field",
           method: "get",
@@ -19,7 +19,7 @@ const legalComplianceApi = baseApi.injectEndpoints({
     updateLegalComplianceInfo: builder.mutation({
       query: (data) => {
         console.log("update financial data", data);
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         return {
           url: "/users/legalCompliance",
           method: "put",

@@ -4,7 +4,7 @@ const businessApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // getUserProfile: builder.query({
     //   query: () => {
-    //     const accessToken = localStorage.getItem("accessToken");
+    //     const accessToken = sessionStorage.getItem("accessToken");
     //     return {
     //       url: "/users/me",
     //       method: "get",
@@ -17,7 +17,7 @@ const businessApi = baseApi.injectEndpoints({
     // }),
     getBusinessDetailsFields: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/users/bd-field",
           method: "get",
@@ -32,7 +32,7 @@ const businessApi = baseApi.injectEndpoints({
     updateBusinessInfo: builder.mutation({
       query: (data) => {
         console.log("update info data", data);
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         return {
           url: "/users/businessInfo",
           method: "put",

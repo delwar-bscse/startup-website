@@ -4,7 +4,7 @@ const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUserProfile: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/users/me",
           method: "get",
@@ -19,7 +19,7 @@ const userApi = baseApi.injectEndpoints({
     updateUserProfile: builder.mutation({
       query: (data) => {
         console.log("update info data", data);
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         return {
           url: "/users/update-profile",
           method: "put",
@@ -34,7 +34,7 @@ const userApi = baseApi.injectEndpoints({
     }),
     getPersonalDetailsFields: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/users/pd-field",
           method: "get",
@@ -49,7 +49,7 @@ const userApi = baseApi.injectEndpoints({
     updatePersonalInfo: builder.mutation({
       query: (data) => {
         console.log("update info data", data);
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         return {
           url: "/users/personalInfo",
           method: "put",
@@ -65,7 +65,7 @@ const userApi = baseApi.injectEndpoints({
     getUserDetails: builder.query({
       query: (userId) => {
         console.log("user id", userId);
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         return {
           url: `/users/details/${userId}`,
           method: "get",
