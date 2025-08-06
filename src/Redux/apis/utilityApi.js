@@ -4,7 +4,7 @@ const utilityApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getQuantityCounts: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         console.log({ accessToken });
 
         // if (!accessToken) {
@@ -23,7 +23,7 @@ const utilityApi = baseApi.injectEndpoints({
     }),
     contactUs: builder.mutation({
       query: (data) => {
-        // const token = localStorage.getItem("createUserToken");
+        // const token = sessionStorage.getItem("createUserToken");
         //  console.log("vetifyOtpToken", token);
         return {
           url: "/users/get-in-touch",
@@ -66,7 +66,7 @@ const utilityApi = baseApi.injectEndpoints({
     }),
     getIndustries: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         console.log({ accessToken });
 
         // if (!accessToken) {

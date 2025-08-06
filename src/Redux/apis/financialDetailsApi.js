@@ -4,7 +4,7 @@ const financialDetailsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getFinancialDetailsFields: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/users/fd-field",
           method: "get",
@@ -19,7 +19,7 @@ const financialDetailsApi = baseApi.injectEndpoints({
     updateFinancialInfo: builder.mutation({
       query: (data) => {
         console.log("update financial data", data);
-        const token = localStorage.getItem("accessToken");
+        const token = sessionStorage.getItem("accessToken");
         return {
           url: "/users/financialDetails",
           method: "put",

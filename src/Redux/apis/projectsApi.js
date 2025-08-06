@@ -4,7 +4,7 @@ const projectsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProjects: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         console.log({ accessToken });
 
         // if (!accessToken) {
@@ -24,7 +24,7 @@ const projectsApi = baseApi.injectEndpoints({
 
     getMyProject: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/projects/own",
           method: "get",
@@ -39,7 +39,7 @@ const projectsApi = baseApi.injectEndpoints({
 
     getMyInvestedProject: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/stripe/my-invested-projects",
           method: "get",
@@ -54,7 +54,7 @@ const projectsApi = baseApi.injectEndpoints({
 
     getMyInvestedEntrepreneurs: builder.query({
       query: () => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: "/stripe/my-invested-entrepreneurs",
           method: "get",
@@ -69,7 +69,7 @@ const projectsApi = baseApi.injectEndpoints({
 
     createProject: builder.mutation({
       query: (data) => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         console.log("create project api data:", data);
         return {
           url: "/projects/",
@@ -86,7 +86,7 @@ const projectsApi = baseApi.injectEndpoints({
 
     getProjectDetails: builder.query({
       query: (projectId) => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = sessionStorage.getItem("accessToken");
         return {
           url: `/projects/details/${projectId}`,
           method: "get",

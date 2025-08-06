@@ -66,7 +66,7 @@ const SignInForm = () => {
 
       console.log(res);
       if (res.success) {
-        localStorage.setItem("accessToken", res.data.accessToken);
+        sessionStorage.setItem("accessToken", res.data.accessToken);
         toast.success("Login successful");
         router.push("/");
       } else {
