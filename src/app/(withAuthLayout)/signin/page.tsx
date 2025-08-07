@@ -70,7 +70,11 @@ const SignInForm = () => {
         toast.success("Login successful");
         router.push("/");
       } else {
-        toast.error(res?.message || "Login failed");
+        if (res?.data.message === "Password do not matched") {
+          toast.error("Incorrect password");
+        } else {
+          toast.error(res?.message || "Login failed");
+        }
       }
     } catch (error: unknown) {
       console.error("Error fetching data", error);
@@ -81,11 +85,21 @@ const SignInForm = () => {
         typeof (error as any).data === "object" &&
         (error as any).data !== null &&
         "message" in (error as any).data &&
+        (error as any).data.message === "Password do not matched"
+      ) {
+        toast.error("Incorrect password");
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof (error as any).data === "object" &&
+        (error as any).data !== null &&
+        "message" in (error as any).data &&
         (error as any).data.message === "This user is not found !"
       ) {
         toast.error("User not found");
       } else {
-        toast.error("Login failed", { id: "login" });
+        toast.error("Login failed");
       }
     }
   };
