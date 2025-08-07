@@ -248,17 +248,17 @@ const CreateProject = ({
   }, [selectBusinessType]);
 
   return (
-    <div className="w-full flex justify-center py-10 px-4">
+    <div className="flex justify-center w-full px-4 py-10">
       <div className="w-full max-w-[1000px] ">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md space-y-6">
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">
+            <div className="px-4 py-8 space-y-6 rounded-lg shadow-md md:py-16 sm:px-24 bg-secondary">
+              <h2 className="mb-8 text-2xl font-semibold md:text-3xl text-primary">
                 Create Project
               </h2>
 
               <div>
-                <p className="text-gray-700 font-semibold py-2">
+                <p className="py-2 font-semibold text-gray-700">
                   Project Cover Image
                 </p>
                 <div className="w-full">
@@ -294,10 +294,10 @@ const CreateProject = ({
 
               {/* Project Story Images */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">
+                <p className="py-2 font-semibold text-gray-700">
                   Project’s Story Related Image
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
                   <ImageField
                     control={form.control}
                     name="storyImage01"
@@ -359,21 +359,21 @@ const CreateProject = ({
                         stepDescription: form.getValues("stepDescription"),
                       })
                     }
-                    className=""
+                    className="cursor-pointer"
                   >
                     Add
                   </Button>
                 </div>
               </div>
               {stepList?.length > 0 && (
-                <div className="space-y-2 border-2 border-gray-300 p-2 rounded-sm">
+                <div className="p-2 space-y-2 border-2 border-gray-300 rounded-sm">
                   {stepList.map((step, index) => (
                     <div
                       key={index}
                       className="flex items-center justify-between"
                     >
                       <div className="flex-1">
-                        <p className="text-gray-700 text-xl font-semibold">
+                        <p className="text-xl font-semibold text-gray-700">
                           {step.stepTitle}
                         </p>
                         <p className="text-gray-600">{step.stepDescription}</p>
@@ -386,7 +386,7 @@ const CreateProject = ({
                             )
                           )
                         }
-                        className="text-2xl font-extrabold w-10 h-8 cursor-pointer"
+                        className="w-10 h-8 text-2xl font-extrabold cursor-pointer"
                       >
                         <RiDeleteBinLine className="text-red-500 hover:text-red-600" />
                       </button>
@@ -397,10 +397,10 @@ const CreateProject = ({
 
               {/* Project Mission Images */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">
+                <p className="py-2 font-semibold text-gray-700">
                   Mission Related Image
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <ImageField
                     control={form.control}
                     name="missionImage01"
@@ -420,13 +420,13 @@ const CreateProject = ({
               <TextareaInputField
                 control={form.control}
                 name="projectVision"
-                label="About You Vision"
+                label="About Your Vision"
               />
 
               {/* Project Story Images */}
               <div>
-                <p className="text-gray-700 font-semibold py-2">Vision Image</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <p className="py-2 font-semibold text-gray-700">Vision Image</p>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <ImageField
                     control={form.control}
                     name="visionImage"
@@ -441,7 +441,7 @@ const CreateProject = ({
                 setSelectedIndustry={setSelectedIndustry}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="targetAmount"
@@ -476,7 +476,7 @@ const CreateProject = ({
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="deadline"
@@ -660,7 +660,7 @@ const TextareaInputField = ({
           <FormControl>
             <Textarea
               placeholder="Type here..."
-              className="min-h-30 bg-white"
+              className="bg-white min-h-30"
               {...field}
             />
           </FormControl>

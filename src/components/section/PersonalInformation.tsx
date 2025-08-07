@@ -175,7 +175,7 @@ const PersonalInformation: React.FC<any> = ({
     <div className="flex justify-center w-full px-4 py-10">
       <div className="w-full max-w-[1000px] ">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="px-4 py-8 space-y-6 rounded-lg shadow-md md:py-16 sm:px-24 bg-secondary">
               <h2 className="mb-8 text-2xl font-semibold md:text-3xl text-primary">
                 Personal Information
@@ -248,6 +248,8 @@ const PersonalInformation: React.FC<any> = ({
 
               {/* Add Skills */}
               <div>
+                {" "}
+                <p className="pb-1 font-medium">Add Skills</p>
                 <Input
                   type="text"
                   value={newSkill}
@@ -275,7 +277,9 @@ const PersonalInformation: React.FC<any> = ({
 
               {/* Image Upload */}
               <div>
-                <p className="py-2 font-semibold text-primary">Add Images</p>
+                <p className="py-2 font-semibold text-primary">
+                  Add About Images
+                </p>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {/* Image Upload Field */}
                   <FormField

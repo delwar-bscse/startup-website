@@ -22,47 +22,6 @@ import {
 } from "@/Redux/apis/businessApi";
 import dayjs from "dayjs";
 
-// const MAX_FILE_SIZE = 1024 * 1024 * 5;
-// const ACCEPTED_IMAGE_TYPES = [
-//   "image/jpeg",
-//   "image/jpg",
-//   "image/png",
-//   "image/webp",
-// ];
-
-// Schema
-// const PersonalInfoSchema = z.object({
-//   occupation: z.string(),
-//   companyName: z.string(),
-//   companyType: z.string(),
-//   experience: z.string(),
-//   companyRegistrationNumber: z.string(),
-//   dateOfEstablishment: z.date({
-//     required_error: "A date of birth is required.",
-//   }),
-//   businessWebsiteURL: z.string(),
-//   achievement: z.string(),
-//   image1: z
-//     .any()
-//     .refine((file) => file, "Image is required.") // Required
-//     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-//     .refine(
-//       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-//       "Only .jpg, .jpeg, .png and .webp formats are supported."
-//     ),
-//   image2: z
-//     .any()
-//     .refine((file) => file, "Image is required.") // Required
-//     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-//     .refine(
-//       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-//       "Only .jpg, .jpeg, .png and .webp formats are supported."
-//     ),
-// });
-
-// Type
-// type PersonalInfoValues = z.infer<typeof PersonalInfoSchema>;
-
 const BusinessDetailsInfo: React.FC<any> = ({
   onHandleStep,
   user,
@@ -74,34 +33,27 @@ const BusinessDetailsInfo: React.FC<any> = ({
 
   const form = useForm({
     mode: "onChange",
-    defaultValues: {
-      Occupation: user?.businessInfo?.Occupation || "",
-      companyName: user?.businessInfo?.companyName || "",
-      CompanyType: user?.businessInfo?.CompanyType || "",
-      CompanyRegistrationNumber:
-        user?.businessInfo?.CompanyRegistrationNumber || "",
-      EstablishmentDate: user?.businessInfo?.EstablishmentDate || "",
-      BusinessWebsiteURL: user?.businessInfo?.BusinessWebsiteURL || "",
-      achievement: user?.businessInfo?.achievement || "",
-    },
+    defaultValues: {},
   });
 
   useEffect(() => {
-    if (user) {
-      form.reset({
-        Occupation: user?.businessInfo?.Occupation || "",
-        companyName: user?.businessInfo?.companyName || "",
-        CompanyType: user?.businessInfo?.CompanyType || "",
-        CompanyRegistrationNumber:
-          user?.businessInfo?.CompanyRegistrationNumber || "",
-        EstablishmentDate: user?.businessInfo?.EstablishmentDate
-          ? dayjs(user.businessInfo.EstablishmentDate).format("YYYY-MM-DD") // Format date
-          : "",
-        BusinessWebsiteURL: user?.businessInfo?.BusinessWebsiteURL || "",
-        achievement: user?.businessInfo?.achievement || "",
+    if (user && businessFields?.data) {
+      const newFormValues: any = {};
+
+      businessFields.data.forEach((field: any) => {
+        const fieldName = field.name;
+        newFormValues[fieldName] = user?.businessInfo?.[fieldName] || "";
       });
+
+      if (user?.businessInfo?.EstablishmentDate) {
+        newFormValues.EstablishmentDate = dayjs(
+          user.businessInfo.EstablishmentDate
+        ).format("YYYY-MM-DD");
+      }
+
+      form.reset(newFormValues);
     }
-  }, [user, form]);
+  }, [user, businessFields?.data, form]);
 
   const onSubmit = async (data: any) => {
     console.log("submitted Data", data);
@@ -115,7 +67,6 @@ const BusinessDetailsInfo: React.FC<any> = ({
       } else {
         toast.success("Business information updated successfully!");
         refetch();
-        // Move to the next step after successful submission
         onHandleStep(3);
       }
     } catch (error) {
@@ -125,15 +76,15 @@ const BusinessDetailsInfo: React.FC<any> = ({
   };
 
   return (
-    <div className="w-full flex justify-center py-10 px-4">
+    <div className="flex justify-center w-full px-4 py-10">
       <div className=" w-full max-w-[1000px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-6 bg-secondary py-8 md:py-16 px-4 sm:px-24 rounded-lg shadow-md">
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">
+            <div className="px-4 py-8 space-y-6 rounded-lg shadow-md bg-secondary md:py-16 sm:px-24">
+              <h2 className="mb-8 text-2xl font-semibold md:text-3xl text-primary">
                 Business Details
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {businessFields?.data.map((inputField: any, index: number) => (
                   <FormField
                     key={index}
@@ -160,7 +111,7 @@ const BusinessDetailsInfo: React.FC<any> = ({
             </div>
 
             {/* Back  ||  Submit then Next */}
-            <div className="w-full flex justify-between">
+            <div className="flex justify-between w-full">
               <Button
                 onClick={() => onHandleStep(1)}
                 variant={"outline"}

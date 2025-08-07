@@ -30,13 +30,13 @@ const PersonalAndBusiness: React.FC<PersonalAndBusinessProps> = ({ user }) => {
   console.log("personal and business user", user);
   return (
     <>
-      <div className="maxWidth py-16 space-y-12">
+      <div className="py-16 space-y-12 maxWidth">
         {/* --- Personal ---*/}
         <div>
-          <h3 className="text-2xl md:text-3xl font-bold pb-4 text-gray-700 border-b border-gray-300 mb-4">
+          <h3 className="pb-4 mb-4 text-2xl font-bold text-gray-700 border-b border-gray-300 md:text-3xl">
             Personal Details
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {user?.name && (
               <p className="flex flex-col">
                 <span className="font-semibold">Name</span>
@@ -91,14 +91,6 @@ const PersonalAndBusiness: React.FC<PersonalAndBusinessProps> = ({ user }) => {
                 </span>
               </p>
             )}
-            {user?.personalInfo?.address && (
-              <p className="flex flex-col">
-                <span className="font-semibold">Address</span>
-                <span className="text-gray-600">
-                  {user?.personalInfo?.address}
-                </span>
-              </p>
-            )}
             {user?.personalInfo?.city && (
               <p className="flex flex-col">
                 <span className="font-semibold">City</span>
@@ -120,10 +112,10 @@ const PersonalAndBusiness: React.FC<PersonalAndBusinessProps> = ({ user }) => {
 
         {/* --- Business ---*/}
         <div>
-          <h3 className="text-2xl md:text-3xl font-bold pb-4 text-gray-700 border-b border-gray-300 mb-4">
+          <h3 className="pb-4 mb-4 text-2xl font-bold text-gray-700 border-b border-gray-300 md:text-3xl">
             Business Details
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {user?.businessInfo?.companyName && (
               <p className="flex flex-col">
                 <span className="font-semibold">Company Name</span>
