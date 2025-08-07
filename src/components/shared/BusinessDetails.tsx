@@ -31,25 +31,26 @@ const BusinessDetails = ({ project }: BusinessDetailsProps) => {
   console.log("Project Detailssss:", project);
   const imageUrl = getImageUrl();
   const visionUrlPath = project?.visionUrl || project?.project.visionUrl;
+  console.log("visionUrlPath", visionUrlPath);
 
   return (
     <div className="py-5">
       {/* ----------- Our Story Section ----------- */}
       <div className="maxWidth">
-        <h2 className="text-3xl md:text-5xl font-bold pb-8 text-gray-600">
+        <h2 className="pb-8 text-3xl font-bold text-gray-600 md:text-5xl">
           Our Story
         </h2>
         <p className="text-gray-600">{project?.story}</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-2 lg:grid-cols-3">
           {project?.storyUrls.map(
             (image: any, index: any | null | undefined) => (
               <Image
                 key={index}
                 src={`${imageUrl}${image}` || `${imageUrl}${project.image}`}
-                width={700}
+                width={500}
                 height={300}
                 alt={`Project Story Image ${index + 1}`}
-                className="rounded-sm"
+                className="rounded-sm h-[400px] w-[600px]"
               />
             )
           )}
@@ -57,9 +58,9 @@ const BusinessDetails = ({ project }: BusinessDetailsProps) => {
       </div>
 
       {/* ----------- Our Mission Section ----------- */}
-      <div className="bg-secondary">
-        <div className="maxWidth py-20">
-          <h2 className="text-3xl md:text-5xl font-bold pb-10 text-gray-700">
+      <div className="my-10 bg-secondary">
+        <div className="py-20 maxWidth">
+          <h2 className="pb-10 text-3xl font-bold text-gray-700 md:text-5xl">
             Our Mission
           </h2>
 
@@ -119,18 +120,18 @@ const BusinessDetails = ({ project }: BusinessDetailsProps) => {
             ) => (
               <div key={index} className="flex gap-2 md:gap-4">
                 <div className="flex flex-col items-center gap-2">
-                  <p className="w-8 h-8 md:w-12 md:h-12 bg-gray-300 rounded-full flex items-center justify-center md:text-xl font-semibold text-gray-700">
+                  <p className="flex items-center justify-center w-8 h-8 font-semibold text-gray-700 bg-gray-300 rounded-full md:w-12 md:h-12 md:text-xl">
                     {index + 1}
                   </p>
                   {index < (project?.mission?.length ?? 0) - 1 && (
-                    <div className="grow border-s-2 md:border-s-4 border-dashed border-gray-300" />
+                    <div className="border-gray-300 border-dashed grow border-s-2 md:border-s-4" />
                   )}
                 </div>
-                <div className="pb-4 pt-1">
-                  <h2 className="sm:text-xl md:text-3xl font-bold pb-2 text-gray-600">
+                <div className="pt-1 pb-4">
+                  <h2 className="pb-2 font-bold text-gray-600 sm:text-xl md:text-3xl">
                     {mission.stepTitle}
                   </h2>
-                  <p className="text-gray-600 text-sm md:text-base">
+                  <p className="text-sm text-gray-600 md:text-base">
                     {mission.stepDescription}
                   </p>
                 </div>
@@ -141,9 +142,9 @@ const BusinessDetails = ({ project }: BusinessDetailsProps) => {
       </div>
 
       {/* ----------- Our Vision Section ----------- */}
-      <div className="maxWidth py-20 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-8 py-10 maxWidth md:grid-cols-2">
         <div>
-          <h2 className="text-3xl md:text-5xl font-bold pb-8 text-gray-600">
+          <h2 className="pb-8 text-3xl font-bold text-gray-600 md:text-5xl">
             Our Vision
           </h2>
           <p className="text-gray-600">{project?.vision}</p>

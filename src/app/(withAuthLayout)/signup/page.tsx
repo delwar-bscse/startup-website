@@ -71,7 +71,8 @@ const SignUpForm = () => {
       console.log("response", res);
       if (res.success) {
         localStorage.setItem("createUserToken", res?.data?.token);
-        toast.success("Sign up successful", { id: "signup" });
+        localStorage.setItem("userEmail", data?.email);
+        toast.success("An OTP was sent to your email", { id: "signup" });
         router.push("/verify-otp?source=signup");
       } else {
         toast.error(
@@ -88,12 +89,12 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="w-full flex justify-center py-10 px-4">
+    <div className="flex justify-center w-full px-4 py-10">
       <div className="w-full max-w-[800px] py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+        <h2 className="mb-4 text-3xl font-bold text-center md:text-4xl">
           Sign Up
         </h2>
-        <p className="text-center text-gray-800 text-sm mb-6">
+        <p className="mb-6 text-sm text-center text-gray-800">
           Join us and start making every moment unforgettable!
         </p>
 
@@ -111,19 +112,27 @@ const SignUpForm = () => {
                     className="flex space-x-4"
                   >
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="investor" id="investor" />
+                      <RadioGroupItem
+                        value="investor"
+                        id="investor"
+                        className="cursor-pointer"
+                      />
                       <Label
                         htmlFor="investor"
-                        className="text-gray-800 font-semibold"
+                        className="font-semibold text-gray-800 cursor-pointer"
                       >
                         Investor
                       </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="entrepreneur" id="entrepreneur" />
+                    <div className="flex items-center space-x-2 cursor-pointer">
+                      <RadioGroupItem
+                        value="entrepreneur"
+                        id="entrepreneur"
+                        className="cursor-pointer"
+                      />
                       <Label
                         htmlFor="entrepreneur"
-                        className="text-gray-800 font-semibold"
+                        className="font-semibold text-gray-800 cursor-pointer"
                       >
                         Entrepreneur
                       </Label>
@@ -135,8 +144,8 @@ const SignUpForm = () => {
             />
 
             {/* Profile Image */}
-            {/* <div className="relative w-40 h-40 mx-auto rounded-full bg-gray-100">
-              <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-primary">
+            {/* <div className="relative w-40 h-40 mx-auto bg-gray-100 rounded-full">
+              <div className="w-40 h-40 overflow-hidden border-4 rounded-full border-primary">
                 <Image
                   src={imageUrl}
                   alt="Profile"
@@ -160,7 +169,7 @@ const SignUpForm = () => {
               />
             </div>
             {imageError && (
-              <p className="text-red-500 text-center pb-4 text-sm">
+              <p className="pb-4 text-sm text-center text-red-500">
                 {imageError}
               </p>
             )} */}
@@ -234,7 +243,7 @@ const SignUpForm = () => {
               control={form.control}
               name="optInGiftDeliveries"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center gap-2 md:gap-4 p-4 text-gray-600">
+                <FormItem className="flex flex-row items-center gap-2 p-4 text-gray-600 md:gap-4">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -246,7 +255,10 @@ const SignUpForm = () => {
             /> */}
 
             {/* Submit */}
-            <Button type="submit" className="w-full text-base md:text-lg">
+            <Button
+              type="submit"
+              className="w-full text-base cursor-pointer md:text-lg"
+            >
               Create Your Account
             </Button>
           </form>

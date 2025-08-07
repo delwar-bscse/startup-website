@@ -16,9 +16,8 @@ const Page = () => {
       <>
         <AboutMe user={user} />
       </>
-      <>
-        <Achievement />
-      </>
+      {user?.role === "investor" && <Achievement user={user} />}
+
       {user?.personalInfo?.interestedIndustry && (
         <InterestedIndustry user={user} />
       )}

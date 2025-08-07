@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
+  useResendOtpMutation,
   useUserOtpVerifyMutation,
   useVerifyChangePasswordOtpMutation,
 } from "@/Redux/apis/authApi";
@@ -60,30 +61,60 @@ const VerifyOTPSuspense = () => {
 
   const [verifyCreateUserOtp] = useUserOtpVerifyMutation();
   const [verifyChangePasswordOtp] = useVerifyChangePasswordOtpMutation();
+  const [resendOtp] = useResendOtpMutation();
 
   const onCreateUserSubmit = async (data: VerifyOtpValues) => {
-    const response = await verifyCreateUserOtp(data).unwrap();
     try {
+      const response = await verifyCreateUserOtp(data).unwrap();
+      console.log(response);
+
       if (response.success) {
         localStorage.removeItem("createUserToken");
-        toast.success("OTP Verified successfully!");
+        toast.success("User Created successfully!");
         router.push("/signin");
+      } else {
+        if (response.data?.message === "Invalid OTP") {
+          toast.error("Invalid OTP. Please try again.");
+        } else if (response.data?.message === "OTP did not match") {
+          toast.error("OTP did not match.");
+        } else if (
+          response?.data?.message?.includes(
+            "MongoServerError: E11000 duplicate key error collection: MoonPartner.users index: phone_1 dup key:"
+          )
+        ) {
+          toast.error("Phone Number already exists.");
+        } else {
+          toast.error("Failed to verify OTP. Please try again.");
+        }
       }
     } catch (error: unknown) {
       console.error("Error verifying OTP:", error);
-      toast.error("An Error Occured");
-      // if (error.data?.message === "Invalid OTP") {
-      //   toast.error("Invalid OTP. Please try again.");
-      // }
-      // if (error.data?.message === "OTP did not match") {
-      //   toast.error(" OTP did not match");
-      // } else {
-      //   toast.error("Failed to verify OTP. Please try again.");
-      // }
-    }
 
-    // router.push("/reset-password")
+      toast.error("An error occurred while verifying OTP.");
+
+      const err = error as { data?: { message?: string } };
+      if (err?.data?.message) {
+        if (err.data.message === "Incorrect OTP. Please try again.") {
+          toast.error("Incorrect OTP. Please try again.");
+        } else if (err.data.message === "OTP did not match") {
+          toast.error("OTP did not match.");
+        } else if (
+          err.data.message === "OTP code Expired! Please try again.!"
+        ) {
+          toast.error("OTP code Expired! Please try again.!");
+        } else if (
+          err?.data?.message?.includes(
+            "MongoServerError: E11000 duplicate key error collection: MoonPartner.users index: phone_1 dup key:"
+          )
+        ) {
+          toast.error("Phone Number already exists.");
+        } else {
+          toast.error("Failed to verify OTP. Please try again.");
+        }
+      }
+    }
   };
+
   const onChangePasswordSubmit = async (data: VerifyOtpValues) => {
     const changePassData = {
       otp: data?.otp,
@@ -130,13 +161,37 @@ const VerifyOTPSuspense = () => {
     }
   };
 
+  const handleResendOtp = async () => {
+    const email = localStorage.getItem("userEmail");
+    if (!email) {
+      toast.error("Email not found. Please start the reset process again.");
+      return;
+    }
+
+    const data = { email };
+    try {
+      const response = await resendOtp(data).unwrap();
+      if (response.success === true) {
+        toast.success("An OTP has been sent to your email!");
+      }
+    } catch (error) {
+      // console.error("Error sending reset code:", error);
+      const err = error as { data?: { message?: string } };
+      if (err.data?.message === "User not found") {
+        toast.error("Incorrect Email.");
+      } else {
+        toast.error("Failed to resend OTP. Please try again.");
+      }
+    }
+  };
+
   return (
-    <div className="w-full flex justify-center py-10 px-4">
+    <div className="flex justify-center w-full px-4 py-10">
       <div className="w-full max-w-[800px] py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+        <h2 className="mb-4 text-3xl font-bold text-center md:text-4xl">
           Verify-OTP
         </h2>
-        <p className="text-center text-gray-800 text-sm mb-6">
+        <p className="mb-6 text-sm text-center text-gray-800">
           {" "}
           We&apos;ll send a verification code to your email. Check your inbox
           and enter the code here.
@@ -173,11 +228,17 @@ const VerifyOTPSuspense = () => {
             {/* Submit */}
             <Button
               type="submit"
-              className="block w-full max-w-100 mx-auto text-base md:text-lg py-1"
+              className="block w-full py-1 mx-auto text-base cursor-pointer max-w-100 md:text-lg"
             >
               Verify
             </Button>
-          </form>
+          </form>{" "}
+          <button
+            onClick={handleResendOtp}
+            className="w-20 mt-5 text-xs cursor-pointer float-end text-[#765CF0] underline"
+          >
+            Resend Otp
+          </button>
         </Form>
       </div>
     </div>

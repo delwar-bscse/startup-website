@@ -78,9 +78,9 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="w-full flex justify-center py-10 px-4">
+    <div className="flex justify-center w-full px-4 py-10">
       <div className="w-full max-w-[800px] py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
+        <h2 className="mb-8 text-3xl font-bold text-center md:text-4xl">
           Reset Password
         </h2>
 
@@ -124,7 +124,10 @@ const SignInForm = () => {
             />
 
             {/* Submit */}
-            <Button type="submit" className="w-full text-base md:text-lg">
+            <Button
+              type="submit"
+              className="w-full text-base cursor-pointer md:text-lg"
+            >
               Update
             </Button>
           </form>
