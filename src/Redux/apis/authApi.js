@@ -59,13 +59,13 @@ const authApi = baseApi.injectEndpoints({
 
     // Resend Otp
     ResendOtp: builder.mutation({
-      query: (data) => {
+      query: (email) => {
         const token = localStorage.getItem("createUserToken");
-        console.log("Resend OTP Data", data);
+        console.log("Resend OTP mail", email);
         return {
-          url: "/otp/resend-otp",
-          method: "PATCH",
-          body: data,
+          url: `/auth/otp-resend/${email}`,
+          method: "post",
+          // body: email,
           headers: {
             "content-type": "application/json",
             token: token,
@@ -77,7 +77,7 @@ const authApi = baseApi.injectEndpoints({
     // sign up
     signUp: builder.mutation({
       query: (data) => {
-        console.log("Data inside mutation query:", data);
+        console.log("Data inside mutation signUp:", data);
         return {
           url: "/users/register",
           method: "POST",
