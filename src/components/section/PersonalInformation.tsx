@@ -34,66 +34,48 @@ const PersonalInformation: React.FC<any> = ({
   const [newSkill, setNewSkill] = useState("");
   const [newInterest, setNewInterest] = useState("");
 
-  const { data: detailsFields } = useGetPersonalDetailsFieldsQuery({});
-  console.log("detailsFields", detailsFields?.data);
+  const { data: detailsFields, isLoading } = useGetPersonalDetailsFieldsQuery(
+    {}
+  );
+  console.log("detailsFields", detailsFields);
   const [updatePersonalInfo] = useUpdatePersonalInfoMutation();
 
   // console.log("user", user);
 
-  const form = useForm({
+  type PersonalInfoFormValues = {
+    [key: string]: any;
+    skills: string[];
+    interestedIndustries: string[];
+    image1?: File | null;
+    image2?: File | null;
+    passportOrNIDDocs?: File[] | null;
+  };
+
+  const form = useForm<PersonalInfoFormValues>({
     mode: "onChange",
     defaultValues: {
-      name: user?.name || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
-      dob: user?.dob ? new Date(user.dob) : "", // Handle undefined or missing dob
-      gender: user?.gender || "",
-      occupation: user?.occupation || "",
-      Nationality: user?.Nationality || "",
-      address: user?.address || "",
-      city: user?.city || "",
-      state: user?.state || "",
-      designation: user?.designation || "",
-      About: user?.About || "",
-      Experience: user?.Experience || "",
-      skills: user?.skills || [],
-      passportOrNIDDocs: user?.passportOrNIDDocs || [],
-      taxCode: user?.taxCode || "",
-      interestedIndustries: user?.interestedIndustries || [], // Default to empty array if undefined
-      image1: undefined, // Image fields should default to undefined
-      image2: undefined,
+      skills: [],
+      interestedIndustries: [],
     },
   });
 
   useEffect(() => {
-    if (user) {
-      form.reset({
-        name: user.name || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        dob: user.dob || "",
-        gender: user.gender || "",
-        occupation: user?.personalInfo?.occupation || "",
-        Nationality: user?.personalInfo?.Nationality || "",
-        address: user?.personalInfo?.address || "",
-        city: user?.personalInfo?.city || "",
-        state: user?.personalInfo?.state || "",
-        designation: user?.personalInfo?.designation || "",
-        Experience: user?.personalInfo?.Experience || "",
-        About: user?.personalInfo?.About || "",
-        interestedIndustries: user?.personalInfo?.interestedIndustries || [],
-        passportOrNIDDocs: user?.personalInfo?.passportOrNIDDocs || [],
-        skills: user?.personalInfo?.skills || [],
-        taxCode: user?.personalInfo?.taxCode || "",
-        image1: undefined,
-        image2: undefined,
+    if (user && detailsFields?.data && !isLoading) {
+      const newFormValues: any = {};
+
+      detailsFields.data.forEach((field: any) => {
+        const fieldName = field.name;
+        newFormValues[fieldName] =
+          user?.[fieldName] || field.defaultValue || "";
       });
+
+      form.reset(newFormValues);
     }
-  }, [user, form]);
+  }, [user, detailsFields?.data, form, isLoading]);
 
   const handleAddSkill = (newSkill: string) => {
     if (newSkill.trim()) {
-      const currentSkills = form.getValues("skills");
+      const currentSkills = form.getValues("skills") ?? [];
       if (!currentSkills.includes(newSkill)) {
         form.setValue("skills", [...currentSkills, newSkill]);
       }
@@ -101,7 +83,7 @@ const PersonalInformation: React.FC<any> = ({
   };
 
   const handleRemoveSkill = (skill: string) => {
-    const currentSkills = form.getValues("skills");
+    const currentSkills = form.getValues("skills") ?? [];
     const updatedSkills = currentSkills.filter(
       (item: string) => item !== skill
     );
@@ -141,7 +123,6 @@ const PersonalInformation: React.FC<any> = ({
   const onSubmit = async (data: any) => {
     console.log("submitted Data", data);
     try {
-      // Create a FormData object for image uploads
       const { email, image1, image2, passportOrNIDDocs, ...newData } = data;
       const formData = new FormData();
 
@@ -174,7 +155,6 @@ const PersonalInformation: React.FC<any> = ({
       //   formData.append("passportOrNIDDocs", doc);
       // });
 
-      // API call to update user data
       const response = await updatePersonalInfo(formData).unwrap();
       console.log(response);
       if (response.error) {
@@ -183,7 +163,6 @@ const PersonalInformation: React.FC<any> = ({
       } else {
         toast.success("Personal information updated successfully!");
         refetch();
-        // Move to the next step after successful submission
         onHandleStep(2);
       }
     } catch (error) {
@@ -193,12 +172,12 @@ const PersonalInformation: React.FC<any> = ({
   };
 
   return (
-    <div className="w-full flex justify-center py-10 px-4">
+    <div className="flex justify-center w-full px-4 py-10">
       <div className="w-full max-w-[1000px] ">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="py-8 md:py-16 px-4 sm:px-24 bg-secondary rounded-lg shadow-md space-y-6">
-              <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-primary">
+            <div className="px-4 py-8 space-y-6 rounded-lg shadow-md md:py-16 sm:px-24 bg-secondary">
+              <h2 className="mb-8 text-2xl font-semibold md:text-3xl text-primary">
                 Personal Information
               </h2>
               <div className="grid grid-cols-1 gap-4">
@@ -237,7 +216,7 @@ const PersonalInformation: React.FC<any> = ({
                                       >
                                         {interest}
                                         <span
-                                          className="ml-2 cursor-pointer text-red-500"
+                                          className="ml-2 text-red-500 cursor-pointer"
                                           onClick={() =>
                                             handleRemoveInterest(interest)
                                           }
@@ -277,14 +256,14 @@ const PersonalInformation: React.FC<any> = ({
                   placeholder="Add a skill"
                 />
                 <div className="mt-2">
-                  {form.getValues("skills").map((skill: string) => (
+                  {form.getValues("skills")?.map((skill: string) => (
                     <span
                       key={skill}
                       className="inline-block bg-transparent border border-[#5F46D9] text-[#2C2064] p-3 rounded-lg m-1 font-semibold"
                     >
                       {skill}
                       <span
-                        className="ml-2 cursor-pointer text-red-500"
+                        className="ml-2 text-red-500 cursor-pointer"
                         onClick={() => handleRemoveSkill(skill)}
                       >
                         x
@@ -296,8 +275,8 @@ const PersonalInformation: React.FC<any> = ({
 
               {/* Image Upload */}
               <div>
-                <p className="text-primary font-semibold py-2">Add Images</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <p className="py-2 font-semibold text-primary">Add Images</p>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {/* Image Upload Field */}
                   <FormField
                     control={form.control}
