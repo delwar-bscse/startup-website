@@ -44,12 +44,24 @@ const VerifyOTPSuspense = () => {
   const searchParams = useSearchParams();
 
   const [source, setSource] = useState<string | null>(null);
+  const [timer, setTimer] = useState<number>(120); // 2 minutes = 120 seconds
+  const [isOtpExpired, setIsOtpExpired] = useState(false);
 
   useEffect(() => {
     const _source = searchParams.get("source");
-
     setSource(_source);
-  }, [searchParams]);
+
+    const countdown = setInterval(() => {
+      if (timer > 0) {
+        setTimer((prev) => prev - 1);
+      } else {
+        setIsOtpExpired(true);
+        clearInterval(countdown); // Stop the countdown once it reaches 0
+      }
+    }, 1000);
+
+    return () => clearInterval(countdown);
+  }, [timer, searchParams]);
 
   const form = useForm<VerifyOtpValues>({
     resolver: zodResolver(verifyOtpSchema),
@@ -64,6 +76,7 @@ const VerifyOTPSuspense = () => {
   const [resendOtp] = useResendOtpMutation();
 
   const onCreateUserSubmit = async (data: VerifyOtpValues) => {
+    console.log("otp data", data);
     try {
       const response = await verifyCreateUserOtp(data).unwrap();
       console.log(response);
@@ -168,11 +181,14 @@ const VerifyOTPSuspense = () => {
       return;
     }
 
-    const data = { email };
+    const data = email;
+    console.log("resend data", data);
     try {
       const response = await resendOtp(data).unwrap();
       if (response.success === true) {
         toast.success("An OTP has been sent to your email!");
+        setTimer(120); // Reset the timer to 2 minutes when the OTP is resent
+        setIsOtpExpired(false);
       }
     } catch (error) {
       // console.error("Error sending reset code:", error);
@@ -232,9 +248,25 @@ const VerifyOTPSuspense = () => {
             >
               Verify
             </Button>
-          </form>{" "}
+          </form>
+
+          {/* Countdown Timer */}
+          <div className="mt-4 text-center">
+            {isOtpExpired ? (
+              <p className="text-sm text-red-500">
+                OTP expired. Please request a new one.
+              </p>
+            ) : (
+              <p className="text-xs text-red-500">
+                Time remaining: {Math.floor(timer / 60)}:
+                {String(timer % 60).padStart(2, "0")}
+              </p>
+            )}
+          </div>
+
           <button
             onClick={handleResendOtp}
+            disabled={!isOtpExpired}
             className="w-20 mt-5 text-xs cursor-pointer float-end text-[#765CF0] underline"
           >
             Resend Otp
